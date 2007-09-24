@@ -1,0 +1,148 @@
+#!/usr/bin/perl
+# Matteo Corti <matteo.corti@gmail.com>
+    
+use strict;
+use Getopt::Long;
+
+my $VERSION    = "0.8";
+my $name       = "UPDATES";
+
+my $verbose    = '';
+my $help       = '';
+
+################################
+# prints the usage of the plugin
+sub usage {
+  my $msg = shift;
+
+  if (defined $msg) {
+    print "$msg\n";
+  }
+
+  print << "EOT";
+usage: check_updates
+  -h, --help                    help
+  -v, --verbose                 verbose output
+  -V, --version                 version
+EOT
+  exit(3);
+}
+
+
+#################################################
+# prints an "unknown" error message (exit code 3)
+sub unknown {
+
+  my $msg = shift;
+
+  if (defined $msg) {
+    print "$name UNKNOWN: $msg\n";
+  }
+
+  exit(3);
+
+}
+
+########################
+# critical message
+sub critical {
+    print "$name CRITICAL: updates available\n";
+    exit 2;
+}
+
+########################
+# critical message
+sub ok {
+    print "$name OK: no updates available\n";
+    exit 0;
+}
+
+########################
+# checks a yum system
+sub check_yum {
+    
+    my $redirection = '';
+    if ($verbose < 2) {
+        $redirection = '> /dev/null 2>&1';
+    }
+    
+    my $ret = system("yum check-update $redirection") >> 8;
+
+    if($ret == 100) {
+        critical();
+    } else {
+        ok();
+    }
+
+}
+
+########################
+# checks an up2date system
+sub check_up2date {
+
+    # parsing the output of up2date -l
+
+    my $updates = `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
+
+    if ($updates > 0) {
+        critical();
+    } else {
+        ok();
+    }
+    
+}
+
+########################
+# Command line arguments
+
+my $result = GetOptions (
+    "help"        => \$help,
+    "verbose|v+"  => \$verbose,
+    "version"     => sub { print "check_dir version $VERSION\n"; exit 3;}
+);
+
+if (!$result) {
+  usage();
+}
+
+if ($help)                { usage(); }
+
+if ($verbose) {
+    print "Checking a $^O system\n";
+}
+
+if ($^O eq 'linux') {
+
+    if (-r '/etc/issue') {
+
+        my $header;
+        
+        open(TMP, '< /etc/issue');
+        while(<TMP>) {
+            chomp;
+            $header = $_;
+            last;
+        }
+        close(TMP);
+
+        if ($header =~ /Fedora/) {
+            if ($verbose) {
+                print "Fedora detected: using yum\n";
+            }
+            check_yum();
+        } elsif ($header =~ /Red\ Hat/) {
+            if ($verbose) {
+                print "Red Hat detected: using up2date\n";
+            }
+            check_up2date();            
+        } else {
+            unknown("unknown Linux distribution");
+        }
+        
+    } else {
+        unknown("Cannot detect Linux distribution (no /etc/issue file)");
+    }
+    
+}
+
+1;
