@@ -1,60 +1,90 @@
-#!/usr/bin/perl
-# Matteo Corti <matteo.corti@gmail.com>
-    
+#!perl
+
+# check_updates is a Nagios plugin to check if RedHat or Fedora system
+# is up-to-date
+#
+# See  the INSTALL file for installation instructions
+#
+# Copyright (c) 2007, ETH Zurich.
+#
+# This module is free software; you can redistribute it and/or modify it
+# under the terms of GNU general public license (gpl) version 3.
+# See the LICENSE file for details.
+#
+# RCS information
+# enable substitution with:
+#   $ svn propset svn:keywords "Id Revision HeadURL Source Date"
+#
+#   $Id$
+#   $Revision$
+#   $HeadURL$
+#   $Date$
+
+use 5.008;
 use strict;
+use warnings;
+use Carp;
+
+use version; our $VERSION = '0.9.0';
+
+use English qw(-no_match_vars);
 use Getopt::Long;
+use List::MoreUtils qw(any);
+use List::Util qw(first);
+use Nagios::Plugin::Threshold;
+use Nagios::Plugin;
+use Number::Format qw(format_number);
+use POSIX qw(uname);
+use Pod::Usage qw(pod2usage);
 
-my $VERSION    = "0.8";
-my $name       = "UPDATES";
+# IMPORTANT: Nagios plugins could be executed using embedded perl in this case
+#            the main routine would be executed as a subroutine and all the
+#            declared subroutines would therefore be inner subroutines
+#            This will cause all the global lexical variables not to stay shared
+#            in the subroutines!
+#
+# All variables are therefore declared as package variables...
+#
+use vars qw(
+  $help
+  $plugin
+  $verbosity
+  $warning
+);
 
-my $verbose    = '';
-my $help       = '';
+##############################################################################
+# subroutines
 
-################################
-# prints the usage of the plugin
-sub usage {
-  my $msg = shift;
+##############################################################################
+# Usage     : verbose("some message string", $optional_verbosity_level);
+# Purpose   : write a message if the verbosity level is high enough
+# Returns   : n/a
+# Arguments : message : message string
+#             level   : options verbosity level
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub verbose {
 
-  if (defined $msg) {
-    print "$msg\n";
-  }
+    # arguments
+    my $message = shift;
+    my $level   = shift;
 
-  print << "EOT";
-usage: check_updates
-  -h, --help                    help
-  -v, --verbose                 verbose output
-  -V, --version                 version
-EOT
-  exit(3);
-}
+    if ( !defined $message ) {
+        $plugin->nagios_exit( UNKNOWN,
+            q{Internal error: not enough parameters for 'verbose'} );
+    }
 
+    if ( !defined $level ) {
+        $level = 0;
+    }
 
-#################################################
-# prints an "unknown" error message (exit code 3)
-sub unknown {
+    if ( $level < $verbosity ) {
+        print $message;
+    }
 
-  my $msg = shift;
+    return;
 
-  if (defined $msg) {
-    print "$name UNKNOWN: $msg\n";
-  }
-
-  exit(3);
-
-}
-
-########################
-# critical message
-sub critical {
-    print "$name CRITICAL: updates available\n";
-    exit 2;
-}
-
-########################
-# critical message
-sub ok {
-    print "$name OK: no updates available\n";
-    exit 0;
 }
 
 ########################
@@ -62,16 +92,16 @@ sub ok {
 sub check_yum {
     
     my $redirection = '';
-    if ($verbose < 2) {
+    if ($verbosity < 2) {
         $redirection = '> /dev/null 2>&1';
     }
     
     my $ret = system("yum check-update $redirection") >> 8;
 
     if($ret == 100) {
-        critical();
+        $plugin->nagios_exit( CRITICAL, "updates available" );
     } else {
-        ok();
+        $plugin->nagios_exit( OK, "no updates available" );
     }
 
 }
@@ -85,31 +115,39 @@ sub check_up2date {
     my $updates = `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
     if ($updates > 0) {
-        critical();
+        $plugin->nagios_exit( CRITICAL, "updates available" );
     } else {
-        ok();
+        $plugin->nagios_exit( OK, "no updates available" );
     }
     
 }
 
+##############################################################################
+# main
+#
+
+################
+# initialization
+$help        = q{};
+$verbosity   = 0;
+$plugin      = Nagios::Plugin->new( shortname => 'CHECK_DISKIO' );
+
+
 ########################
 # Command line arguments
 
+Getopt::Long::Configure(qw{bundling });
 my $result = GetOptions (
-    "help"        => \$help,
-    "verbose|v+"  => \$verbose,
-    "version"     => sub { print "check_dir version $VERSION\n"; exit 3;}
+    'help|h|?'    => \$help,
+    'verbose|v+'  => \$verbosity,
+    'version|V'   => sub { print "check_updates version $VERSION\n"; exit 3;}
 );
 
-if (!$result) {
-  usage();
+if ( !$result || $help) {
+    pod2usage();
 }
 
-if ($help)                { usage(); }
-
-if ($verbose) {
-    print "Checking a $^O system\n";
-}
+verbose "Checking a $^O system\n";
 
 if ($^O eq 'linux') {
 
@@ -126,14 +164,10 @@ if ($^O eq 'linux') {
         close(TMP);
 
         if ($header =~ /Fedora/) {
-            if ($verbose) {
-                print "Fedora detected: using yum\n";
-            }
+            verbose "Fedora detected: using yum\n";
             check_yum();
         } elsif ($header =~ /Red\ Hat/) {
-            if ($verbose) {
-                print "Red Hat detected: using up2date\n";
-            }
+            verbose "RedHat detected: using up2date\n";
             check_up2date();            
         } else {
             unknown("unknown Linux distribution");
@@ -146,3 +180,143 @@ if ($^O eq 'linux') {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+C<check_updates> - a Nagios plugin to check if RedHat or Fedora system
+is up-to-date
+
+=head1 DESCRIPTION
+
+check_updates is a Nagios plugin to check if RedHat or Fedora system
+is up-to-date
+
+=head1 VERSION
+
+Version 0.9.0
+
+=head1 SYNOPSIS
+
+ check_updates [--help] [--verbose] [--version]
+
+ Options    
+  --help,-h,-?                  this help message
+  --verbose,-v                  verbose output
+  --version,-V                  print version
+
+=head1 REQUIRED ARGUMENTS
+
+
+=head1 OPTIONS
+
+  --help,-h,-?                  this help message
+
+  --version,-V                  print version
+
+  --verbose,-v                  verbose output
+
+=head1 EXAMPLE
+
+ check_updates
+
+check_updates checks if the system is up-to-date
+
+=head1 DIAGNOSTICS
+
+You can specify multiple --verbose options to increase the program
+verbosity.
+
+=head1 EXIT STATUS
+
+0 if OK, 1 in case of a warning, 2 in case of a critical status and 3
+in case of an unkown problem
+
+=head1 DEPENDENCIES
+
+check_updates depends on
+
+=over 4
+
+=item * Carp
+
+=item * English
+
+=item * Getopt::Long
+
+=item * List::MoreUtils
+
+=item * List::Util
+
+=item * Nagios::Plugin
+
+=item * Nagios::Plugin::Threshold
+
+=item * Number::Format
+
+=item * POSIX
+
+=item * Pod::Usage
+
+=item * version
+
+=back
+
+=head1 CONFIGURATION
+
+=head1 INCOMPATIBILITIES
+
+None reported.
+
+=head1 SEE ALSO
+
+Nagios documentation
+
+=head1 BUGS AND LIMITATIONS
+
+No bugs have been reported.
+
+Please report any bugs or feature requests to matteo.corti@id.ethz.ch,
+or through the web interface at
+https://svn.id.ethz.ch/trac/bd_webhosting/newticket
+
+=head1 AUTHOR
+
+Matteo Corti <matteo.corti@id.ethz.ch>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2007, ETH Zurich.
+
+This module is free software; you can redistribute it and/or modify it
+under the terms of GNU general public license (gpl) version 3.
+See the LICENSE file for details.
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE
+TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+
+=head1 ACKNOWLEDGMENTS
+
