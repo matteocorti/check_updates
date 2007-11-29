@@ -56,6 +56,27 @@ use vars qw(
 # subroutines
 
 ##############################################################################
+# Usage     : whoami()
+# Purpose   : retrieve the user runnging the process
+# Returns   : username
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub whoami {
+    my $output;
+    my $pid = open $output, q{-|}, 'whoami'
+        or
+        $plugin->nagios_exit( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+    while (<$output>) {
+        chomp;
+        return $_;
+    }
+    $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
+    return;
+}
+
+##############################################################################
 # Usage     : verbose("some message string", $optional_verbosity_level);
 # Purpose   : write a message if the verbosity level is high enough
 # Returns   : n/a
@@ -136,6 +157,10 @@ sub check_up2date {
 
     # parsing the output of up2date -l
 
+    if (whoami() ne 'root') {
+        $plugin->nagios_exit( CRITICAL, q{must be root to execute 'up2date -l': use sudo} );
+    }
+    
     my $updates =
 `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
