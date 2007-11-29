@@ -13,4 +13,3 @@ follows:
 and execute the plugin with sudo
 
   sudo $INSTALLATION_PATH/check_updates
-

@@ -1,4 +1,4 @@
-%define version 0.9.4
+%define version 0.9.5
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Thu Nov 29 2007 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.5-0
+- checks for root
+
 * Thu Nov 29 2007 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.4-0
 - removed sudo
 
