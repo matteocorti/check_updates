@@ -105,10 +105,19 @@ sub check_yum {
     my $ret = system("yum check-update $redirection") >> 8;
 
     if ( $ret == 100 ) {
-        $plugin->nagios_exit( CRITICAL, 'updates available' );
-    }
-    else {
-        $plugin->nagios_exit( OK, 'no updates available' );
+
+      #count the packages
+      my $updates = `yum check-update | sed -e '1,/^\$/ d' | wc -l `;
+      chomp $updates;
+      my $message = $updates . ' update';
+      if ( $updates > 1 ) {
+	$message = $message . q{s};
+      }
+      $message = $message . ' available';
+      $plugin->nagios_exit( CRITICAL, $message );
+
+    } else {
+      $plugin->nagios_exit( OK, 'no updates available' );
     }
 
     return;
