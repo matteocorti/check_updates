@@ -87,45 +87,64 @@ sub verbose {
 
 }
 
-########################
-# checks a yum system
+##############################################################################
+# Usage     : check_yum();
+# Purpose   : checks a yum based system for updates
+# Returns   : n/a
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
 sub check_yum {
-    
-    my $redirection = '';
-    if ($verbosity < 2) {
+
+    my $redirection = q{};
+    if ( $verbosity < 2 ) {
         $redirection = '> /dev/null 2>&1';
     }
-    
+
     my $ret = system("yum check-update $redirection") >> 8;
 
-    if($ret == 100) {
-        $plugin->nagios_exit( CRITICAL, "updates available" );
-    } else {
-        $plugin->nagios_exit( OK, "no updates available" );
+    if ( $ret == 100 ) {
+        $plugin->nagios_exit( CRITICAL, 'updates available' );
     }
+    else {
+        $plugin->nagios_exit( OK, 'no updates available' );
+    }
+
+    return;
 
 }
 
-########################
-# checks an up2date system
+##############################################################################
+# Usage     : check_up2date();
+# Purpose   : checks an up2date based system for updates
+# Returns   : n/a
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
 sub check_up2date {
 
     # parsing the output of up2date -l
 
-    my $updates = `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
+    my $updates =
+`up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
-    if ($updates > 0) {
+    if ( $updates > 0 ) {
         chomp $updates;
         my $message = $updates . ' update';
-        if ($updates > 1) {
-            $message = $message.q{s};
+        if ( $updates > 1 ) {
+            $message = $message . q{s};
         }
         $message = $message . ' available';
         $plugin->nagios_exit( CRITICAL, $message );
-    } else {
-        $plugin->nagios_exit( OK, "no updates available" );
     }
-    
+    else {
+        $plugin->nagios_exit( OK, 'no updates available' );
+    }
+
+    return;
+
 }
 
 ##############################################################################
@@ -134,55 +153,63 @@ sub check_up2date {
 
 ################
 # initialization
-$help        = q{};
-$verbosity   = 0;
-$plugin      = Nagios::Plugin->new( shortname => 'CHECK_DISKIO' );
-
+$help      = q{};
+$verbosity = 0;
+$plugin    = Nagios::Plugin->new( shortname => 'CHECK_DISKIO' );
 
 ########################
 # Command line arguments
 
 Getopt::Long::Configure(qw{bundling });
-my $result = GetOptions (
-    'help|h|?'    => \$help,
-    'verbose|v+'  => \$verbosity,
-    'version|V'   => sub { print "check_updates version $VERSION\n"; exit 3;}
+my $result = GetOptions(
+    'help|h|?'   => \$help,
+    'verbose|v+' => \$verbosity,
+    'version|V'  => sub { print "check_updates version $VERSION\n"; exit 3; }
 );
 
-if ( !$result || $help) {
+if ( !$result || $help ) {
     pod2usage();
 }
 
 verbose "Checking a $^O system\n";
 
-if ($^O eq 'linux') {
+if ( $OSNAME eq 'linux' ) {
 
-    if (-r '/etc/issue') {
+    if ( -r '/etc/issue' ) {
 
         my $header;
-        
-        open(TMP, '< /etc/issue');
-        while(<TMP>) {
+        my $TMP;
+
+        open $TMP, q{<}, '/etc/issue'
+          or $plugin->nagios_exit( CRITICAL,
+            "Error opening /etc/issue: $OS_ERROR" );
+        while (<$TMP>) {
             chomp;
             $header = $_;
             last;
         }
-        close(TMP);
+        close $TMP
+          or $plugin->nagios_exit( CRITICAL,
+            "Error closing /etc/issue: $OS_ERROR" );
 
-        if ($header =~ /Fedora/) {
+        if ( $header =~ /Fedora/mx ) {
             verbose "Fedora detected: using yum\n";
             check_yum();
-        } elsif ($header =~ /Red\ Hat/) {
-            verbose "RedHat detected: using up2date\n";
-            check_up2date();            
-        } else {
-            unknown("unknown Linux distribution");
         }
-        
-    } else {
-        unknown("Cannot detect Linux distribution (no /etc/issue file)");
+        elsif ( $header =~ /Red\ Hat/mx ) {
+            verbose "RedHat detected: using up2date\n";
+            check_up2date();
+        }
+        else {
+            $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
+        }
+
     }
-    
+    else {
+        $plugin->nagios_exit( UNKNOWN,
+            'Cannot detect Linux distribution (no /etc/issue file)' );
+    }
+
 }
 
 1;
