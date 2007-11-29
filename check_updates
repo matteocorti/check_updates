@@ -115,7 +115,13 @@ sub check_up2date {
     my $updates = `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
     if ($updates > 0) {
-        $plugin->nagios_exit( CRITICAL, "updates available" );
+        chomp $updates;
+        my $message = $updates . ' update';
+        if ($updates > 1) {
+            $message = $message.q{s};
+        }
+        $message = $message . ' available';
+        $plugin->nagios_exit( CRITICAL, $message );
     } else {
         $plugin->nagios_exit( OK, "no updates available" );
     }
