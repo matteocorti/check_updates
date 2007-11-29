@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.5';
+use version; our $VERSION = '0.9.6';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -189,7 +189,7 @@ sub check_up2date {
 # initialization
 $help      = q{};
 $verbosity = 0;
-$plugin    = Nagios::Plugin->new( shortname => 'CHECK_DISKIO' );
+$plugin    = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 
 ########################
 # Command line arguments
@@ -264,7 +264,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.4
+Version 0.9.6
 
 =head1 SYNOPSIS
 
