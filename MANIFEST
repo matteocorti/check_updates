@@ -1,6 +1,7 @@
 AUTHORS
-ChangeLog
+Changes
 check_updates
+check_updates.spec
 COPYING
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
@@ -18,3 +19,4 @@ NAME
 NEWS
 README
 TODO
+VERSION
