@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.6';
+use version; our $VERSION = '0.9.7';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -48,6 +48,7 @@ use Pod::Usage qw(pod2usage);
 use vars qw(
   $help
   $plugin
+  $threshold
   $verbosity
   $warning
 );
@@ -66,8 +67,8 @@ use vars qw(
 sub whoami {
     my $output;
     my $pid = open $output, q{-|}, 'whoami'
-        or
-        $plugin->nagios_exit( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+      or
+      $plugin->nagios_exit( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
     while (<$output>) {
         chomp;
         return $_;
@@ -127,18 +128,32 @@ sub check_yum {
 
     if ( $ret == 100 ) {
 
-      #count the packages
-      my $updates = `yum check-update | sed -e '1,/^\$/ d' | wc -l `;
-      chomp $updates;
-      my $message = $updates . ' update';
-      if ( $updates > 1 ) {
-	$message = $message . q{s};
-      }
-      $message = $message . ' available';
-      $plugin->nagios_exit( CRITICAL, $message );
+        #count the packages
+        my $updates = `yum check-update | sed -e '1,/^\$/ d' | wc -l `;
+        chomp $updates;
+        my $message = $updates . ' update';
+        if ( $updates > 1 ) {
+            $message = $message . q{s};
+        }
+        $message = $message . ' available';
+        $plugin->add_perfdata(
+            label     => 'updates',
+            value     => $updates,
+            uom       => q{},
+            threshold => $threshold,
+        );
+        $plugin->nagios_exit( CRITICAL, $message );
 
-    } else {
-      $plugin->nagios_exit( OK, 'no updates available' );
+    }
+    else {
+
+        $plugin->add_perfdata(
+            label     => 'updates',
+            value     => 0,
+            uom       => q{},
+            threshold => $threshold,
+        );
+        $plugin->nagios_exit( OK, 'no updates available' );
     }
 
     return;
@@ -157,10 +172,11 @@ sub check_up2date {
 
     # parsing the output of up2date -l
 
-    if (whoami() ne 'root') {
-        $plugin->nagios_exit( CRITICAL, q{must be root to execute 'up2date -l': use sudo} );
+    if ( whoami() ne 'root' ) {
+        $plugin->nagios_exit( CRITICAL,
+            q{must be root to execute 'up2date -l': use sudo} );
     }
-    
+
     my $updates =
 `up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
@@ -171,9 +187,21 @@ sub check_up2date {
             $message = $message . q{s};
         }
         $message = $message . ' available';
+        $plugin->add_perfdata(
+            label     => 'updates',
+            value     => $updates,
+            uom       => q{},
+            threshold => $threshold,
+        );
         $plugin->nagios_exit( CRITICAL, $message );
     }
     else {
+        $plugin->add_perfdata(
+            label     => 'updates',
+            value     => 0,
+            uom       => q{},
+            threshold => $threshold,
+        );
         $plugin->nagios_exit( OK, 'no updates available' );
     }
 
@@ -190,6 +218,10 @@ sub check_up2date {
 $help      = q{};
 $verbosity = 0;
 $plugin    = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
+$threshold = Nagios::Plugin::Threshold->set_thresholds(
+    warning  => 0,
+    critical => 0,
+);
 
 ########################
 # Command line arguments
@@ -264,7 +296,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.6
+Version 0.9.7
 
 =head1 SYNOPSIS
 
