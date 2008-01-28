@@ -1,0 +1,4 @@
+2008-01-22  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates (check_up2date): recognizes CentOS
+

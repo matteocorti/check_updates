@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.7';
+use version; our $VERSION = '0.9.8';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -258,8 +258,8 @@ if ( $OSNAME eq 'linux' ) {
           or $plugin->nagios_exit( CRITICAL,
             "Error closing /etc/issue: $OS_ERROR" );
 
-        if ( $header =~ /Fedora/mx ) {
-            verbose "Fedora detected: using yum\n";
+        if ( $header =~ /Fedora/mx || $header =~ /CentOS/ ) {
+            verbose "Fedora/CentOS detected: using yum\n";
             check_yum();
         }
         elsif ( $header =~ /Red\ Hat/mx ) {
@@ -296,7 +296,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.7
+Version 0.9.8
 
 =head1 SYNOPSIS
 

@@ -1,4 +1,4 @@
-%define version 0.9.7
+%define version 0.9.8
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Tue Jan 22 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.8-0
+- Considers CentOS
+
 * Thu Dec 13 2007 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.7-0
 - performance data
 
