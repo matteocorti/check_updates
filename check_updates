@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.8';
+use version; our $VERSION = '0.9.9';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -46,6 +46,7 @@ use Pod::Usage qw(pod2usage);
 # All variables are therefore declared as package variables...
 #
 use vars qw(
+  $critical
   $help
   $plugin
   $threshold
@@ -110,6 +111,47 @@ sub verbose {
 }
 
 ##############################################################################
+# Usage     : check_running_kernel();
+# Purpose   : checks if the loaded kernel is the latest available
+# Returns   : n/a
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub check_running_kernel {
+
+    use RPM2;
+
+    my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
+
+    verbose "running a Linux kernel: $release\n";
+
+    my $rpm_db  = RPM2->open_rpm_db();
+    my @kernels = $rpm_db->find_by_name('kernel');
+
+    my @versions;
+
+    for my $header (@kernels) {
+        push @versions,
+          $header->tag('Version') . q{-} . $header->tag('Release');
+    }
+
+    @versions = sort @versions;
+
+    if ($critical) {
+        $critical .=
+"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+    }
+    else {
+        $critical =
+"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+    }
+
+    return;
+
+}
+
+##############################################################################
 # Usage     : check_yum();
 # Purpose   : checks a yum based system for updates
 # Returns   : n/a
@@ -128,9 +170,18 @@ sub check_yum {
 
     if ( $ret == 100 ) {
 
-        #count the packages
-        my $updates = `yum check-update | sed -e '1,/^\$/ d' | wc -l `;
-        chomp $updates;
+        # count the packages
+
+        my $output;
+        my $updates;
+        my $pid = open $output, q{-|}, q{yum check-update | sed -e '1,/^\$/ d' | wc -l}
+            or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+        while (<$output>) {
+            chomp;
+            $updates = $_;
+            last;
+        }
+        
         my $message = $updates . ' update';
         if ( $updates > 1 ) {
             $message = $message . q{s};
@@ -142,7 +193,13 @@ sub check_yum {
             uom       => q{},
             threshold => $threshold,
         );
-        $plugin->nagios_exit( CRITICAL, $message );
+
+        if ($critical) {
+            $critical .= $message;
+        }
+        else {
+            $critical = $message;
+        }
 
     }
     else {
@@ -177,9 +234,17 @@ sub check_up2date {
             q{must be root to execute 'up2date -l': use sudo} );
     }
 
-    my $updates =
-`up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l `;
 
+    my $output;
+    my $updates;
+    my $pid = open $output, q{-|}, q{up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l}
+        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    while (<$output>) {
+        chomp;
+        $updates = $_;
+        last;
+    }
+    
     if ( $updates > 0 ) {
         chomp $updates;
         my $message = $updates . ' update';
@@ -193,16 +258,24 @@ sub check_up2date {
             uom       => q{},
             threshold => $threshold,
         );
-        $plugin->nagios_exit( CRITICAL, $message );
+
+        if ($critical) {
+            $critical .= " $message";
+        }
+        else {
+            $critical = $message;
+        }
+
     }
     else {
+
         $plugin->add_perfdata(
             label     => 'updates',
             value     => 0,
             uom       => q{},
             threshold => $threshold,
         );
-        $plugin->nagios_exit( OK, 'no updates available' );
+
     }
 
     return;
@@ -241,6 +314,8 @@ verbose "Checking a $^O system\n";
 
 if ( $OSNAME eq 'linux' ) {
 
+    check_running_kernel();
+
     if ( -r '/etc/issue' ) {
 
         my $header;
@@ -270,6 +345,13 @@ if ( $OSNAME eq 'linux' ) {
             $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
         }
 
+        if ($critical) {
+            $plugin->nagios_exit( CRITICAL, $critical );
+        }
+        else {
+            $plugin->nagios_exit( OK, 'no updates available' );
+        }
+
     }
     else {
         $plugin->nagios_exit( UNKNOWN,
@@ -296,7 +378,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.8
+Version 0.9.9
 
 =head1 SYNOPSIS
 

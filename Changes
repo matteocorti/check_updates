@@ -1,4 +1,10 @@
+2008-02-21  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: checks if the running kernel is the latest
+                         installed
+	* check_updates: removed backticks (using open -|)
+
 2008-01-22  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates (check_up2date): recognizes CentOS
+	* check_updates: recognizes CentOS
 
