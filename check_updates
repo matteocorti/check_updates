@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.9';
+use version; our $VERSION = '0.9.10';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -111,10 +111,10 @@ sub verbose {
 }
 
 ##############################################################################
-# Usage     : check_running_kernel();
+# Usage     : check_running_kernel( $package );
 # Purpose   : checks if the loaded kernel is the latest available
 # Returns   : n/a
-# Arguments : n/a
+# Arguments : $package : the kernel package name (e.g., kenerl or kernel-smp)
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
@@ -122,29 +122,43 @@ sub check_running_kernel {
 
     use RPM2;
 
+    my $package = shift;
+    
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
     verbose "running a Linux kernel: $release\n";
 
     my $rpm_db  = RPM2->open_rpm_db();
-    my @kernels = $rpm_db->find_by_name('kernel');
+    my @kernels = $rpm_db->find_by_name($package);
 
     my @versions;
 
     for my $header (@kernels) {
+
         push @versions,
           $header->tag('Version') . q{-} . $header->tag('Release');
     }
 
     @versions = sort @versions;
-
-    if ($critical) {
-        $critical .=
-"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+    
+    my $installed = $versions[-1];
+    if ($package =~ /-smp$/mx) {
+        $installed .= 'smp';
     }
-    else {
-        $critical =
-"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+
+    verbose "kernel: running = $release, installed = $installed\n";
+    
+    if ($installed ne $release) {
+    
+        if ($critical) {
+            $critical .=
+                "the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+        }
+        else {
+            $critical =
+                "the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+        }
+
     }
 
     return;
@@ -314,8 +328,6 @@ verbose "Checking a $^O system\n";
 
 if ( $OSNAME eq 'linux' ) {
 
-    check_running_kernel();
-
     if ( -r '/etc/issue' ) {
 
         my $header;
@@ -335,10 +347,12 @@ if ( $OSNAME eq 'linux' ) {
 
         if ( $header =~ /Fedora/mx || $header =~ /CentOS/ ) {
             verbose "Fedora/CentOS detected: using yum\n";
+            check_running_kernel('kernel');
             check_yum();
         }
         elsif ( $header =~ /Red\ Hat/mx ) {
             verbose "RedHat detected: using up2date\n";
+            check_running_kernel('kernel-smp');
             check_up2date();
         }
         else {
@@ -378,7 +392,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.9
+Version 0.9.10
 
 =head1 SYNOPSIS
 
