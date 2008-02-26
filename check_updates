@@ -188,7 +188,7 @@ sub check_yum {
 
         my $output;
         my $updates;
-        my $pid = open $output, q{-|}, q{yum check-update | sed -e '1,/^\$/ d' | wc -l}
+        my $pid = open $output, q{-|}, q{yum check-update | sed -e '1,/^$/ d' | wc -l}
             or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
         while (<$output>) {
             chomp;
