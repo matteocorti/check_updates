@@ -1,3 +1,8 @@
+2008-02-26  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: fixed a problem while counting the number of obsolete
+			 packages
+
 2008-02-21  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: fixed the kernel check on RH systems

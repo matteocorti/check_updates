@@ -1,4 +1,4 @@
-%define version 0.9.10
+%define version 0.9.11
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Tue Feb 26 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.11-0
+- fixed a bug in the package count
+
 * Thu Feb 21 2008 root <matteo.corti@id.ethz.ch> - 0.9.10-0
 - fixed kernel check on RH
 
