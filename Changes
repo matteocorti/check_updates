@@ -1,3 +1,7 @@
+2008-03-07  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: fixed a problem in the notification of a needed reboot
+
 2008-02-26  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: fixed a problem while counting the number of obsolete

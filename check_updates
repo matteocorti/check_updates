@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.11';
+use version; our $VERSION = '0.9.12';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -149,7 +149,7 @@ sub check_running_kernel {
     verbose "kernel: running = $release, installed = $installed\n";
     
     if ($installed ne $release) {
-    
+
         if ($critical) {
             $critical .=
                 "the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
@@ -224,7 +224,13 @@ sub check_yum {
             uom       => q{},
             threshold => $threshold,
         );
-        $plugin->nagios_exit( OK, 'no updates available' );
+
+        if ($critical) {
+            $plugin->nagios_exit( CRITICAL, $critical );
+        } else {
+            $plugin->nagios_exit( OK, 'no updates available' );
+        }
+        
     }
 
     return;
@@ -392,7 +398,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.11
+Version 0.9.12
 
 =head1 SYNOPSIS
 
