@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '0.9.12';
+use version; our $VERSION = '0.9.13';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -351,13 +351,18 @@ if ( $OSNAME eq 'linux' ) {
           or $plugin->nagios_exit( CRITICAL,
             "Error closing /etc/issue: $OS_ERROR" );
 
-        if ( $header =~ /Fedora/mx || $header =~ /CentOS/ ) {
-            verbose "Fedora/CentOS detected: using yum\n";
+        if ( $header =~ /Fedora/mx ) {
+            verbose "Fedora detected: using yum\n";
             check_running_kernel('kernel');
             check_yum();
         }
+        elsif ( $header =~ /CentOS/mx ) {
+            verbose "CentOS detected: using yum\n";            
+            check_running_kernel('kernel-smp');
+            check_yum();
+        }
         elsif ( $header =~ /Red\ Hat/mx ) {
-            verbose "RedHat detected: using up2date\n";
+            verbose "RedHat detected: using up2date\n";            
             check_running_kernel('kernel-smp');
             check_up2date();
         }
@@ -398,7 +403,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 0.9.12
+Version 0.9.13
 
 =head1 SYNOPSIS
 

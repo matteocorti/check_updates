@@ -1,4 +1,4 @@
-%define version 0.9.12
+%define version 0.9.13
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Mon Mar 17 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.13-0
+- bug fix for up2date kernel on CentOS
+
 * Fri Mar  7 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.12-0
 - fixed a bug in the reboot notification
 
