@@ -1,1 +1,2 @@
+2008-05-08: 1.0.0 - corrected a bug in the kernel version comparison. First stable release
 2008-02-21: 0.9.9 - checks if the running kernel is the latest installed
