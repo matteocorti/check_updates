@@ -124,13 +124,13 @@ sub check_running_kernel {
     use RPM2;
 
     my $package = shift;
-    
+
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
     # remove the trailing arch displayed on some systems (F9)
 
     $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mx;
-    
+
     verbose "running a Linux kernel: $release\n";
 
     my $rpm_db  = RPM2->open_rpm_db();
@@ -147,21 +147,21 @@ sub check_running_kernel {
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
-    if ($package =~ /-smp$/mx) {
+    if ( $package =~ /-smp$/mx ) {
         $installed .= 'smp';
     }
 
     verbose "kernel: running = $release, installed = $installed\n";
-    
-    if ($installed ne $release) {
+
+    if ( $installed ne $release ) {
 
         if ($critical) {
             $critical .=
-                "the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
         }
         else {
             $critical =
-                "the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
         }
 
     }
@@ -193,14 +193,15 @@ sub check_yum {
 
         my $output;
         my $updates;
-        my $pid = open $output, q{-|}, q{yum check-update | sed -e '1,/^$/ d' | wc -l}
-            or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+        my $pid = open $output, q{-|},
+          q{yum check-update | sed -e '1,/^$/ d' | wc -l}
+          or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
         while (<$output>) {
             chomp;
             $updates = $_;
             last;
         }
-        
+
         my $message = $updates . ' update';
         if ( $updates > 1 ) {
             $message = $message . q{s};
@@ -232,10 +233,11 @@ sub check_yum {
 
         if ($critical) {
             $plugin->nagios_exit( CRITICAL, $critical );
-        } else {
+        }
+        else {
             $plugin->nagios_exit( OK, 'no updates available' );
         }
-        
+
     }
 
     return;
@@ -259,17 +261,17 @@ sub check_up2date {
             q{must be root to execute 'up2date -l': use sudo} );
     }
 
-
     my $output;
     my $updates;
-    my $pid = open $output, q{-|}, q{up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l}
-        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    my $pid = open $output, q{-|},
+q{up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l}
+      or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
     while (<$output>) {
         chomp;
         $updates = $_;
         last;
     }
-    
+
     if ( $updates > 0 ) {
         chomp $updates;
         my $message = $updates . ' update';
@@ -362,12 +364,12 @@ if ( $OSNAME eq 'linux' ) {
             check_yum();
         }
         elsif ( $header =~ /CentOS/mx ) {
-            verbose "CentOS detected: using yum\n";            
+            verbose "CentOS detected: using yum\n";
             check_running_kernel('kernel-smp');
             check_yum();
         }
         elsif ( $header =~ /Red\ Hat/mx ) {
-            verbose "RedHat detected: using up2date\n";            
+            verbose "RedHat detected: using up2date\n";
             check_running_kernel('kernel-smp');
             check_up2date();
         }
