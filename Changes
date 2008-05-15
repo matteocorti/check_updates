@@ -1,3 +1,7 @@
+2008-05-15  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: uname returns the kernel version with the architecture at the end
+
 2008-05-08  root  <matteo.corti@id.ethz.ch>
 
 	* check_updates: Correct kernel versions sorting

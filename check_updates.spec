@@ -1,4 +1,4 @@
-%define version 1.0.0
+%define version 1.0.1
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Thu May 15 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.1-0
+- removing the trailing arch from uname
+
 * Thu May  8 2008 root <matteo.corti@id.ethz.ch> - 1.0.0-0
 - correct kernel version comparisons
 
