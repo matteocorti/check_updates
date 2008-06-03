@@ -4,8 +4,9 @@ use inc::Module::Install;
 ##############################################################################
 # Define metadata (we read it from the binary)
 
-name     'check_updates';
-all_from 'check_updates';
+name         'check_updates';
+version_from 'check_updates';
+all_from     'check_updates.pod';
 
 ##############################################################################
 # Specific dependencies

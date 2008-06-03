@@ -14,9 +14,12 @@ Install to a custom directory (CUSTOM_DIR)
 
 In the source directory run:
 
-    perl Makefile.PL INSTALLSCRIPT=CUSTOM_DIR
+    perl Makefile.PL INSTALLSITESCRIPT=CUSTOM_DIR
     make
     make install
+
+You can override the INSTALLSCRIPT, INSTALLNBIN or INSTALLSITESCRIPT
+variable depending on your perl installation.
 
 The man page is installed to /usr/share/man/man1/check_updates.1
 you can customize the path by setting INSTALLMAN1DIR as follows
@@ -33,7 +36,7 @@ your Perl interpreter and copy it to the desired location
 
 Generate the man page with pod2man
 
-    pod2man check_updates > CUSTOM_MAN_FILE
+    pod2man check_updates.pod > CUSTOM_MAN_FILE
 
 Please report any installation problem to <matteo.corti@id.ethz.ch> or
 open a ticket at

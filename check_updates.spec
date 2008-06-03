@@ -1,4 +1,4 @@
-%define version 1.0.1
+%define version 1.0.2
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man1/%{name}.1.gz
 
 %changelog
+* Tue Jun  3 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.2-0
+- separated POD because of ePN issues
+
 * Thu May 15 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.1-0
 - removing the trailing arch from uname
 

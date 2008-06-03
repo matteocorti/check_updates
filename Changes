@@ -1,3 +1,7 @@
+2008-06-03  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: separated the POD documentation because of ePN issues
+
 2008-05-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: uname returns the kernel version with the architecture at the end

@@ -1,3 +1,4 @@
+2008-06-03: 1.0.2 - Separated the POD because of ePN issues
 2008-05-15: 1.0.1 - Strips the ending architecture from the kernel version
 2008-05-08: 1.0.0 - corrected a bug in the kernel version comparison.
                     First stable release
