@@ -35,7 +35,6 @@ use Nagios::Plugin::Threshold;
 use Nagios::Plugin;
 use Number::Format qw(format_number);
 use POSIX qw(uname);
-use Pod::Usage qw(pod2usage);
 use Sort::Versions;
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
@@ -57,6 +56,41 @@ use vars qw(
 
 ##############################################################################
 # subroutines
+
+##############################################################################
+# Usage     : usage( -message => 'some text', -exitval => 1 )
+# Purpose   : prints a usage message
+# Returns   : n/a
+# Arguments : -message : an optional error message
+#             -exitval : the exit code (defaults to 0)
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub usage {
+
+    my %args = @_;
+
+    my $exitval = 0;
+    if ($args{-exitval}) {
+        $exitval = $args{-exitval};
+    }
+    
+    if ($args{-message}) {
+        print $args{-message};
+    }
+
+    print<<'EOT';
+check_updates [--help] [--verbose] [--version]
+
+Options    
+  --help,-h,-?                  this help message
+  --verbose,-v                  verbose output
+  --version,-V                  print version
+EOT
+
+    exit $exitval;
+    
+}
 
 ##############################################################################
 # Usage     : whoami()
@@ -334,7 +368,7 @@ my $result = GetOptions(
 );
 
 if ( !$result || $help ) {
-    pod2usage();
+    usage();
 }
 
 verbose "Checking a $^O system\n";

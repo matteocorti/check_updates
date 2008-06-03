@@ -22,7 +22,6 @@ requires 'Nagios::Plugin'            => 0;
 requires 'Nagios::Plugin::Threshold' => 0;
 requires 'Number::Format'            => 0;
 requires 'POSIX'                     => 0;
-requires 'Pod::Usage'                => 0;
 requires 'Sort::Versions'            => 0;
 requires 'version'                   => 0;
 
