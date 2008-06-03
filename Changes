@@ -1,6 +1,8 @@
 2008-06-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: separated the POD documentation because of ePN issues
+	* check_updates: added the -[no]-bootc-heck option to disable the kernel check
+	* check_updates: corrected a bug occurring when yum debug level is 0
 
 2008-05-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 

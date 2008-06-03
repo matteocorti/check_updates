@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.0.2';
+use version; our $VERSION = '1.1.0';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -47,6 +47,7 @@ use Sort::Versions;
 #
 use vars qw(
   $critical
+  $bootcheck
   $help
   $plugin
   $threshold
@@ -83,9 +84,11 @@ sub usage {
 check_updates [--help] [--verbose] [--version]
 
 Options    
-  --help,-h,-?                  this help message
-  --verbose,-v                  verbose output
-  --version,-V                  print version
+  --boot-check        check if the machine was booted with the newest kernel (default)
+  --help,-h,-?        this help message
+  --no-boot-check     do not complain if the machine was booted with an old kernel
+  --verbose,-v        verbose output
+  --version,-V        print version
 EOT
 
     exit $exitval;
@@ -157,6 +160,10 @@ sub check_running_kernel {
 
     use RPM2;
 
+    if (!$bootcheck) {
+        return;
+    }
+    
     my $package = shift;
 
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
@@ -164,7 +171,7 @@ sub check_running_kernel {
     # remove the trailing arch displayed on some systems (F9)
 
     $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mx;
-
+    
     verbose "running a Linux kernel: $release\n";
 
     my $rpm_db  = RPM2->open_rpm_db();
@@ -189,13 +196,13 @@ sub check_running_kernel {
 
     if ( $installed ne $release ) {
 
+        my $error = "your machine is running kernel $release but a newer version ($versions[-1]) is installed: you should reboot"; 
+        
         if ($critical) {
-            $critical .=
-"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+            $critical .= $error;
         }
         else {
-            $critical =
-"the running kernel $release is not up-to-date (kernel $versions[-1] is installed)";
+            $critical = $error;
         }
 
     }
@@ -225,10 +232,17 @@ sub check_yum {
 
         # count the packages
 
+        verbose "yum reports a non-up-to-date system\n";
+
         my $output;
         my $updates;
+
+        # run yum check update and remove everything
+        # up to the first empty line, then count
+        # the listed updates
+        
         my $pid = open $output, q{-|},
-          q{yum check-update | sed -e '1,/^$/ d' | wc -l}
+          q{yum check-update | sed -e '0,/^$/ d' | wc -l}
           or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
         while (<$output>) {
             chomp;
@@ -249,7 +263,7 @@ sub check_yum {
         );
 
         if ($critical) {
-            $critical .= $message;
+            $critical .= q{, } . $message;
         }
         else {
             $critical = $message;
@@ -257,6 +271,8 @@ sub check_yum {
 
     }
     else {
+
+        verbose "yum reports an up-to-date system\n";
 
         $plugin->add_perfdata(
             label     => 'updates',
@@ -351,6 +367,7 @@ q{up2date -l | grep -A 64 -- '--------------------------------------------------
 # initialization
 $help      = q{};
 $verbosity = 0;
+$bootcheck = 1;
 $plugin    = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 $threshold = Nagios::Plugin::Threshold->set_thresholds(
     warning  => 0,
@@ -362,9 +379,10 @@ $threshold = Nagios::Plugin::Threshold->set_thresholds(
 
 Getopt::Long::Configure(qw{bundling });
 my $result = GetOptions(
-    'help|h|?'   => \$help,
-    'verbose|v+' => \$verbosity,
-    'version|V'  => sub { print "check_updates version $VERSION\n"; exit 3; }
+    'help|h|?'    => \$help,
+    'boot-check!' => \$bootcheck,
+    'verbose|v+'  => \$verbosity,
+    'version|V'   => sub { print "check_updates version $VERSION\n"; exit 3; }
 );
 
 if ( !$result || $help ) {

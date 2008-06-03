@@ -12,27 +12,33 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.0.2
+Version 1.1.0
 
 =head1 SYNOPSIS
 
  check_updates [--help] [--verbose] [--version]
 
- Options    
-  --help,-h,-?                  this help message
-  --verbose,-v                  verbose output
-  --version,-V                  print version
+ Options
+  --boot-check        check if the machine was booted with the newest kernel (default)
+  --help,-h,-?        this help message
+  --no-boot-check     do not complain if the machine was booted with an old kernel
+  --verbose,-v        verbose output
+  --version,-V        print version
 
 =head1 REQUIRED ARGUMENTS
 
 
 =head1 OPTIONS
 
-  --help,-h,-?                  this help message
+  --boot-check        check if the machine was booted with the newest kernel (default)
 
-  --version,-V                  print version
+  --help,-h,-?        this help message
 
-  --verbose,-v                  verbose output
+  --no-boot-check     do not complain if the machine was booted with an old kernel
+
+  --version,-V        print version
+
+  --verbose,-v        verbose output
 
 =head1 EXAMPLE
 
@@ -73,8 +79,6 @@ check_updates depends on
 =item * Number::Format
 
 =item * POSIX
-
-=item * Pod::Usage
 
 =item * Sort::Versions
 
