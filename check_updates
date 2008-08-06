@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.1.0';
+use version; our $VERSION = '1.1.1';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -171,6 +171,14 @@ sub check_running_kernel {
     # remove the trailing arch displayed on some systems (F9)
 
     $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mx;
+
+    # remove smp
+    
+    $release =~ s/smp$//mx;
+
+    # remove RH flavour
+
+    $release =~ s/\.EL$//mx;
     
     verbose "running a Linux kernel: $release\n";
 
@@ -181,22 +189,22 @@ sub check_running_kernel {
 
     for my $header (@kernels) {
 
-        push @versions,
-          $header->tag('Version') . q{-} . $header->tag('Release');
+        my $version = $header->tag('Version') . q{-} . $header->tag('Release');
+        $version =~ s/\.EL$//mx;
+        
+        push @versions, $version;
+          
     }
 
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
-    if ( $package =~ /-smp$/mx ) {
-        $installed .= 'smp';
-    }
-
+    
     verbose "kernel: running = $release, installed = $installed\n";
 
     if ( $installed ne $release ) {
 
-        my $error = "your machine is running kernel $release but a newer version ($versions[-1]) is installed: you should reboot"; 
+        my $error = "your machine is running kernel $release but a newer version ($installed) is installed: you should reboot"; 
         
         if ($critical) {
             $critical .= $error;

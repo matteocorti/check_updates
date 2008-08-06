@@ -1,3 +1,8 @@
+2008-08-06  root  <matteo.corti@id.ethz.ch>
+
+	* check_updates: workaround for a possible bug in Sort::Versions
+	                 (http://rt.cpan.org/Public/Bug/Display.html?id=34622)
+
 2008-06-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: separated the POD documentation because of ePN issues

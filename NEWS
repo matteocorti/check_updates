@@ -1,3 +1,4 @@
+2008-08-06: 1.1.1 - fixed a problem with version sorting
 2008-06-03: 1.1.0 - added an option to enable/disable the check on the running
                     kernel and fixed a bug occurring when yum is set to use
 		    a low verbosity
