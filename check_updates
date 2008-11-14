@@ -321,15 +321,18 @@ sub check_up2date {
 
     my $output;
     my $updates;
-    my $pid = open $output, q{-|},
-q{up2date -l | grep -A 64 -- '----------------------------------------------------------' | grep [a-z] | wc -l}
+
+    my $command = q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]' | wc -l};
+        
+    my $pid = open $output, q{-|}, $command
       or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    
     while (<$output>) {
         chomp;
         $updates = $_;
         last;
     }
-
+    
     if ( $updates > 0 ) {
         chomp $updates;
         my $message = $updates . ' update';
