@@ -1,4 +1,4 @@
-%define version 1.2.0
+%define version 1.2.1
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib

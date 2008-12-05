@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.2.0';
+use version; our $VERSION = '1.2.1';
 
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
@@ -80,8 +80,7 @@ sub whoami {
         chomp;
         return $_;
     }
-    close $output
-        or $plugin->nagios_exit( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+    close $output;
     
     $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
     return;
@@ -172,9 +171,7 @@ sub check_running_kernel {
         push @versions, $version;
     }
 
-    close $output
-      or $plugin->nagios_exit( UNKNOWN,
-        "Cannot list installed kernels: $OS_ERROR" );
+    close $output;
     
     @versions = sort versioncmp @versions;
 
@@ -239,11 +236,7 @@ sub check_yum {
             last;
         }
 
-        close $output
-            or $plugin->nagios_exit(
-                UNKNOWN,
-                "Cannot list list updates: $OS_ERROR"
-            );
+        close $output;
 
         my $message = $updates . ' update';
         if ( $updates > 1 ) {
@@ -321,8 +314,7 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         last;
     }
 
-    close $output
-        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    close $output;
     
     if ( $updates > 0 ) {
         chomp $updates;
