@@ -1,3 +1,13 @@
+2008-12-05  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: got rid of RPM2 (broken with modern RPM versions)
+	* check_updates: using Nagios::Plugin::Getopt for the processing of command line options
+	* check_updates: timeout
+
+2008-11-14  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: fixed a bug with updates and excluded packages (wrong count)
+
 2008-08-06  root  <matteo.corti@id.ethz.ch>
 
 	* check_updates: workaround for a possible bug in Sort::Versions

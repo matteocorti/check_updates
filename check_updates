@@ -25,17 +25,22 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.1.1';
+use version; our $VERSION = '1.2.0';
 
 use English qw(-no_match_vars);
-use Getopt::Long;
 use List::MoreUtils qw(any);
 use List::Util qw(first);
+use Nagios::Plugin::Getopt;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin;
 use Number::Format qw(format_number);
 use POSIX qw(uname);
 use Sort::Versions;
+
+use Readonly;
+
+Readonly my $EXIT_UNKNOWN                 => 3;
+Readonly my $YUM_RETURN_UPDATES_AVAILABLE => 100;
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -46,54 +51,17 @@ use Sort::Versions;
 # All variables are therefore declared as package variables...
 #
 use vars qw(
-  $critical
   $bootcheck
+  $critical
   $help
+  $options
   $plugin
   $threshold
-  $verbosity
   $warning
 );
 
 ##############################################################################
 # subroutines
-
-##############################################################################
-# Usage     : usage( -message => 'some text', -exitval => 1 )
-# Purpose   : prints a usage message
-# Returns   : n/a
-# Arguments : -message : an optional error message
-#             -exitval : the exit code (defaults to 0)
-# Throws    : n/a
-# Comments  : n/a
-# See also  : n/a
-sub usage {
-
-    my %args = @_;
-
-    my $exitval = 0;
-    if ($args{-exitval}) {
-        $exitval = $args{-exitval};
-    }
-    
-    if ($args{-message}) {
-        print $args{-message};
-    }
-
-    print<<'EOT';
-check_updates [--help] [--verbose] [--version]
-
-Options    
-  --boot-check        check if the machine was booted with the newest kernel (default)
-  --help,-h,-?        this help message
-  --no-boot-check     do not complain if the machine was booted with an old kernel
-  --verbose,-v        verbose output
-  --version,-V        print version
-EOT
-
-    exit $exitval;
-    
-}
 
 ##############################################################################
 # Usage     : whoami()
@@ -112,6 +80,9 @@ sub whoami {
         chomp;
         return $_;
     }
+    close $output
+        or $plugin->nagios_exit( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+    
     $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
     return;
 }
@@ -140,7 +111,7 @@ sub verbose {
         $level = 0;
     }
 
-    if ( $level < $verbosity ) {
+    if ( $level < $options->verbose ) {
         print $message;
     }
 
@@ -158,54 +129,64 @@ sub verbose {
 # See also  : n/a
 sub check_running_kernel {
 
-    use RPM2;
-
-    if (!$bootcheck) {
+    if ( !$bootcheck ) {
         return;
     }
-    
+
     my $package = shift;
 
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
     # remove the trailing arch displayed on some systems (F9)
 
-    $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mx;
+    $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
 
     # remove smp
-    
-    $release =~ s/smp$//mx;
+
+    $release =~ s/smp$//mxs;
 
     # remove RH flavour
 
-    $release =~ s/\.EL$//mx;
-    
-    verbose "running a Linux kernel: $release\n";
+    $release =~ s/\.EL$//mxs;
 
-    my $rpm_db  = RPM2->open_rpm_db();
-    my @kernels = $rpm_db->find_by_name($package);
+    verbose "running a Linux kernel: $release\n";
 
     my @versions;
 
-    for my $header (@kernels) {
+    my $output;
+    my $pid = open $output, q{-|}, q{rpm -q kernel}
+      or $plugin->nagios_exit( UNKNOWN,
+        "Cannot list installed kernels: $OS_ERROR" );
+    while (<$output>) {
 
-        my $version = $header->tag('Version') . q{-} . $header->tag('Release');
-        $version =~ s/\.EL$//mx;
-        
+        my $version = $_;
+
+        chomp $version;
+
+        # strip package name
+        $version =~ s/^kernel-//mxs;
+
+        # strip architecture
+        $version =~ s/\.[^\.]*$//mxs;
+
         push @versions, $version;
-          
     }
 
+    close $output
+      or $plugin->nagios_exit( UNKNOWN,
+        "Cannot list installed kernels: $OS_ERROR" );
+    
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
-    
+
     verbose "kernel: running = $release, installed = $installed\n";
 
     if ( $installed ne $release ) {
 
-        my $error = "your machine is running kernel $release but a newer version ($installed) is installed: you should reboot"; 
-        
+        my $error =
+"your machine is running kernel $release but a newer version ($installed) is installed: you should reboot";
+
         if ($critical) {
             $critical .= $error;
         }
@@ -230,13 +211,13 @@ sub check_running_kernel {
 sub check_yum {
 
     my $redirection = q{};
-    if ( $verbosity < 2 ) {
+    if ( $options->verbose < 2 ) {
         $redirection = '> /dev/null 2>&1';
     }
 
     my $ret = system("yum check-update $redirection") >> 8;
 
-    if ( $ret == 100 ) {
+    if ( $ret == $YUM_RETURN_UPDATES_AVAILABLE ) {
 
         # count the packages
 
@@ -248,7 +229,7 @@ sub check_yum {
         # run yum check update and remove everything
         # up to the first empty line, then count
         # the listed updates
-        
+
         my $pid = open $output, q{-|},
           q{yum check-update | sed -e '0,/^$/ d' | wc -l}
           or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
@@ -257,6 +238,12 @@ sub check_yum {
             $updates = $_;
             last;
         }
+
+        close $output
+            or $plugin->nagios_exit(
+                UNKNOWN,
+                "Cannot list list updates: $OS_ERROR"
+            );
 
         my $message = $updates . ' update';
         if ( $updates > 1 ) {
@@ -322,16 +309,20 @@ sub check_up2date {
     my $output;
     my $updates;
 
-    my $command = q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]' | wc -l};
-        
+    my $command =
+q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]' | wc -l};
+
     my $pid = open $output, q{-|}, $command
       or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
-    
+
     while (<$output>) {
         chomp;
         $updates = $_;
         last;
     }
+
+    close $output
+        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
     
     if ( $updates > 0 ) {
         chomp $updates;
@@ -377,7 +368,6 @@ sub check_up2date {
 ################
 # initialization
 $help      = q{};
-$verbosity = 0;
 $bootcheck = 1;
 $plugin    = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 $threshold = Nagios::Plugin::Threshold->set_thresholds(
@@ -388,17 +378,42 @@ $threshold = Nagios::Plugin::Threshold->set_thresholds(
 ########################
 # Command line arguments
 
-Getopt::Long::Configure(qw{bundling });
-my $result = GetOptions(
-    'help|h|?'    => \$help,
-    'boot-check!' => \$bootcheck,
-    'verbose|v+'  => \$verbosity,
-    'version|V'   => sub { print "check_updates version $VERSION\n"; exit 3; }
+$options = Nagios::Plugin::Getopt->new(
+    usage   => 'Usage: %s [--help] [--verbose] [--version] [--timeout t]',
+    version => $VERSION,
+    url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
+    blurb   => 'Checks if RedHat or Fedora system is up-to-date', 
 );
 
-if ( !$result || $help ) {
-    usage();
+$options->arg(
+    spec => 'boot-check',
+    help => 'Check if the machine was booted with the newest kernel (default)',
+);
+
+$options->arg(
+    spec => 'no-boot-check',
+    help => 'do not complain if the machine was booted with an old kernel',
+);
+
+
+$options->getopts();
+
+# check bootcheck consistency
+if ($options->get('boot-check') && $options->get('no-boot-check')) {
+    $plugin->nagios_exit(
+        CRITICAL,
+        'Error --boot-check and --no-boot-check specified at the same time'
+    );
 }
+
+if ($options->get('no-boot-check')) {
+    $bootcheck = 0;
+}
+
+#########
+# Timeout
+
+alarm $options->timeout;
 
 verbose "Checking a $^O system\n";
 
@@ -421,17 +436,17 @@ if ( $OSNAME eq 'linux' ) {
           or $plugin->nagios_exit( CRITICAL,
             "Error closing /etc/issue: $OS_ERROR" );
 
-        if ( $header =~ /Fedora/mx ) {
+        if ( $header =~ /Fedora/mxs ) {
             verbose "Fedora detected: using yum\n";
             check_running_kernel('kernel');
             check_yum();
         }
-        elsif ( $header =~ /CentOS/mx ) {
+        elsif ( $header =~ /CentOS/mxs ) {
             verbose "CentOS detected: using yum\n";
             check_running_kernel('kernel-smp');
             check_yum();
         }
-        elsif ( $header =~ /Red\ Hat/mx ) {
+        elsif ( $header =~ /Red\ Hat/mxs ) {
             verbose "RedHat detected: using up2date\n";
             check_running_kernel('kernel-smp');
             check_up2date();

@@ -1,4 +1,4 @@
-%define version 1.1.0
+%define version 1.2.0
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -39,6 +39,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Fri Dec  5 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.2.0-0
+- update to 1.2 (timeout and no dep on RPM2)
+
+* Fri Nov 14 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.1.2-0
+- fixed a bug with up2date and excluded packages
+
+* Wed Aug  6 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.1.1-0
+- fixed a problem with RPM version numbers
+
 * Tue Jun  3 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.2-0
 - separated POD because of ePN issues
 
