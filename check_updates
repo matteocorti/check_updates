@@ -153,17 +153,17 @@ sub check_running_kernel {
     my @versions;
 
     my $output;
-    my $pid = open $output, q{-|}, q{rpm -q kernel}
+    my $pid = open $output, q{-|}, "rpm -q $package"
       or $plugin->nagios_exit( UNKNOWN,
         "Cannot list installed kernels: $OS_ERROR" );
     while (<$output>) {
 
         my $version = $_;
-
+        
         chomp $version;
 
         # strip package name
-        $version =~ s/^kernel-//mxs;
+        $version =~ s/^$package-//mxs;
 
         # strip architecture
         $version =~ s/\.[^\.]*$//mxs;
@@ -178,7 +178,7 @@ sub check_running_kernel {
     my $installed = $versions[-1];
 
     verbose "kernel: running = $release, installed = $installed\n";
-
+    
     if ( $installed ne $release ) {
 
         my $error =
