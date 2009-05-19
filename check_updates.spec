@@ -1,5 +1,5 @@
-%define version 1.2.2
-%define release 0
+%define version 1.2.3
+%define release 1
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
 
@@ -39,6 +39,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Tue Apr  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.2.3-0
+- RH5 support
+
 * Fri Dec  5 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.2.2-0
 - bug fixes
 

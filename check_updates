@@ -25,8 +25,9 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.2.2';
+use version; our $VERSION = '1.2.3';
 
+use Data::Dumper;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use List::Util qw(first);
@@ -52,12 +53,15 @@ Readonly my $YUM_RETURN_UPDATES_AVAILABLE => 100;
 #
 use vars qw(
   $bootcheck
-  $critical
+  $exit_message
   $help
   $options
+  $outdated
   $plugin
   $threshold
-  $warning
+  $updates
+  $wrong_kernel
+  @outdated
 );
 
 ##############################################################################
@@ -146,10 +150,10 @@ sub check_running_kernel {
 
     # remove RH flavour
 
-    $release =~ s/\.EL$//mxs;
+    $release =~ s/\.EL5?$//imxs;
 
     verbose "running a Linux kernel: $release\n";
-
+    
     my @versions;
 
     my $output;
@@ -184,13 +188,15 @@ sub check_running_kernel {
         my $error =
 "your machine is running kernel $release but a newer version ($installed) is installed: you should reboot";
 
-        if ($critical) {
-            $critical .= $error;
+        if ($exit_message) {
+            $exit_message .= $error;
         }
         else {
-            $critical = $error;
+            $exit_message = $error;
         }
 
+        $wrong_kernel = 1;
+        
     }
 
     return;
@@ -221,24 +227,27 @@ sub check_yum {
         verbose "yum reports a non-up-to-date system\n";
 
         my $output;
-        my $updates;
 
         # run yum check update and remove everything
         # up to the first empty line, then count
         # the listed updates
 
         my $pid = open $output, q{-|},
-          q{yum check-update | sed -e '0,/^$/ d' | wc -l}
+          q{yum check-update | sed -e '0,/^$/ d'}
           or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
         while (<$output>) {
             chomp;
-            $updates = $_;
-            last;
+            my $line = $_;
+            $line =~ s/\ .*//mxs;
+            push @outdated, $line;
         }
 
+        $updates = scalar @outdated;
+        
         close $output;
 
         my $message = $updates . ' update';
+        $outdated = $updates;
         if ( $updates > 1 ) {
             $message = $message . q{s};
         }
@@ -250,11 +259,11 @@ sub check_yum {
             threshold => $threshold,
         );
 
-        if ($critical) {
-            $critical .= q{, } . $message;
+        if ($exit_message) {
+            $exit_message .= q{, } . $message;
         }
         else {
-            $critical = $message;
+            $exit_message = $message;
         }
 
     }
@@ -269,8 +278,8 @@ sub check_yum {
             threshold => $threshold,
         );
 
-        if ($critical) {
-            $plugin->nagios_exit( CRITICAL, $critical );
+        if ($exit_message) {
+            $plugin->nagios_exit( CRITICAL, $exit_message );
         }
         else {
             $plugin->nagios_exit( OK, 'no updates available' );
@@ -300,7 +309,6 @@ sub check_up2date {
     }
 
     my $output;
-    my $updates;
 
     my $command =
 q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]' | wc -l};
@@ -310,12 +318,13 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
     while (<$output>) {
         chomp;
+
         $updates = $_;
         last;
     }
 
     close $output;
-    
+
     if ( $updates > 0 ) {
         chomp $updates;
         my $message = $updates . ' update';
@@ -330,11 +339,11 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
             threshold => $threshold,
         );
 
-        if ($critical) {
-            $critical .= " $message";
+        if ($exit_message) {
+            $exit_message .= " $message";
         }
         else {
-            $critical = $message;
+            $exit_message = $message;
         }
 
     }
@@ -359,13 +368,11 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
 ################
 # initialization
-$help      = q{};
-$bootcheck = 1;
-$plugin    = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
-$threshold = Nagios::Plugin::Threshold->set_thresholds(
-    warning  => 0,
-    critical => 0,
-);
+$help         = q{};
+$bootcheck    = 1;
+$wrong_kernel = 0;
+$updates      = 0;
+$plugin       = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 
 ########################
 # Command line arguments
@@ -387,8 +394,25 @@ $options->arg(
     help => 'do not complain if the machine was booted with an old kernel',
 );
 
+$options->arg(
+    spec    => 'warning|w=i',
+    help    => 'Exit with WARNING status if more than INTEGER updates are available',
+    default => 0
+);
+
+$options->arg(
+    spec    => 'critical|c=i',
+    help    => 'Exit with CRITICLA status if more than INTEGER updates are available',
+    default => 0
+);
 
 $options->getopts();
+
+$threshold = Nagios::Plugin::Threshold->set_thresholds(
+    warning  => $options->get('warning'),
+    critical => $options->get('critical'),
+);
+
 
 # check bootcheck consistency
 if ($options->get('boot-check') && $options->get('no-boot-check')) {
@@ -438,20 +462,52 @@ if ( $OSNAME eq 'linux' ) {
             check_running_kernel('kernel-smp');
             check_yum();
         }
-        elsif ( $header =~ /Red\ Hat/mxs ) {
-            verbose "RedHat detected: using up2date\n";
+        elsif ( $header =~ /Red\ Hat.* 4/mxs ) {
+            verbose "RedHat 4 detected: using up2date\n";
             check_running_kernel('kernel-smp');
             check_up2date();
+        }
+        elsif ( $header =~ /Red\ Hat.* 5/mxs ) {
+            verbose "RedHat 5 detected: using yum\n";
+            check_running_kernel('kernel');
+            check_yum();
         }
         else {
             $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
         }
 
-        if ($critical) {
-            $plugin->nagios_exit( CRITICAL, $critical );
-        }
-        else {
-            $plugin->nagios_exit( OK, 'no updates available' );
+        if ($bootcheck && $wrong_kernel) {
+            # a wrong kernel always generates a critical
+            $plugin->nagios_exit( CRITICAL, $exit_message );
+        } else {            
+            if ($exit_message) {                
+
+                # Nagios::Plugin does not support the addition Nagios 3 status lines
+                # -> we do it manually
+                #
+                # $plugin->nagios_exit(
+                #    $threshold->get_status($updates),
+                #    $exit_message
+                # );
+
+                my $status = $threshold->get_status($updates+1);
+
+                print 'CHECK_UPDATES '
+                    . $Nagios::Plugin::STATUS_TEXT{$status}
+                    . " - $exit_message | "
+                    . ${$plugin->perfdata}[0]->perfoutput
+                    . "\n";
+
+                for my $package (@outdated) {
+                    print "$package\n"
+                }
+            
+                exit $status;
+                
+            }
+            else {
+                $plugin->nagios_exit( OK, 'no updates available' );
+            }
         }
 
     }

@@ -1,3 +1,4 @@
+2009-04-07: 1.2.3 - RH5 support
 2008-12-06: 1.2.1 - fixed a bug occurring while checking the current kernel on kernel-smp machines
 2008-12-06: 1.2.1 - fixed a bug occurring while closing program pipes
 2008-12-05: 1.2.0 - implemented timeouts and no more dependent on RPM2

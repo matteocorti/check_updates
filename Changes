@@ -1,3 +1,7 @@
+2009-04-07  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: RH5 support
+
 2008-12-05  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: got rid of RPM2 (broken with modern RPM versions)
