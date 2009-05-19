@@ -1,3 +1,8 @@
+2009-05-19  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: --critical and --warning are working again
+	* check_updates: Nagios 3 extended info with the outdated packages
+
 2009-04-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: RH5 support
