@@ -1,5 +1,5 @@
-%define version 1.3.0
-%define release 1
+%define version 1.3.1
+%define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
 
@@ -12,6 +12,7 @@ Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
 Group:     Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Source:    http://www.id.ethz.ch/people/allid_list/corti/%{name}-%{version}.tar.gz
+Prefix:    %{_prefix}
 BuildArch: noarch
 
 Requires: perl
@@ -39,6 +40,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Mon Jun 15 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.1-0
+- support for PAE kernels
+
+* Wed May 20 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.0-2
+- RPM is now relocatable
+
 * Tue May 19 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.0-1
 - --critical and --working working again + support for extended info
 

@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.3.0';
+use version; our $VERSION = '1.3.1';
 
 use Data::Dumper;
 use English qw(-no_match_vars);
@@ -124,7 +124,7 @@ sub verbose {
 # Usage     : check_running_kernel( $package );
 # Purpose   : checks if the loaded kernel is the latest available
 # Returns   : n/a
-# Arguments : $package : the kernel package name (e.g., kenerl or kernel-smp)
+# Arguments : $package : the kernel package name (e.g., kernel or kernel-smp)
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
@@ -138,10 +138,11 @@ sub check_running_kernel {
 
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
-    # remove the trailing arch displayed on some systems (F9)
+    # remove the trailing arch displayed on some systems
 
+    $release =~ s/\.PAE//mxs;
     $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
-
+    
     # remove smp
 
     $release =~ s/smp$//mxs;
@@ -155,7 +156,7 @@ sub check_running_kernel {
     my @versions;
 
     my $output;
-    my $pid = open $output, q{-|}, "rpm -q $package"
+    my $pid = open $output, q{-|}, "rpm -q $package $package-PAE"
       or $plugin->nagios_exit( UNKNOWN,
         "Cannot list installed kernels: $OS_ERROR" );
     while (<$output>) {
@@ -164,12 +165,19 @@ sub check_running_kernel {
         
         chomp $version;
 
+        if ($version =~ /not\ installed/mxs) {
+            next;
+        }
+
         # strip package name
         $version =~ s/^$package-//mxs;
 
         # strip architecture
         $version =~ s/\.[^\.]*$//mxs;
 
+        # strip PAE
+        $version =~ s/PAE-//mxs;
+        
         push @versions, $version;
     }
 

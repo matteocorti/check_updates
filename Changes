@@ -1,3 +1,7 @@
+2009-06-15  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: recognize PAE kernels
+
 2009-05-19  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: --critical and --warning are working again
