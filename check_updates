@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.3.1';
+use version; our $VERSION = '1.3.2';
 
 use Data::Dumper;
 use English qw(-no_match_vars);
@@ -158,42 +158,58 @@ sub check_running_kernel {
 
     ################################################################################
     # Installed
-    
+
     my @versions;
 
-    my $output;
-    
-    my $pid = open $output, q{-|}, "rpm -q $package $package-smp $package-PAE"
-      or $plugin->nagios_exit( UNKNOWN,
-        "Cannot list installed kernels: $OS_ERROR" );
-    
-    while (<$output>) {
+    for my $rpm ( ( "$package", "$package-smp", "$package-PAE") ) {
 
-        my $version = $_;
+        my $output;
         
-        chomp $version;
+        my $pid = open $output, q{-|}, "rpm -q $rpm"
+            or $plugin->nagios_exit(
+                UNKNOWN,
+                "Cannot list installed kernels: $OS_ERROR"
+            );
 
-        if ($version =~ /not\ installed/mxs) {
-            next;
+        # there could be multiple versions of the same package installed
+        my @rpm_versions;
+        while (<$output>) {
+            chomp $_;
+            push @rpm_versions, $_;
         }
+            
+        if ( !( close $output ) && ( $OS_ERROR != 0 ) ) {
+            
+            # close to a piped open return false if the command with non-zero
+            # status. In this case $! is set to 0
+            $plugin->nagios_exit(
+                UNKNOWN,
+                "Error while closing pipe to rpm: $OS_ERROR\n"
+            );
 
-        # strip package name
-        $version =~ s/^$package-//mxs;
-
-        # strip architecture
-        $version =~ s/\.[^\.]*$//mxs;
-
-        # strip SMP
-        $version =~ s/smp-//imxs;
-
-        # strip PAE
-        $version =~ s/PAE-//imxs;
+        }
         
-        push @versions, $version;
+        if ($CHILD_ERROR == 0) {
+
+            # rpm exits with 0 only it the RPM exists
+            
+            push @versions, @rpm_versions;
+        }
+        
     }
 
-    close $output;
-    
+    # strip package name
+    map { $_ =~ s/^$package-//mxs } @versions;
+
+    # strip architecture
+    map { $_ =~ s/\.[^\.]*$//mxs } @versions;
+
+    # strip SMP
+    map { $_ =~ s/smp-//imxs } @versions;
+
+    # strip PAE
+    map { $_ =~ s/PAE-//imxs } @versions;
+        
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];

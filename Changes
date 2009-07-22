@@ -1,6 +1,6 @@
 2009-07-22  root  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a problem with RH4 systems with a non-smp kernel
+	* check_updates: does not parse the output of rpm because of localization problems
 
 2009-06-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
