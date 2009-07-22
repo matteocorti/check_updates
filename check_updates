@@ -121,10 +121,10 @@ sub verbose {
 }
 
 ##############################################################################
-# Usage     : check_running_kernel( $package );
+# Usage     : check_running_kernel( );
 # Purpose   : checks if the loaded kernel is the latest available
 # Returns   : n/a
-# Arguments : $package : the kernel package name (e.g., kernel or kernel-smp)
+# Arguments : n/a
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
@@ -134,8 +134,11 @@ sub check_running_kernel {
         return;
     }
 
-    my $package = shift;
+    my $package = 'kernel';
 
+    ################################################################################
+    # Running
+    
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
     # remove the trailing arch displayed on some systems
@@ -152,13 +155,18 @@ sub check_running_kernel {
     $release =~ s/\.EL5?$//imxs;
 
     verbose "running a Linux kernel: $release\n";
+
+    ################################################################################
+    # Installed
     
     my @versions;
 
     my $output;
-    my $pid = open $output, q{-|}, "rpm -q $package $package-PAE"
+    
+    my $pid = open $output, q{-|}, "rpm -q $package $package-smp $package-PAE"
       or $plugin->nagios_exit( UNKNOWN,
         "Cannot list installed kernels: $OS_ERROR" );
+    
     while (<$output>) {
 
         my $version = $_;
@@ -175,8 +183,11 @@ sub check_running_kernel {
         # strip architecture
         $version =~ s/\.[^\.]*$//mxs;
 
+        # strip SMP
+        $version =~ s/smp-//imxs;
+
         # strip PAE
-        $version =~ s/PAE-//mxs;
+        $version =~ s/PAE-//imxs;
         
         push @versions, $version;
     }
@@ -379,7 +390,7 @@ $plugin       = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 # Command line arguments
 
 $options = Nagios::Plugin::Getopt->new(
-    usage   => 'Usage: %s [--help] [--verbose] [--version] [--timeout t]',
+    usage   => 'Usage: %s [OPTIONS]',
     version => $VERSION,
     url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
     blurb   => 'Checks if RedHat or Fedora system is up-to-date', 
@@ -455,22 +466,22 @@ if ( $OSNAME eq 'linux' ) {
 
         if ( $header =~ /Fedora/mxs ) {
             verbose "Fedora detected: using yum\n";
-            check_running_kernel('kernel');
+            check_running_kernel();
             check_yum();
         }
         elsif ( $header =~ /CentOS/mxs ) {
             verbose "CentOS detected: using yum\n";
-            check_running_kernel('kernel-smp');
+            check_running_kernel();
             check_yum();
         }
         elsif ( $header =~ /Red\ Hat.* 4/mxs ) {
             verbose "RedHat 4 detected: using up2date\n";
-            check_running_kernel('kernel-smp');
+            check_running_kernel();
             check_up2date();
         }
         elsif ( $header =~ /Red\ Hat.* 5/mxs ) {
             verbose "RedHat 5 detected: using yum\n";
-            check_running_kernel('kernel');
+            check_running_kernel();
             check_yum();
         }
         else {
