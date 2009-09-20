@@ -1,4 +1,4 @@
-%define version 1.3.2
+%define version 1.3.3
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Sun Sep 20 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.3-0
+- Updated to 1.3.3
+
 * Wed Jul 22 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.2-0
 - fixed a bug which gave wrong results on systems with a non-English localizations
 

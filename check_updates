@@ -490,12 +490,12 @@ if ( $OSNAME eq 'linux' ) {
             check_running_kernel();
             check_yum();
         }
-        elsif ( $header =~ /Red\ Hat.* 4/mxs ) {
+        elsif ( $header =~ /Red\ Hat.*\ 4/mxs ) {
             verbose "RedHat 4 detected: using up2date\n";
             check_running_kernel();
             check_up2date();
         }
-        elsif ( $header =~ /Red\ Hat.* 5/mxs ) {
+        elsif ( $header =~ /Red\ Hat.*\ 5/mxs ) {
             verbose "RedHat 5 detected: using yum\n";
             check_running_kernel();
             check_yum();
