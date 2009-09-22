@@ -19,7 +19,6 @@ MANIFEST.SKIP
 META.yml
 NAME
 NEWS
-patch.check_updates
 README
 TODO
 VERSION
