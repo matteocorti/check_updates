@@ -430,7 +430,7 @@ $options->arg(
 
 $options->arg(
     spec    => 'critical|c=i',
-    help    => 'Exit with CRITICLA status if more than INTEGER updates are available',
+    help    => 'Exit with CRITICAL status if more than INTEGER updates are available',
     default => 0
 );
 
