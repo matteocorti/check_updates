@@ -1,4 +1,4 @@
-%define version 1.3.4
+%define version 1.4.0
 %define release 0
 %define name    check_updates
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -40,6 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Fri Dec  4 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.0-0
+- updated 1.4.0 (checks for security updates if yum-plugin-security is available )
+
 * Wed Nov 11 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.3.4-0
 - Updated to 1.3.4
 

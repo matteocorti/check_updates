@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.3.4';
+use version; our $VERSION = '1.4.0';
 
 use Data::Dumper;
 use English qw(-no_match_vars);
@@ -58,9 +58,13 @@ use vars qw(
   $options
   $plugin
   $threshold
+  $security_plugin
   $wrong_kernel
-  @outdated
+  $status
+  @status_lines
 );
+
+$status = OK;
 
 ##############################################################################
 # subroutines
@@ -237,6 +241,72 @@ sub check_running_kernel {
 }
 
 ##############################################################################
+# Usage     : run_yum();
+# Purpose   : runs yum check-updates with the supplied command line argumens
+# Returns   : the list of updates
+# Arguments : string with the command line arguments
+# Throws    : n/a
+# Comments  : sets $security_plugin to true if the plugin is enabled
+# See also  : n/a
+sub run_yum {
+
+    my $arguments = shift;
+
+    my $blank_line;
+    my $OUTPUT_HANDLER;
+    my @updates;
+
+    my $command = "yum $arguments check-update";
+
+    my $pid = open $OUTPUT_HANDLER, q{-|}, $command        
+        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    while (<$OUTPUT_HANDLER>) {
+        
+        my $line = $_;
+        
+        verbose $line, 1;
+
+        chomp $line;        
+
+        if (! $line ) {
+            $blank_line = 1;
+            next;
+        }
+        
+        if ( $line =~ m{^Loaded\ plugins:.*\ security.*}mxs ) {
+            
+            if (! $security_plugin ) {
+                # we do not want the same output if we are running the second check
+                verbose "Security plugin installed\n";
+            }
+            $security_plugin = 1;
+            
+        }
+
+        if ($blank_line) {
+
+            $line =~ s{\ .*}{}mxs;
+            
+            push @updates, $line;
+        }
+        
+    }
+
+    close $OUTPUT_HANDLER;
+
+    if (($CHILD_ERROR >> 8) == $YUM_RETURN_UPDATES_AVAILABLE ) {
+        if ($security_plugin) {
+            verbose "Security updates available\n";
+        } else {
+            verbose "Updates available\n";
+        }
+    }
+    
+    return @updates;
+    
+}
+
+##############################################################################
 # Usage     : check_yum();
 # Purpose   : checks a yum based system for updates
 # Returns   : n/a
@@ -246,77 +316,112 @@ sub check_running_kernel {
 # See also  : n/a
 sub check_yum {
 
-    my $redirection = q{};
-    if ( $options->verbose < 2 ) {
-        $redirection = '> /dev/null 2>&1';
+    my $message;
+    my @outdated = run_yum('');
+    my @security_updates;
+    
+    $plugin->add_perfdata(
+        label     => 'total_updates',
+        value     => scalar @outdated,
+        uom       => q{},
+        threshold => $threshold,
+    );
+
+    if (@outdated > 0) {
+    
+        if (! $security_plugin ) {
+
+            # every update is critical since it could be a security problem
+            
+            $status = CRITICAL;
+            verbose "yum reports a non-up-to-date system\n";
+
+            $message = (scalar @outdated) . ' update';
+            if ( @outdated > 1 ) {
+                $message = $message . q{s};
+            }
+            $message = $message . ' available';
+            
+            @status_lines = @outdated;
+
+       } else {
+
+           $status = WARNING;
+
+           @security_updates = run_yum('--security');
+           
+           if (@security_updates > 0) {
+
+               $status = CRITICAL;
+               
+               $message = (scalar @security_updates) . ' security update';
+               if ( @security_updates > 1 ) {
+                   $message = $message . q{s};
+               }
+
+               # compute the array difference
+               my %count;
+
+               for my $element (@security_updates) {
+                   push @status_lines, "$element (security)";
+                   $count{$element}++;
+               }
+               
+               for my $element (@outdated) {
+                   $count{$element}++;
+               }
+
+               my @difference;
+               for my $element (@outdated) {
+                   if ($count{$element} == 1) {
+                       push @difference, $element;
+                   }
+               }
+
+               @outdated = @difference;
+               
+           }
+
+           if (@outdated > 0) {
+
+               if ($message) {
+                   $message .= ' and ';
+               }
+               
+               $message .= (scalar @outdated) . ' non-critical update';
+               if ( @outdated > 1 ) {
+                   $message = $message . q{s};
+               }
+               
+               push @status_lines, @outdated;
+               
+           }
+           
+           if ($message) {
+               $message .= ' available';
+           }
+           
+       }
+            
+    } else {
+        $status = OK;
+        $message = 'no updates available';
     }
 
-    my $ret = system("yum check-update $redirection") >> 8;
-
-    if ( $ret == $YUM_RETURN_UPDATES_AVAILABLE ) {
-
-        # count the packages
-
-        verbose "yum reports a non-up-to-date system\n";
-
-        my $output;
-
-        # run yum check update and remove everything
-        # up to the first empty line, then count
-        # the listed updates
-
-        my $pid = open $output, q{-|},
-          q{yum check-update | sed -e '0,/^$/ d'}
-          or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
-        while (<$output>) {
-            chomp;
-            my $line = $_;
-            $line =~ s/\ .*//mxs;
-            push @outdated, $line;
-        }
-
-        close $output;
-
-        my $message = (scalar @outdated) . ' update';
-        if ( @outdated > 1 ) {
-            $message = $message . q{s};
-        }
-        $message = $message . ' available';
-        $plugin->add_perfdata(
-            label     => 'updates',
-            value     => scalar @outdated,
-            uom       => q{},
-            threshold => $threshold,
-        );
-
-        if ($exit_message) {
-            $exit_message .= q{, } . $message;
-        }
-        else {
-            $exit_message = $message;
-        }
-
+    $plugin->add_perfdata(
+        label     => 'security_updates',
+        value     => scalar @security_updates,
+        uom       => q{},
+        threshold => $threshold,
+    );
+    
+    if ($exit_message) {
+        $exit_message .= q{, } . $message;
+    } else {
+        $exit_message = $message;
     }
-    else {
-
-        verbose "yum reports an up-to-date system\n";
-
-        $plugin->add_perfdata(
-            label     => 'updates',
-            value     => 0,
-            uom       => q{},
-            threshold => $threshold,
-        );
-
-        if ($exit_message) {
-            $plugin->nagios_exit( CRITICAL, $exit_message );
-        }
-        else {
-            $plugin->nagios_exit( OK, 'no updates available' );
-        }
-
-    }
-
+    
+    
     return;
 
 }
@@ -350,20 +455,24 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         chomp;
         my $line = $_;
         $line =~ s/\ .*//mxs;
-        push @outdated, $line;
+        push @status_lines, $line;
     }
     
     close $output;
 
-    if ( @outdated > 0 ) {
-        my $message = (scalar @outdated) . ' update';
-        if ( @outdated > 1 ) {
+    if ( @status_lines > 0 ) {
+        
+        my $message = (scalar @status_lines) . ' update';
+
+        $status = CRITICAL;
+        
+        if ( @status_lines > 1 ) {
             $message = $message . q{s};
         }
         $message = $message . ' available';
         $plugin->add_perfdata(
             label     => 'updates',
-            value     => scalar @outdated,
+            value     => scalar @status_lines,
             uom       => q{},
             threshold => $threshold,
         );
@@ -505,41 +614,30 @@ if ( $OSNAME eq 'linux' ) {
         }
 
         if ($bootcheck && $wrong_kernel) {
-            # a wrong kernel always generates a critical
-            $plugin->nagios_exit( CRITICAL, $exit_message );
-        } else {            
-            if ($exit_message) {                
-
-                # Nagios::Plugin does not support the addition Nagios 3 status lines
-                # -> we do it manually
-                #
-                # $plugin->nagios_exit(
-                #    $threshold->get_status($updates),
-                #    $exit_message
-                # );
-
-                my $status = $threshold->get_status((scalar @outdated)+1);
-
-                print 'CHECK_UPDATES '
-                    . $Nagios::Plugin::STATUS_TEXT{$status}
-                    . " - $exit_message | "
-                    . ${$plugin->perfdata}[0]->perfoutput
-                    . "\n";
-
-                for my $package (@outdated) {
-                    print "$package\n"
-                }
-            
-                exit $status;
-                
-            }
-            else {
-                $plugin->nagios_exit( OK, 'no updates available' );
-            }
+            $status = CRITICAL;
         }
 
-    }
-    else {
+        # Nagios::Plugin does not support the addition Nagios 3 status lines
+        # -> we do it manually
+        
+        print 'CHECK_UPDATES '
+            . $Nagios::Plugin::STATUS_TEXT{$status}
+            . " - $exit_message |";
+
+        for my $pdata (@{$plugin->perfdata}) {
+            print q{ } . $pdata->perfoutput;
+        }
+
+        print "\n";
+
+        for my $package (@status_lines) {
+            print "$package\n"
+        }
+            
+        exit $status;
+        
+        
+    } else {
         $plugin->nagios_exit( UNKNOWN,
             'Cannot detect Linux distribution (no /etc/issue file)' );
     }
