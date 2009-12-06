@@ -1,3 +1,5 @@
+2009-12-06: 1.4.1 - fixed licensing and RPM packaging. Fixed the kernel version check
+                    on CentOS
 2009-12-04: 1.4.0 - checks for security updates if yum-plugin-security
                     is available
 2009-11-11: 1.3.4 - fixed a bug that failed to recognize some RH kernels

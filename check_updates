@@ -20,14 +20,12 @@
 #   $HeadURL$
 #   $Date$
 
-use 5.008;
 use strict;
 use warnings;
 use Carp;
 
 use version; our $VERSION = '1.4.1';
 
-use Data::Dumper;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use List::Util qw(first);
@@ -124,6 +122,27 @@ sub verbose {
 
 }
 
+sub clean_kernel_version {
+
+    my $kernel = shift;
+
+    $kernel =~ s/\.[\w]*PAE//mxs;
+    $kernel =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
+    
+    # remove smp
+
+    $kernel =~ s/smp$//mxs;
+
+    # remove RH, Fedora and CentOSflavours
+
+    $kernel =~ s/\.el\d+.*//imxs;
+    $kernel =~ s/.fc\d+.*//imxs;
+
+    return $kernel;
+    
+}
+
+
 ##############################################################################
 # Usage     : check_running_kernel( );
 # Purpose   : checks if the loaded kernel is the latest available
@@ -145,18 +164,7 @@ sub check_running_kernel {
     
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
-    # remove the trailing arch displayed on some systems
-
-    $release =~ s/\.[\w]*PAE//mxs;
-    $release =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
-    
-    # remove smp
-
-    $release =~ s/smp$//mxs;
-
-    # remove RH flavour
-
-    $release =~ s/\.EL5?$//imxs;
+    $release = clean_kernel_version( $release );
 
     verbose "running a Linux kernel: $release\n";
 
@@ -203,17 +211,11 @@ sub check_running_kernel {
     }
 
     # strip package name
-    map { $_ =~ s/^$package-//mxs } @versions;
+    map { $_ =~ s/^$package-//mxs } @versions;    
 
-    # strip architecture
-    map { $_ =~ s/\.[^\.]*$//mxs } @versions;
+    # 'clean' version
+    map { $_ = clean_kernel_version($_) } @versions;
 
-    # strip SMP
-    map { $_ =~ s/smp-//imxs } @versions;
-
-    # strip PAE
-    map { $_ =~ s/PAE-//imxs } @versions;
-        
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
