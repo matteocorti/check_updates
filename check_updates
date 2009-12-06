@@ -85,7 +85,7 @@ sub whoami {
         return $_;
     }
     close $output;
-    
+
     $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
     return;
 }
@@ -128,7 +128,7 @@ sub clean_kernel_version {
 
     $kernel =~ s/\.[\w]*PAE//mxs;
     $kernel =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
-    
+
     # remove smp
 
     $kernel =~ s/smp$//mxs;
@@ -139,9 +139,8 @@ sub clean_kernel_version {
     $kernel =~ s/.fc\d+.*//imxs;
 
     return $kernel;
-    
-}
 
+}
 
 ##############################################################################
 # Usage     : check_running_kernel( );
@@ -161,10 +160,10 @@ sub check_running_kernel {
 
     ################################################################################
     # Running
-    
+
     my ( $sysname, $nodename, $release, $version, $machine ) = POSIX::uname();
 
-    $release = clean_kernel_version( $release );
+    $release = clean_kernel_version($release);
 
     verbose "running a Linux kernel: $release\n";
 
@@ -173,15 +172,13 @@ sub check_running_kernel {
 
     my @versions;
 
-    for my $rpm ( ( "$package", "$package-smp", "$package-PAE") ) {
+    for my $rpm ( ( "$package", "$package-smp", "$package-PAE" ) ) {
 
         my $output;
-        
+
         my $pid = open $output, q{-|}, "rpm -q $rpm"
-            or $plugin->nagios_exit(
-                UNKNOWN,
-                "Cannot list installed kernels: $OS_ERROR"
-            );
+          or $plugin->nagios_exit( UNKNOWN,
+            "Cannot list installed kernels: $OS_ERROR" );
 
         # there could be multiple versions of the same package installed
         my @rpm_versions;
@@ -189,39 +186,39 @@ sub check_running_kernel {
             chomp $_;
             push @rpm_versions, $_;
         }
-            
+
         if ( !( close $output ) && ( $OS_ERROR != 0 ) ) {
-            
+
             # close to a piped open return false if the command with non-zero
             # status. In this case $! is set to 0
-            $plugin->nagios_exit(
-                UNKNOWN,
-                "Error while closing pipe to rpm: $OS_ERROR\n"
-            );
+            $plugin->nagios_exit( UNKNOWN,
+                "Error while closing pipe to rpm: $OS_ERROR\n" );
 
         }
-        
-        if ($CHILD_ERROR == 0) {
+
+        if ( $CHILD_ERROR == 0 ) {
 
             # rpm exits with 0 only it the RPM exists
-            
+
             push @versions, @rpm_versions;
         }
-        
+
     }
 
-    # strip package name
-    map { $_ =~ s/^$package-//mxs } @versions;    
+    for (@versions) {
 
-    # 'clean' version
-    map { $_ = clean_kernel_version($_) } @versions;
+        # strip package name
+        $_ =~ s/^$package-//mxs;
+        $_ = clean_kernel_version($_);
+
+    }
 
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
 
     verbose "kernel: running = $release, installed = $installed\n";
-    
+
     if ( $installed ne $release ) {
 
         my $error =
@@ -235,7 +232,7 @@ sub check_running_kernel {
         }
 
         $wrong_kernel = 1;
-        
+
     }
 
     return;
@@ -260,52 +257,54 @@ sub run_yum {
 
     my $command = "yum $arguments check-update";
 
-    my $pid = open $OUTPUT_HANDLER, q{-|}, $command        
-        or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    my $pid = open $OUTPUT_HANDLER, q{-|}, $command
+      or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
     while (<$OUTPUT_HANDLER>) {
-        
+
         my $line = $_;
-        
+
         verbose $line, 1;
 
-        chomp $line;        
+        chomp $line;
 
-        if (! $line ) {
+        if ( !$line ) {
             $blank_line = 1;
             next;
         }
-        
+
         if ( $line =~ m{^Loaded\ plugins:.*\ security.*}mxs ) {
-            
-            if (! $security_plugin ) {
-                # we do not want the same output if we are running the second check
+
+            if ( !$security_plugin ) {
+
+             # we do not want the same output if we are running the second check
                 verbose "Security plugin installed\n";
             }
             $security_plugin = 1;
-            
+
         }
 
         if ($blank_line) {
 
             $line =~ s{\ .*}{}mxs;
-            
+
             push @updates, $line;
         }
-        
+
     }
 
     close $OUTPUT_HANDLER;
 
-    if (($CHILD_ERROR >> 8) == $YUM_RETURN_UPDATES_AVAILABLE ) {
+    if ( ( $CHILD_ERROR >> 8 ) == $YUM_RETURN_UPDATES_AVAILABLE ) {
         if ($security_plugin) {
             verbose "Security updates available\n";
-        } else {
+        }
+        else {
             verbose "Updates available\n";
         }
     }
-    
+
     return @updates;
-    
+
 }
 
 ##############################################################################
@@ -319,9 +318,9 @@ sub run_yum {
 sub check_yum {
 
     my $message;
-    my @outdated = run_yum('');
+    my @outdated = run_yum(q{});
     my @security_updates;
-    
+
     $plugin->add_perfdata(
         label     => 'total_updates',
         value     => scalar @outdated,
@@ -329,84 +328,86 @@ sub check_yum {
         threshold => $threshold,
     );
 
-    if (@outdated > 0) {
-    
-        if (! $security_plugin ) {
+    if ( @outdated > 0 ) {
+
+        if ( !$security_plugin ) {
 
             # every update is critical since it could be a security problem
-            
+
             $status = CRITICAL;
             verbose "yum reports a non-up-to-date system\n";
 
-            $message = (scalar @outdated) . ' update';
+            $message = ( scalar @outdated ) . ' update';
             if ( @outdated > 1 ) {
                 $message = $message . q{s};
             }
             $message = $message . ' available';
-            
+
             @status_lines = @outdated;
 
-       } else {
+        }
+        else {
 
-           $status = WARNING;
+            $status = WARNING;
 
-           @security_updates = run_yum('--security');
-           
-           if (@security_updates > 0) {
+            @security_updates = run_yum('--security');
 
-               $status = CRITICAL;
-               
-               $message = (scalar @security_updates) . ' security update';
-               if ( @security_updates > 1 ) {
-                   $message = $message . q{s};
-               }
+            if ( @security_updates > 0 ) {
 
-               # compute the array difference
-               my %count;
+                $status = CRITICAL;
 
-               for my $element (@security_updates) {
-                   push @status_lines, "$element (security)";
-                   $count{$element}++;
-               }
-               
-               for my $element (@outdated) {
-                   $count{$element}++;
-               }
+                $message = ( scalar @security_updates ) . ' security update';
+                if ( @security_updates > 1 ) {
+                    $message = $message . q{s};
+                }
 
-               my @difference;
-               for my $element (@outdated) {
-                   if ($count{$element} == 1) {
-                       push @difference, $element;
-                   }
-               }
+                # compute the array difference
+                my %count;
 
-               @outdated = @difference;
-               
-           }
+                for my $element (@security_updates) {
+                    push @status_lines, "$element (security)";
+                    $count{$element}++;
+                }
 
-           if (@outdated > 0) {
+                for my $element (@outdated) {
+                    $count{$element}++;
+                }
 
-               if ($message) {
-                   $message .= ' and ';
-               }
-               
-               $message .= (scalar @outdated) . ' non-critical update';
-               if ( @outdated > 1 ) {
-                   $message = $message . q{s};
-               }
-               
-               push @status_lines, @outdated;
-               
-           }
-           
-           if ($message) {
-               $message .= ' available';
-           }
-           
-       }
-            
-    } else {
-        $status = OK;
+                my @difference;
+                for my $element (@outdated) {
+                    if ( $count{$element} == 1 ) {
+                        push @difference, $element;
+                    }
+                }
+
+                @outdated = @difference;
+
+            }
+
+            if ( @outdated > 0 ) {
+
+                if ($message) {
+                    $message .= ' and ';
+                }
+
+                $message .= ( scalar @outdated ) . ' non-critical update';
+                if ( @outdated > 1 ) {
+                    $message = $message . q{s};
+                }
+
+                push @status_lines, @outdated;
+
+            }
+
+            if ($message) {
+                $message .= ' available';
+            }
+
+        }
+
+    }
+    else {
+        $status  = OK;
         $message = 'no updates available';
     }
 
@@ -416,14 +417,14 @@ sub check_yum {
         uom       => q{},
         threshold => $threshold,
     );
-    
+
     if ($exit_message) {
         $exit_message .= q{, } . $message;
-    } else {
+    }
+    else {
         $exit_message = $message;
     }
-    
-    
+
     return;
 
 }
@@ -459,15 +460,15 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         $line =~ s/\ .*//mxs;
         push @status_lines, $line;
     }
-    
+
     close $output;
 
     if ( @status_lines > 0 ) {
-        
-        my $message = (scalar @status_lines) . ' update';
+
+        my $message = ( scalar @status_lines ) . ' update';
 
         $status = CRITICAL;
-        
+
         if ( @status_lines > 1 ) {
             $message = $message . q{s};
         }
@@ -520,7 +521,7 @@ $options = Nagios::Plugin::Getopt->new(
     usage   => 'Usage: %s [OPTIONS]',
     version => $VERSION,
     url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
-    blurb   => 'Checks if RedHat or Fedora system is up-to-date', 
+    blurb   => 'Checks if RedHat or Fedora system is up-to-date',
 );
 
 $options->arg(
@@ -534,14 +535,16 @@ $options->arg(
 );
 
 $options->arg(
-    spec    => 'warning|w=i',
-    help    => 'Exit with WARNING status if more than INTEGER updates are available',
+    spec => 'warning|w=i',
+    help =>
+      'Exit with WARNING status if more than INTEGER updates are available',
     default => 0
 );
 
 $options->arg(
-    spec    => 'critical|c=i',
-    help    => 'Exit with CRITICAL status if more than INTEGER updates are available',
+    spec => 'critical|c=i',
+    help =>
+      'Exit with CRITICAL status if more than INTEGER updates are available',
     default => 0
 );
 
@@ -552,16 +555,13 @@ $threshold = Nagios::Plugin::Threshold->set_thresholds(
     critical => $options->get('critical'),
 );
 
-
 # check bootcheck consistency
-if ($options->get('boot-check') && $options->get('no-boot-check')) {
-    $plugin->nagios_exit(
-        CRITICAL,
-        'Error --boot-check and --no-boot-check specified at the same time'
-    );
+if ( $options->get('boot-check') && $options->get('no-boot-check') ) {
+    $plugin->nagios_exit( CRITICAL,
+        'Error --boot-check and --no-boot-check specified at the same time' );
 }
 
-if ($options->get('no-boot-check')) {
+if ( $options->get('no-boot-check') ) {
     $bootcheck = 0;
 }
 
@@ -570,7 +570,7 @@ if ($options->get('no-boot-check')) {
 
 alarm $options->timeout;
 
-verbose "Checking a $^O system\n";
+verbose "Checking a $OSNAME system\n";
 
 if ( $OSNAME eq 'linux' ) {
 
@@ -615,31 +615,31 @@ if ( $OSNAME eq 'linux' ) {
             $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
         }
 
-        if ($bootcheck && $wrong_kernel) {
+        if ( $bootcheck && $wrong_kernel ) {
             $status = CRITICAL;
         }
 
         # Nagios::Plugin does not support the addition Nagios 3 status lines
         # -> we do it manually
-        
-        print 'CHECK_UPDATES '
-            . $Nagios::Plugin::STATUS_TEXT{$status}
-            . " - $exit_message |";
 
-        for my $pdata (@{$plugin->perfdata}) {
+        print 'CHECK_UPDATES '
+          . $Nagios::Plugin::STATUS_TEXT{$status}
+          . " - $exit_message |";
+
+        for my $pdata ( @{ $plugin->perfdata } ) {
             print q{ } . $pdata->perfoutput;
         }
 
         print "\n";
 
         for my $package (@status_lines) {
-            print "$package\n"
+            print "$package\n";
         }
-            
+
         exit $status;
-        
-        
-    } else {
+
+    }
+    else {
         $plugin->nagios_exit( UNKNOWN,
             'Cannot detect Linux distribution (no /etc/issue file)' );
     }
