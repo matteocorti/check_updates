@@ -7,15 +7,15 @@ Summary:   A Nagios plugin to check if RedHat or Fedora system is up-to-date
 Name:      %{name}
 Version:   %{version}
 Release:   %{release}
-License:   GPL
+License:   GPLv3
 Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
 Group:     Applications/System
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Source:    http://www.id.ethz.ch/people/allid_list/corti/%{name}-%{version}.tar.gz
-Prefix:    %{_prefix}
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+URL:       https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
+Source:    https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{name}-%{version}.tar.gz
 BuildArch: noarch
 
-Requires: perl
+Requires:  perl
 
 %description
 A Nagios plugin to check if RedHat or Fedora system is up-to-date
@@ -24,20 +24,28 @@ A Nagios plugin to check if RedHat or Fedora system is up-to-date
 %setup -q
 
 %build
-%__perl Makefile.PL  INSTALLSCRIPT=%{buildroot}%{_prefix} INSTALLSITEMAN3DIR=%{buildroot}/usr/share/man/man3 INSTALLSITESCRIPT=%{buildroot}%{_prefix}
-make
+%{__perl} Makefile.PL \
+    INSTALLSCRIPT=%{_prefix} \
+    INSTALLSITEMAN3DIR=%{_mandir}/man3 \
+    INSTALLSITESCRIPT=%{_prefix}
+make %{?_smp_mflags}
 
 %install
-make install
+rm -rf %{buildroot}
+make pure_install PERL_INSTALL_ROOT=%{buildroot}
+find %{buildroot} -type f -name .packlist -exec rm -f {} \;
+find %{buildroot} -type f -name "*.pod" -exec rm -f {} \;
+find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \;
+%{_fixperms} %{buildroot}/*
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
-%defattr(-, root, root, 0644)
-%doc AUTHORS Changes NEWS README INSTALL TODO COPYING VERSION
-%attr(0755, root, root) %{_prefix}/%{name}
-%attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
+%defattr(-,root,root,-)
+%doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
+%{_prefix}/%{name}
+%{_mandir}/man3/%{name}.3pm*
 
 %changelog
 * Sun Dec  6 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.1-0
