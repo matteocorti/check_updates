@@ -2,43 +2,64 @@
 
 =head1 NAME
 
-C<check_updates> - a Nagios plugin to check if RedHat or Fedora system
+C<check_updates> - a Nagios plugin to check if Red Hat or Fedora system
 is up-to-date
 
 =head1 DESCRIPTION
 
-check_updates is a Nagios plugin to check if RedHat or Fedora system
+check_updates is a Nagios plugin to check if Red Hat or Fedora system
 is up-to-date
 
 =head1 VERSION
 
-Version 1.4.1
+Version 1.4.2
 
 =head1 SYNOPSIS
 
- check_updates [--help] [--verbose] [--version]
+  check_updates [OPTIONS]
 
- Options
-  --boot-check        check if the machine was booted with the newest kernel (default)
-  --help,-h,-?        this help message
-  --no-boot-check     do not complain if the machine was booted with an old kernel
-  --verbose,-v        verbose output
-  --version,-V        print version
-
-=head1 REQUIRED ARGUMENTS
-
+  -?, --usage
+    Print usage information
+  -h, --help
+    Print detailed help screen
+  -V, --version
+    Print version information
+  --extra-opts=[<section>[@<config_file>]]
+    Section and/or config_file from which to load extra options (may repeat)
+  --boot-check
+    Check if the machine was booted with the newest kernel (default)
+  --no-boot-check
+    do not complain if the machine was booted with an old kernel
+  -w, --warning=INTEGER
+    Exit with WARNING status if more than INTEGER updates are available
+  -c, --critical=INTEGER
+    Exit with CRITICAL status if more than INTEGER updates are available
+  -t, --timeout=INTEGER
+    Seconds before plugin times out (default: 15)
+  -v, --verbose
+    Show details for command-line debugging (can repeat up to 3 times)
 
 =head1 OPTIONS
 
-  --boot-check        check if the machine was booted with the newest kernel (default)
+  -?, --usage                              Print usage information
 
-  --help,-h,-?        this help message
+  -h, --help                               Print detailed help screen
 
-  --no-boot-check     do not complain if the machine was booted with an old kernel
+  -V, --version                            Print version information
 
-  --version,-V        print version
+  --extra-opts=[<section>[@<config_file>]] Section and/or config_file from which to load extra options (may repeat)
 
-  --verbose,-v        verbose output
+  --boot-check                             Check if the machine was booted with the newest kernel (default)
+
+  --no-boot-check                          do not complain if the machine was booted with an old kernel
+
+  -w, --warning=INTEGER                    Exit with WARNING status if more than INTEGER updates are available
+
+  -c, --critical=INTEGER                   Exit with CRITICAL status if more than INTEGER updates are available
+
+  -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
+
+  -v, --verbose                            Show details for command-line debugging (can repeat up to 3 times)
 
 =head1 EXAMPLE
 
@@ -74,19 +95,21 @@ check_updates depends on
 
 =item * Nagios::Plugin
 
+=item * Nagios::Plugin::Getopt
+
 =item * Nagios::Plugin::Threshold
 
 =item * Number::Format
 
 =item * POSIX
 
+=item * Readonly
+
 =item * Sort::Versions
 
 =item * version
 
 =back
-
-=head1 CONFIGURATION
 
 =head1 INCOMPATIBILITIES
 
@@ -102,7 +125,7 @@ No bugs have been reported.
 
 Please report any bugs or feature requests to matteo.corti@id.ethz.ch,
 or through the web interface at
-https://svn.id.ethz.ch/trac/bd_webhosting/newticket
+http://trac.id.ethz.ch/projects/nagios_plugins/newticket?component=check_updates
 
 =head1 AUTHOR
 
@@ -110,7 +133,7 @@ Matteo Corti <matteo.corti@id.ethz.ch>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2007, ETH Zurich.
+Copyright (c) 2009, Matteo Corti
 
 This module is free software; you can redistribute it and/or modify it
 under the terms of GNU general public license (gpl) version 3.
@@ -141,3 +164,14 @@ DAMAGES.
 
 =head1 ACKNOWLEDGMENTS
 
+Many thanks to:
+
+=over 4
+
+=item * Peter Bircher & Cristian Tuduce for several bug fixes
+
+=item * Mark Greenheigh for the prompt and precise bug reports
+
+=item * Jose Pedro Oliveria for the build and release fixes
+
+=back

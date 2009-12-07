@@ -1,9 +1,13 @@
+2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates.pod: fixed outdated documentation
+	* doc: several additions spelling fixes (thanks to J. Oliveira)
+
 2009-12-06  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed licensing information (see #51)
-	* doc: several spelling fixes (thanks to J. Oliveira)
-	* check_updates.spec: fixed several build problems (see #52)
-	* check_updates: unified kernel cleanup code (see #53)
+	* check_updates: fixed licensing information (see #52)
+	* check_updates.spec: fixed several build problems (see #53)
+	* check_updates: unified kernel cleanup code (see #54)
 
 2009-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
 

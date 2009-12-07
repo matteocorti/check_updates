@@ -13,3 +13,16 @@ follows:
 and execute the plugin with sudo
 
   sudo $INSTALLATION_PATH/check_updates
+
+
+Yum security plugin:
+====================
+
+Use one of the following commands to install the yum security plugin:
+
+  Fedora systems:
+  * yum install yum-plugin-security   
+
+  Red Hat / CentOS 5.x systems:
+  * yum install yum-security   
+

@@ -1,7 +1,10 @@
-%define version 1.4.1
+%define version 1.4.2
 %define release 0
 %define name    check_updates
-%define _prefix /usr/lib/nagios/plugins/contrib
+%define nagiospluginsdir %{_libdir}/nagios/plugins
+
+# No binaries in this package
+%define debug_package %{nil}
 
 Summary:   A Nagios plugin to check if RedHat or Fedora system is up-to-date
 Name:      %{name}
@@ -13,9 +16,8 @@ Group:     Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL:       https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
 Source:    https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{name}-%{version}.tar.gz
-BuildArch: noarch
 
-Requires:  perl
+Requires:  nagios-plugins
 
 %description
 A Nagios plugin to check if RedHat or Fedora system is up-to-date
@@ -25,9 +27,9 @@ A Nagios plugin to check if RedHat or Fedora system is up-to-date
 
 %build
 %{__perl} Makefile.PL \
-    INSTALLSCRIPT=%{_prefix} \
+    INSTALLSCRIPT=%{nagiospluginsdir} \
     INSTALLSITEMAN3DIR=%{_mandir}/man3 \
-    INSTALLSITESCRIPT=%{_prefix}
+    INSTALLSITESCRIPT=%{nagiospluginsdir}
 make %{?_smp_mflags}
 
 %install
@@ -44,10 +46,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
-%{_prefix}/%{name}
+%{nagiospluginsdir}/%{name}
 %{_mandir}/man3/%{name}.3pm*
 
 %changelog
+* Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.2-0
+- updated to 1.4.2 (patches from J. Oliveira)
+
 * Sun Dec  6 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.1-0
 - updated to 1.4.1 (minor fixes)
 
