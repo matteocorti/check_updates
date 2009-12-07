@@ -1,6 +1,7 @@
 2009-12-06  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: fixed licensing information (see #51)
+	* doc: several spelling fixes (thanks to J. Oliveira)
 	* check_updates.spec: fixed several build problems (see #52)
 	* check_updates: unified kernel cleanup code (see #53)
 
