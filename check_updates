@@ -24,7 +24,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.4.2';
+use version; our $VERSION = '1.4.3';
 
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
@@ -126,7 +126,9 @@ sub clean_kernel_version {
 
     my $kernel = shift;
 
-    $kernel =~ s/\.[\w]*PAE//mxs;
+    $kernel =~ s/\.[\w]*PAE//imxs;
+    $kernel =~ s/PAE-//imxs;
+    
     $kernel =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
 
     # remove smp
