@@ -1,3 +1,11 @@
+################################################################################
+# File version information:
+# $Id$
+# $Revision$
+# $HeadURL$
+# $Date$
+################################################################################
+
 %define version 1.4.2
 %define release 0
 %define name    check_updates
