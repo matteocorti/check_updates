@@ -134,6 +134,7 @@ sub clean_kernel_version {
     # remove smp
 
     $kernel =~ s/smp$//mxs;
+    $kernel =~ s/smp-//imxs;    
 
     # remove RH, Fedora and CentOSflavours
 
