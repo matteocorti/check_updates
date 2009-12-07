@@ -7,7 +7,7 @@
 ################################################################################
 
 %define version 1.4.4
-%define release 0
+%define release 1
 %define name    check_updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
 
@@ -17,15 +17,22 @@
 Summary:   A Nagios plugin to check if RedHat or Fedora system is up-to-date
 Name:      %{name}
 Version:   %{version}
-Release:   %{release}
-License:   GPLv3
+Release:   %{release}%{?dist}
+License:   GPLv3+
 Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
 Group:     Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL:       https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
 Source:    https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{name}-%{version}.tar.gz
 
+# Fedora build requirement (not needed for EPEL{4,5})
+BuildRequires: perl(ExtUtils::MakeMaker)
+
 Requires:  nagios-plugins
+# Yum security plugin RPM:
+#    Fedora             : yum-plugin-security (virtual provides yum-security)
+#    Red Hat Enterprise : yum-security
+# Requires:  yum-security
 
 %description
 A Nagios plugin to check if RedHat or Fedora system is up-to-date
