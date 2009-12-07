@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.3
+%define version 1.4.4
 %define release 0
 %define name    check_updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -58,6 +58,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/%{name}.3pm*
 
 %changelog
+* Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.4-0
+- updated to 1.4.4 (SMP version cleanup bug)
+
 * Mon Dec  7 2009 root <matteo.corti@id.ethz.ch> - 1.4.3-0
 - updated to 1.4.3 (PAE version cleanup bug)
 

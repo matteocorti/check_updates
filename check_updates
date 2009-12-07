@@ -24,7 +24,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.4.3';
+use version; our $VERSION = '1.4.4';
 
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);

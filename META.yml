@@ -30,4 +30,4 @@ requires:
   version: 0
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 1.4.2
+version: 1.4.4

@@ -1,5 +1,6 @@
-2009-12-07  root  <matteo.corti@id.ethz.ch>
+2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
+	* check_updates (clean_kernel_version): fixed a bug with SMP kernels version cleanup
 	* check_updates (clean_kernel_version): fixed a bug with PAE kernels version cleanup
 
 2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
