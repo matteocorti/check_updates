@@ -463,9 +463,11 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
     close $output;
 
+    my $message;
+    
     if ( @status_lines > 0 ) {
 
-        my $message = ( scalar @status_lines ) . ' update';
+        $message = ( scalar @status_lines ) . ' update';
 
         $status = CRITICAL;
 
@@ -480,16 +482,11 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
             threshold => $threshold,
         );
 
-        if ($exit_message) {
-            $exit_message .= " $message";
-        }
-        else {
-            $exit_message = $message;
-        }
-
     }
     else {
-
+               
+        $message = 'no updates available';
+        
         $plugin->add_perfdata(
             label     => 'updates',
             value     => 0,
@@ -499,6 +496,13 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
     }
 
+    if ($exit_message) {
+        $exit_message .= " $message";
+    }
+    else {
+        $exit_message = $message;
+    }
+        
     return;
 
 }

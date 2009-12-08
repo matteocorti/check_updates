@@ -1,3 +1,7 @@
+2009-12-08  root  <matteo.corti@id.ethz.ch>
+
+	* check_updates (check_up2date): fixed 'no updates' message on up2date based systems
+
 2009-12-08  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Removed unnecessary dependence on List::MoreUtils, List::Util and Number::Format (fixed #55)
