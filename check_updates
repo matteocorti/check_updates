@@ -24,15 +24,12 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.4.4';
+use version; our $VERSION = '1.4.5';
 
 use English qw(-no_match_vars);
-use List::MoreUtils qw(any);
-use List::Util qw(first);
 use Nagios::Plugin::Getopt;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin;
-use Number::Format qw(format_number);
 use POSIX qw(uname);
 use Sort::Versions;
 

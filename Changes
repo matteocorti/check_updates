@@ -1,5 +1,10 @@
+2009-12-08  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Removed unnecessary dependence on List::MoreUtils, List::Util and Number::Format (fixed #55)
+
 2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
+	* Version 1.4.4
 	* check_updates (clean_kernel_version): fixed a bug with SMP kernels version cleanup
 	* check_updates (clean_kernel_version): fixed a bug with PAE kernels version cleanup
 

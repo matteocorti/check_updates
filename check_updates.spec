@@ -6,8 +6,8 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.4
-%define release 1
+%define version 1.4.5
+%define release 0
 %define name    check_updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
 

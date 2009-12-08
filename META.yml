@@ -19,15 +19,12 @@ no_index:
 requires:
   Carp: 0
   English: 0
-  List::MoreUtils: 0
-  List::Util: 0
   Nagios::Plugin: 0
   Nagios::Plugin::Getopt: 0
   Nagios::Plugin::Threshold: 0
-  Number::Format: 0
   POSIX: 0
   Sort::Versions: 0
   version: 0
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 1.4.4
+version: 1.4.5

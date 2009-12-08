@@ -24,12 +24,9 @@ include 'version';
 
 requires 'Carp'                      => 0;
 requires 'English'                   => 0;
-requires 'List::MoreUtils'           => 0;
-requires 'List::Util'                => 0;
 requires 'Nagios::Plugin'            => 0;
 requires 'Nagios::Plugin::Getopt'    => 0;
 requires 'Nagios::Plugin::Threshold' => 0;
-requires 'Number::Format'            => 0;
 requires 'POSIX'                     => 0;
 requires 'Sort::Versions'            => 0;
 requires 'version'                   => 0;

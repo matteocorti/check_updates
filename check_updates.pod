@@ -97,17 +97,11 @@ check_updates depends on
 
 =item * Getopt::Long
 
-=item * List::MoreUtils
-
-=item * List::Util
-
 =item * Nagios::Plugin
 
 =item * Nagios::Plugin::Getopt
 
 =item * Nagios::Plugin::Threshold
-
-=item * Number::Format
 
 =item * POSIX
 
