@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/%{name}.3pm*
 
 %changelog
+* Tue Dec  8 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.5-0%{?dist}
+- updated to 1.4.5 (fixed OK status message on up2date based systems)
+
 * Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.4-0
 - updated to 1.4.4 (SMP version cleanup bug)
 

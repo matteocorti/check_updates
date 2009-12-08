@@ -125,13 +125,13 @@ sub clean_kernel_version {
 
     $kernel =~ s/\.[\w]*PAE//imxs;
     $kernel =~ s/PAE-//imxs;
-    
+
     $kernel =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
 
     # remove smp
 
     $kernel =~ s/smp$//mxs;
-    $kernel =~ s/smp-//imxs;    
+    $kernel =~ s/smp-//imxs;
 
     # remove RH, Fedora and CentOSflavours
 
@@ -464,7 +464,7 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
     close $output;
 
     my $message;
-    
+
     if ( @status_lines > 0 ) {
 
         $message = ( scalar @status_lines ) . ' update';
@@ -484,9 +484,9 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
     }
     else {
-               
+
         $message = 'no updates available';
-        
+
         $plugin->add_perfdata(
             label     => 'updates',
             value     => 0,
@@ -502,7 +502,7 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
     else {
         $exit_message = $message;
     }
-        
+
     return;
 
 }

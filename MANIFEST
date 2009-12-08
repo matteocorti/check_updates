@@ -3,7 +3,6 @@ Changes
 check_updates
 check_updates.pod
 check_updates.spec
-check_updates_1.4.4_specfile.patch
 COPYING
 COPYRIGHT
 inc/Module/Install.pm

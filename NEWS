@@ -1,3 +1,4 @@
+2009-12-08: 1.4.5 - fixed a the 'no updates' message on up2date based systems
 2009-12-07: 1.4.4 - fixed a bug with SMP kernel version cleanup
 2009-12-07: 1.4.3 - fixed a bug with PAE kernel version cleanup
 2009-12-07: 1.4.2 - fixed documentation and RPM packaging
