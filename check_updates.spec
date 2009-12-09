@@ -41,10 +41,9 @@ A Nagios plugin to check if RedHat or Fedora system is up-to-date
 %setup -q
 
 %build
-%{__perl} Makefile.PL \
+%{__perl} Makefile.PL INSTALLDIRS=vendor \
     INSTALLSCRIPT=%{nagiospluginsdir} \
-    INSTALLSITEMAN3DIR=%{_mandir}/man3 \
-    INSTALLSITESCRIPT=%{nagiospluginsdir}
+    INSTALLVENDORSCRIPT=%{nagiospluginsdir}
 make %{?_smp_mflags}
 
 %install
@@ -62,10 +61,10 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
 %{nagiospluginsdir}/%{name}
-%{_mandir}/man3/%{name}.3pm*
+%{_mandir}/man1/%{name}.1*
 
 %changelog
-* Tue Dec  8 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.5-0%{?dist}
+* Tue Dec  8 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.5-0
 - updated to 1.4.5 (fixed OK status message on up2date based systems)
 
 * Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.4-0

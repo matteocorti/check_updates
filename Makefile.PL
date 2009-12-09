@@ -35,6 +35,7 @@ install_script  'check_updates';
 
 WriteMakefile(
     INSTALLSCRIPT        => '/usr/lib/nagios/plugins/contrib',
-    INSTALLBIN           => '/usr/lib/nagios/plugins/contrib',
     INSTALLSITESCRIPT    => '/usr/lib/nagios/plugins/contrib',
+    MAN1PODS             => { 'check_updates.pod' => 'blib/man1/check_updates.1', },
+    MAN3PODS             => { },
 );

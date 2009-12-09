@@ -1,3 +1,9 @@
+2009-12-09  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Makefile.PL: man page being installed in the wrong section (3 instead of 1)
+	* Makefile.PL: perl site vs vendor directories
+	* check_updates.spec: removed the the %{?dist} macro from the changelog entries
+
 2009-12-08  root  <matteo.corti@id.ethz.ch>
 
 	* check_updates (check_up2date): fixed 'no updates' message on up2date based systems
