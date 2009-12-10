@@ -1,3 +1,7 @@
+2009-12-10  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.4.6 
+
 2009-12-09  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Makefile.PL: man page being installed in the wrong section (3 instead of 1)

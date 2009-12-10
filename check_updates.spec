@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.5
+%define version 1.4.6
 %define release 0
 %define name    check_updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -64,6 +64,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Thu Dec 10 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.6-0
+- updated to 1.4.6 (man page installed in 1, installation and packaging fixes)
+
 * Tue Dec  8 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.5-0
 - updated to 1.4.5 (fixed OK status message on up2date based systems)
 
