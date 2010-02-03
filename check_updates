@@ -35,8 +35,8 @@ use Sort::Versions;
 
 use Readonly;
 
-Readonly my $EXIT_UNKNOWN                 => 3;
-Readonly my $YUM_RETURN_UPDATES_AVAILABLE => 100;
+Readonly our $EXIT_UNKNOWN                 => 3;
+Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
