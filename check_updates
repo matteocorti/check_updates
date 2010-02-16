@@ -259,6 +259,7 @@ sub run_yum {
 
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command
       or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+    
     while (<$OUTPUT_HANDLER>) {
 
         my $line = $_;
@@ -282,8 +283,14 @@ sub run_yum {
             $security_plugin = 1;
 
         }
-
+        
         if ($blank_line) {
+
+            # some lines are wrapped and result and the second part
+            # is erroneously interpreted as a new update
+            if ($line =~ m/^\ / ) {
+                next;
+            }
 
             $line =~ s{\ .*}{}mxs;
 
