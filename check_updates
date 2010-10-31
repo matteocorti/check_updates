@@ -8,7 +8,8 @@
 # Copyright (c) 2009, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
-# under the terms of GNU general public license (gpl) version 3.
+# under the terms of GNU general public license (gpl) version 3,
+# or (at your option) any later version.
 # See the COPYING file for details.
 #
 # RCS information
@@ -24,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-use version; our $VERSION = '1.4.7';
+use version; our $VERSION = '1.4.8';
 
 use English qw(-no_match_vars);
 use Nagios::Plugin::Getopt;

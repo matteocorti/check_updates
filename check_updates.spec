@@ -64,6 +64,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Sun Oct 31 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.7-0
+- updated to 1.4.8 (fixed the license declaration)
+
 * Tue Feb 16 2010 root <matteo.corti@id.ethz.ch> - 1.4.7-0
 - updated to 1.4.7 (bug fix: wrong update count if yum check-updates gets wrapped)
 
