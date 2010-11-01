@@ -20,7 +20,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.4.8
+Version 1.4.9
 
 =head1 SYNOPSIS
 
@@ -108,8 +108,6 @@ check_updates depends on
 =item * Readonly
 
 =item * Sort::Versions
-
-=item * version
 
 =back
 
