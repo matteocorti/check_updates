@@ -5,7 +5,7 @@
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2009, Matteo Corti
+# Copyright (c) 2007-2010, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -25,7 +25,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '1.4.9';
+our $VERSION = '1.4.10';
 
 use English qw(-no_match_vars);
 use Nagios::Plugin::Getopt;

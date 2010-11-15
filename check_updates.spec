@@ -6,9 +6,9 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.9
+%define version 1.4.10
 %define release 0
-%define name    check_updates
+%define name    nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
 
 # No binaries in this package
@@ -17,6 +17,7 @@
 Summary:   A Nagios plugin to check if RedHat or Fedora system is up-to-date
 Name:      %{name}
 Version:   %{version}
+Obsoletes: check_updates
 Release:   %{release}%{?dist}
 License:   GPLv3+
 Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
@@ -64,6 +65,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Mon Nov 15 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.10-0
+- License fix and new package name
+
 * Mon Nov  1 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.9-0
 - removed the dependency on version.pm
 

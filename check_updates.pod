@@ -20,7 +20,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.4.9
+Version 1.4.10
 
 =head1 SYNOPSIS
 
@@ -133,10 +133,11 @@ Matteo Corti <matteo.corti@id.ethz.ch>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2009, Matteo Corti
+Copyright (c) 2007-2010, Matteo Corti
 
 This module is free software; you can redistribute it and/or modify it
-under the terms of GNU general public license (gpl) version 3.
+under the terms of GNU general public license (gpl) version 3 or (at
+your option) any later version.
 See the LICENSE file for details.
 
 =head1 DISCLAIMER OF WARRANTY
