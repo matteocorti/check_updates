@@ -6,30 +6,31 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.11
-%define release 0
-%define name    nagios-plugins-check-updates
+%define version          1.4.11
+%define release          0
+%define sourcename       check_updates
+%define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
 
 # No binaries in this package
-%define debug_package %{nil}
+%define debug_package    %{nil}
 
-Summary:   A Nagios plugin to check if RedHat or Fedora system is up-to-date
-Name:      %{name}
-Version:   %{version}
-Obsoletes: check_updates
-Release:   %{release}%{?dist}
-License:   GPLv3+
-Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
-Group:     Applications/System
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-URL:       https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
-Source:    https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{name}-%{version}.tar.gz
+Summary:       A Nagios plugin to check if RedHat or Fedora system is up-to-date
+Name:          %{packagename}
+Version:       %{version}
+Obsoletes:     check_updates
+Release:       %{release}%{?dist}
+License:       GPLv3+
+Packager:      Matteo Corti <matteo.corti@id.ethz.ch>
+Group:         Applications/System
+BuildRoot:     %{_tmppath}/%{packagename}-%{version}-%{release}-root-%(%{__id_u} -n)
+URL:           https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
+Source:        https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{sourcename}-%{version}.tar.gz
 
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
 
-Requires:  nagios-plugins
+Requires:      nagios-plugins
 # Yum security plugin RPM:
 #    Fedora             : yum-plugin-security (virtual provides yum-security)
 #    Red Hat Enterprise : yum-security
@@ -39,7 +40,7 @@ Requires:  nagios-plugins
 A Nagios plugin to check if RedHat or Fedora system is up-to-date
 
 %prep
-%setup -q
+%setup -q -n %{sourcename}-%{version}
 
 %build
 %{__perl} Makefile.PL INSTALLDIRS=vendor \
@@ -61,8 +62,8 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
-%{nagiospluginsdir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%{nagiospluginsdir}/%{sourcename}
+%{_mandir}/man1/%{sourcename}.1*
 
 %changelog
 * Thu Nov 18 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.11-0
