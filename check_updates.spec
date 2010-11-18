@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version 1.4.10
+%define version 1.4.11
 %define release 0
 %define name    nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Thu Nov 18 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.11-0
+- fixed the processing of Xen kernels
+
 * Mon Nov 15 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.10-0
 - License fix and new package name
 
@@ -74,7 +77,7 @@ rm -rf %{buildroot}
 * Sun Oct 31 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.8-0
 - updated to 1.4.8 (fixed the license declaration)
 
-* Tue Feb 16 2010 root <matteo.corti@id.ethz.ch> - 1.4.7-0
+* Tue Feb 16 2010 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.7-0
 - updated to 1.4.7 (bug fix: wrong update count if yum check-updates gets wrapped)
 
 * Thu Dec 10 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.6-0
@@ -86,7 +89,7 @@ rm -rf %{buildroot}
 * Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.4-0
 - updated to 1.4.4 (SMP version cleanup bug)
 
-* Mon Dec  7 2009 root <matteo.corti@id.ethz.ch> - 1.4.3-0
+* Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.3-0
 - updated to 1.4.3 (PAE version cleanup bug)
 
 * Mon Dec  7 2009 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.2-0
@@ -137,7 +140,7 @@ rm -rf %{buildroot}
 * Thu May 15 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.1-0
 - removing the trailing arch from uname
 
-* Thu May  8 2008 root <matteo.corti@id.ethz.ch> - 1.0.0-0
+* Thu May  8 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 1.0.0-0
 - correct kernel version comparisons
 
 * Mon Mar 17 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.13-0
@@ -149,7 +152,7 @@ rm -rf %{buildroot}
 * Tue Feb 26 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.11-0
 - fixed a bug in the package count
 
-* Thu Feb 21 2008 root <matteo.corti@id.ethz.ch> - 0.9.10-0
+* Thu Feb 21 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.10-0
 - fixed kernel check on RH
 
 * Thu Feb 21 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.9-0
