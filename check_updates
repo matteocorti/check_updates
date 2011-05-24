@@ -67,7 +67,9 @@ use vars qw(
 );
 ## use critic
 
-$status = OK;
+# the script is declared as a package so that it can be unit tested
+# but it should not be used as a module
+run() unless caller();
 
 ##############################################################################
 # subroutines
@@ -541,155 +543,177 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 }
 
 ##############################################################################
-# main
-#
+# Usage     : run();
+# Purpose   : main method
+# Returns   : n/a
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub run {
 
-################
-# initialization
-$help         = q{};
-$bootcheck    = 1;
-$wrong_kernel = 0;
-$plugin       = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
+    $status = OK;
 
-########################
-# Command line arguments
+    ##############################################################################
+    # main
+    #
 
-$options = Nagios::Plugin::Getopt->new(
-    usage   => 'Usage: %s [OPTIONS]',
-    version => $VERSION,
-    url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
-    blurb   => 'Checks if RedHat or Fedora system is up-to-date',
-);
+    ################
+    # initialization
+    $help         = q{};
+    $bootcheck    = 1;
+    $wrong_kernel = 0;
+    $plugin       = Nagios::Plugin->new( shortname => 'CHECK_UPDATES' );
 
-$options->arg(
-    spec => 'boot-check',
-    help => 'Check if the machine was booted with the newest kernel (default)',
-);
+    ########################
+    # Command line arguments
 
-$options->arg(
-    spec => 'no-boot-check',
-    help => 'do not complain if the machine was booted with an old kernel',
-);
+    $options = Nagios::Plugin::Getopt->new(
+        usage   => 'Usage: %s [OPTIONS]',
+        version => $VERSION,
+        url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
+        blurb   => 'Checks if RedHat or Fedora system is up-to-date',
+    );
 
-$options->arg(
-    spec => 'warning|w=i',
-    help =>
-      'Exit with WARNING status if more than INTEGER updates are available',
-    default => 0
-);
+    $options->arg(
+        spec => 'boot-check',
+        help =>
+          'Check if the machine was booted with the newest kernel (default)',
+    );
 
-$options->arg(
-    spec => 'critical|c=i',
-    help =>
-      'Exit with CRITICAL status if more than INTEGER updates are available',
-    default => 0
-);
+    $options->arg(
+        spec => 'no-boot-check',
+        help => 'do not complain if the machine was booted with an old kernel',
+    );
 
-$options->getopts();
+    $options->arg(
+        spec => 'warning|w=i',
+        help =>
+          'Exit with WARNING status if more than INTEGER updates are available',
+        default => 0
+    );
 
-$threshold = Nagios::Plugin::Threshold->set_thresholds(
-    warning  => $options->get('warning'),
-    critical => $options->get('critical'),
-);
+    $options->arg(
+        spec => 'critical|c=i',
+        help =>
+'Exit with CRITICAL status if more than INTEGER updates are available',
+        default => 0
+    );
 
-# check bootcheck consistency
-if ( $options->get('boot-check') && $options->get('no-boot-check') ) {
-    $plugin->nagios_exit( CRITICAL,
-        'Error --boot-check and --no-boot-check specified at the same time' );
-}
+    $options->getopts();
 
-if ( $options->get('no-boot-check') ) {
-    $bootcheck = 0;
-}
+    $threshold = Nagios::Plugin::Threshold->set_thresholds(
+        warning  => $options->get('warning'),
+        critical => $options->get('critical'),
+    );
 
-#########
-# Timeout
+    # check bootcheck consistency
+    if ( $options->get('boot-check') && $options->get('no-boot-check') ) {
+        $plugin->nagios_exit( CRITICAL,
+            'Error --boot-check and --no-boot-check specified at the same time'
+        );
+    }
 
-alarm $options->timeout;
+    if ( $options->get('no-boot-check') ) {
+        $bootcheck = 0;
+    }
 
-verbose "Checking a $OSNAME system\n";
+    #########
+    # Timeout
 
-if ( $OSNAME eq 'linux' ) {
+    alarm $options->timeout;
 
-    if ( -r '/etc/issue' ) {
+    verbose "Checking a $OSNAME system\n";
 
-        my $header;
-        my $TMP;
+    if ( $OSNAME eq 'linux' ) {
 
-        open $TMP, q{<}, '/etc/issue'
-          or $plugin->nagios_exit( CRITICAL,
-            "Error opening /etc/issue: $OS_ERROR" );
-        while (<$TMP>) {
-            chomp;
-            $header = $_;
-            last;
-        }
-        close $TMP
-          or $plugin->nagios_exit( CRITICAL,
-            "Error closing /etc/issue: $OS_ERROR" );
+        if ( -r '/etc/issue' ) {
 
-        if ( $header =~ /Fedora/mxs ) {   ## no critic (ProhibitCascadingIfElse)
-            verbose "Fedora detected: using yum\n";
-            check_running_kernel();
-            check_yum();
-        }
-        elsif ( $header =~ /CentOS/mxs ) {
-            verbose "CentOS detected: using yum\n";
-            check_running_kernel();
-            check_yum();
-        }
-        elsif ( $header =~ /Scientific[ ]Linux/mxs ) {
-            verbose "Scientific Linux detected: using yum\n";
-            check_running_kernel();
-            check_yum();
-        }
-        elsif ( $header =~ /Red[ ]Hat.*[ ]4/mxs ) {
-            verbose "Red Hat Enterprise Linux 4 detected: using up2date\n";
-            check_running_kernel();
-            check_up2date();
-        }
-        elsif ( $header =~ /Red[ ]Hat.*[ ][56]/mxs ) {
-            verbose "Red Hat Enterprise Linux 5 or newer detected: using yum\n";
-            check_running_kernel();
-            check_yum();
-        }
-        else {
-            $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
-        }
+            my $header;
+            my $TMP;
 
-        if ( $bootcheck && $wrong_kernel ) {
-            $status = CRITICAL;
-        }
+            open $TMP, q{<}, '/etc/issue'
+              or $plugin->nagios_exit( CRITICAL,
+                "Error opening /etc/issue: $OS_ERROR" );
+            while (<$TMP>) {
+                chomp;
+                $header = $_;
+                last;
+            }
+            close $TMP
+              or $plugin->nagios_exit( CRITICAL,
+                "Error closing /etc/issue: $OS_ERROR" );
 
-        # Nagios::Plugin does not support the addition Nagios 3 status lines
-        # -> we do it manually
+            if ( $header =~ /Fedora/mxs )
+            {    ## no critic (ProhibitCascadingIfElse)
+                verbose "Fedora detected: using yum\n";
+                check_running_kernel();
+                check_yum();
+            }
+            elsif ( $header =~ /CentOS/mxs ) {
+                verbose "CentOS detected: using yum\n";
+                check_running_kernel();
+                check_yum();
+            }
+            elsif ( $header =~ /Scientific[ ]Linux/mxs ) {
+                verbose "Scientific Linux detected: using yum\n";
+                check_running_kernel();
+                check_yum();
+            }
+            elsif ( $header =~ /Red[ ]Hat.*[ ]4/mxs ) {
+                verbose "Red Hat Enterprise Linux 4 detected: using up2date\n";
+                check_running_kernel();
+                check_up2date();
+            }
+            elsif ( $header =~ /Red[ ]Hat.*[ ][56]/mxs ) {
+                verbose
+                  "Red Hat Enterprise Linux 5 or newer detected: using yum\n";
+                check_running_kernel();
+                check_yum();
+            }
+            else {
+                $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
+            }
 
-        #<<<
-        print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
-          . $Nagios::Plugin::STATUS_TEXT{$status}
-          . " - $exit_message |";
-        #>>>
-        for my $pdata ( @{ $plugin->perfdata } ) {
+            if ( $bootcheck && $wrong_kernel ) {
+                $status = CRITICAL;
+            }
+
+            # Nagios::Plugin does not support the addition Nagios 3 status lines
+            # -> we do it manually
+
             #<<<
-            print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
+            print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
+                . $Nagios::Plugin::STATUS_TEXT{$status}
+                . " - $exit_message |";
             #>>>
-        }
+            
+            for my $pdata ( @{ $plugin->perfdata } ) {
+                #<<<
+                print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
+                #>>>
+            }
 
-        #<<<
-        print "\n"; ## no critic (RequireCheckedSyscalls)
-        #>>>
-        for my $package (@status_lines) {
+            #<<<
+            print "\n"; ## no critic (RequireCheckedSyscalls)
+            #>>>
+            for my $package (@status_lines) {
             #<<<
             print "$package\n"; ## no critic (RequireCheckedSyscalls)
             #>>>
-        }
+            }
 
-        exit $status;
+            exit $status;
+
+        }
+        else {
+            $plugin->nagios_exit( UNKNOWN,
+                'Cannot detect Linux distribution (no /etc/issue file)' );
+        }
 
     }
     else {
-        $plugin->nagios_exit( UNKNOWN,
-            'Cannot detect Linux distribution (no /etc/issue file)' );
+        $plugin->nagios_exit( UNKNOWN, 'Cannot detect Linux system' );
     }
 
 }
