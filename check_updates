@@ -69,7 +69,9 @@ use vars qw(
 
 # the script is declared as a package so that it can be unit tested
 # but it should not be used as a module
-run() unless caller();
+if ( !caller ) {
+    run();
+}
 
 ##############################################################################
 # subroutines
@@ -543,6 +545,76 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 }
 
 ##############################################################################
+# Usage     : my $system = get_os_name_and_version();
+# Purpose   : returns the name of the system by parsing /etc/issue
+# Returns   : name of the system
+# Arguments : n/a
+# Throws    : CRITICAL if not able to read /etc/issue
+# Comments  : n/a
+# See also  : n/a
+sub get_os_name_and_version {
+
+    my $filename = shift;
+    if (! $filename ) {
+        $filename = '/etc/issue';
+    }
+    
+    my $header;
+
+    if ( -r $filename ) {
+
+        my $TMP;
+
+        open $TMP, q{<}, $filename
+          or $plugin->nagios_exit( CRITICAL,
+            "Error opening $filename: $OS_ERROR" );
+        while (<$TMP>) {
+            chomp;
+            $header = $_;
+            last;
+        }
+        close $TMP
+          or $plugin->nagios_exit( CRITICAL,
+            "Error closing $filename: $OS_ERROR" );
+
+    }
+    else {
+        $plugin->nagios_exit( UNKNOWN,
+            'Cannot detect Linux distribution (no $filename file)' );
+    }
+
+    return $header;
+
+}
+
+##############################################################################
+# Usage     : my $updater = get_updated()
+# Purpose   : returns the name of updating system (yum or up2date)
+# Returns   : name of updating system or undef if not found
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub get_updater {
+
+    my $name = shift;
+    
+    if ( $name =~ /Fedora/mxs ||
+         $name =~ /CentOS/mxs ||
+         $name =~ /Scientific[ ]Linux/mxs ||
+         $name =~ /Red[ ]Hat.*[ ][56]/mxs
+     ) {
+        return 'yum';
+    }
+    elsif ( $name =~ /Red[ ]Hat.*[ ]4/mxs ) {
+        return 'up2date';
+    }
+    return;
+
+}
+
+
+##############################################################################
 # Usage     : run();
 # Purpose   : main method
 # Returns   : n/a
@@ -627,94 +699,59 @@ sub run {
 
     if ( $OSNAME eq 'linux' ) {
 
-        if ( -r '/etc/issue' ) {
+        my $name = get_os_name_and_version();
+        verbose "Running on $name\n";
 
-            my $header;
-            my $TMP;
+        my $updater = get_updater($name);
 
-            open $TMP, q{<}, '/etc/issue'
-              or $plugin->nagios_exit( CRITICAL,
-                "Error opening /etc/issue: $OS_ERROR" );
-            while (<$TMP>) {
-                chomp;
-                $header = $_;
-                last;
-            }
-            close $TMP
-              or $plugin->nagios_exit( CRITICAL,
-                "Error closing /etc/issue: $OS_ERROR" );
+        if ( $updater eq 'yum' ) {
+            verbose "Using yum\n";
+            check_running_kernel();
+            check_yum();
+        }
+        elsif ( $updater eq 'up2date' ) {
+            verbose "Using up2date\n";
+            check_running_kernel();
+            check_up2date();
+        } else {
+            $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
+        }
 
-            if ( $header =~ /Fedora/mxs )
-            {    ## no critic (ProhibitCascadingIfElse)
-                verbose "Fedora detected: using yum\n";
-                check_running_kernel();
-                check_yum();
-            }
-            elsif ( $header =~ /CentOS/mxs ) {
-                verbose "CentOS detected: using yum\n";
-                check_running_kernel();
-                check_yum();
-            }
-            elsif ( $header =~ /Scientific[ ]Linux/mxs ) {
-                verbose "Scientific Linux detected: using yum\n";
-                check_running_kernel();
-                check_yum();
-            }
-            elsif ( $header =~ /Red[ ]Hat.*[ ]4/mxs ) {
-                verbose "Red Hat Enterprise Linux 4 detected: using up2date\n";
-                check_running_kernel();
-                check_up2date();
-            }
-            elsif ( $header =~ /Red[ ]Hat.*[ ][56]/mxs ) {
-                verbose
-                  "Red Hat Enterprise Linux 5 or newer detected: using yum\n";
-                check_running_kernel();
-                check_yum();
-            }
-            else {
-                $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
-            }
+        if ( $bootcheck && $wrong_kernel ) {
+            $status = CRITICAL;
+        }
 
-            if ( $bootcheck && $wrong_kernel ) {
-                $status = CRITICAL;
-            }
+        # Nagios::Plugin does not support the addition Nagios 3 status lines
+        # -> we do it manually
 
-            # Nagios::Plugin does not support the addition Nagios 3 status lines
-            # -> we do it manually
-
+        #<<<
+        print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
+            . $Nagios::Plugin::STATUS_TEXT{$status}
+            . " - $exit_message |";
+        #>>>
+        for my $pdata ( @{ $plugin->perfdata } ) {
             #<<<
-            print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
-                . $Nagios::Plugin::STATUS_TEXT{$status}
-                . " - $exit_message |";
+            print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
             #>>>
-            
-            for my $pdata ( @{ $plugin->perfdata } ) {
-                #<<<
-                print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
-                #>>>
-            }
+        }
 
-            #<<<
-            print "\n"; ## no critic (RequireCheckedSyscalls)
-            #>>>
-            for my $package (@status_lines) {
+        #<<<
+        print "\n"; ## no critic (RequireCheckedSyscalls)
+        #>>>
+        for my $package (@status_lines) {
             #<<<
             print "$package\n"; ## no critic (RequireCheckedSyscalls)
             #>>>
-            }
-
-            exit $status;
-
         }
-        else {
-            $plugin->nagios_exit( UNKNOWN,
-                'Cannot detect Linux distribution (no /etc/issue file)' );
-        }
+
+        exit $status;
 
     }
     else {
         $plugin->nagios_exit( UNKNOWN, 'Cannot detect Linux system' );
     }
+
+    return;
 
 }
 
