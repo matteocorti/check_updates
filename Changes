@@ -2,7 +2,7 @@
 
 	* Version 1.4.12
 	* check_updates: fixed the detection of RH 6 and Scientific Linux Systems
-	                 (thanks to J. Oliveira)
+	                 (thanks to J. Oliveira and T. Edwardsson)
 	* check_updates: several style fixes (cleaned with Perl::Critic)
         * t:             some unit tests (to be extended)
 

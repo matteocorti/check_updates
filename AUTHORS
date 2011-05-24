@@ -4,6 +4,7 @@ Many thanks to:
  * Peter Bircher & Cristian Tuduce for several bug fixes
  * Mark Greenheigh for the prompt and precise bug reports
  * Jose Pedro Oliveira for the build and release fixes
+ * Tomas Edwardsson for a patch fixing the detection of RH EL 6 systems
 
 # File version information:
 # $Id$
