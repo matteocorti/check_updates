@@ -58,6 +58,4 @@ is( get_updater('Scientific Linux release 6.0 (Carbon)'),
 is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
     'up2date', 'updater RHEL 4' );
 
-done_testing();
-
 1;

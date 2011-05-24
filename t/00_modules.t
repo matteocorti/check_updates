@@ -40,6 +40,4 @@ can_ok( 'POSIX', 'uname' );
 use_ok('Sort::Versions');
 can_ok( 'Sort::Versions', 'versioncmp' );
 
-done_testing();
-
 1;
