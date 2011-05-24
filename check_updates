@@ -580,7 +580,7 @@ sub get_os_name_and_version {
     }
     else {
         $plugin->nagios_exit( UNKNOWN,
-            'Cannot detect Linux distribution (no $filename file)' );
+            "Cannot detect Linux distribution (no $filename file)" );
     }
 
     return $header;
