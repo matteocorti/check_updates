@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.4.12
+%define version          1.4.13
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -66,6 +66,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Tue May 24 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.13-0
+- fixed the unit tests on RH systems (old Test::Simple version)
+
 * Tue May 24 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.12-0
 - fixed the detection of RH 6 and Scientific Linux Systems
 
