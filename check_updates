@@ -555,10 +555,10 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 sub get_os_name_and_version {
 
     my $filename = shift;
-    if (! $filename ) {
+    if ( !$filename ) {
         $filename = '/etc/issue';
     }
-    
+
     my $header;
 
     if ( -r $filename ) {
@@ -598,12 +598,12 @@ sub get_os_name_and_version {
 sub get_updater {
 
     my $name = shift;
-    
-    if ( $name =~ /Fedora/mxs ||
-         $name =~ /CentOS/mxs ||
-         $name =~ /Scientific[ ]Linux/mxs ||
-         $name =~ /Red[ ]Hat.*[ ][56]/mxs
-     ) {
+
+    if (   $name =~ /Fedora/mxs
+        || $name =~ /CentOS/mxs
+        || $name =~ /Scientific[ ]Linux/mxs
+        || $name =~ /Red[ ]Hat.*[ ][56]/mxs )
+    {
         return 'yum';
     }
     elsif ( $name =~ /Red[ ]Hat.*[ ]4/mxs ) {
@@ -612,7 +612,6 @@ sub get_updater {
     return;
 
 }
-
 
 ##############################################################################
 # Usage     : run();
@@ -713,7 +712,8 @@ sub run {
             verbose "Using up2date\n";
             check_running_kernel();
             check_up2date();
-        } else {
+        }
+        else {
             $plugin->nagios_exit( UNKNOWN, 'unknown Linux distribution' );
         }
 
