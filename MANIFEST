@@ -20,4 +20,10 @@ MANIFEST.SKIP
 META.yml
 NEWS
 README
+t/00_modules.t
+t/01_functions.t
+t/examples/fedora_14
+t/examples/rhel_4
+t/examples/rhel_6
+t/examples/scientific_linux_6
 TODO
