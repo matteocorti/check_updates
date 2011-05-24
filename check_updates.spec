@@ -29,6 +29,10 @@ Source:        https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{sourc
 
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
+BuildRequires: perl(Test::More)
+BuildRequires: perl(Nagios::Plugin)
+BuildRequires: perl(Readonly)
+BuildRequires: perl(Sort::Versions)
 
 Requires:      nagios-plugins
 # Yum security plugin RPM:
@@ -56,6 +60,9 @@ find %{buildroot} -type f -name "*.pod" -exec rm -f {} \;
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} %{buildroot}/*
 
+%check
+make test
+
 %clean
 rm -rf %{buildroot}
 
@@ -68,6 +75,7 @@ rm -rf %{buildroot}
 %changelog
 * Tue May 24 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.13-0
 - fixed the unit tests on RH systems (old Test::Simple version)
+- added the unit tests to the build process
 
 * Tue May 24 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.12-0
 - fixed the detection of RH 6 and Scientific Linux Systems
