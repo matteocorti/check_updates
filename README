@@ -20,11 +20,13 @@ Yum security plugin:
 
 Use one of the following commands to install the yum security plugin:
 
-  Fedora systems:
-  * yum install yum-plugin-security   
+  Fedora, Red Hat Enterprise Linux 6.x, Scientific Linux 6.x systems:
 
-  Red Hat / CentOS 5.x systems:
-  * yum install yum-security   
+  * yum install yum-plugin-security
+
+  Red Hat Enterprise Linux 5.x, CentOS 5.x and Scientific Linux 5.x systems:
+
+  * yum install yum-security
 
 # $Id$
 # $Revision$

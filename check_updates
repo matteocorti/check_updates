@@ -1,5 +1,7 @@
 #!perl
 
+package main;
+
 # check_updates is a Nagios plugin to check if RedHat or Fedora system
 # is up-to-date
 #
@@ -21,12 +23,14 @@
 #   $HeadURL$
 #   $Date$
 
+use 5.00800;
+
 use strict;
 use warnings;
+
+our $VERSION = '1.4.12';
+
 use Carp;
-
-our $VERSION = '1.4.11';
-
 use English qw(-no_match_vars);
 use Nagios::Plugin::Getopt;
 use Nagios::Plugin::Threshold;
@@ -38,6 +42,7 @@ use Readonly;
 
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
+Readonly our $BITS_PER_BYTE                => 8;
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -47,6 +52,7 @@ Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 #
 # All variables are therefore declared as package variables...
 #
+## no critic (ProhibitPackageVars)
 use vars qw(
   $bootcheck
   $exit_message
@@ -59,6 +65,7 @@ use vars qw(
   $status
   @status_lines
 );
+## use critic
 
 $status = OK;
 
@@ -82,7 +89,9 @@ sub whoami {
         chomp;
         return $_;
     }
-    close $output;
+    close $output
+      or
+      $plugin->nagios_exit( UNKNOWN, "Error determining the user: $OS_ERROR" );
 
     $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
     return;
@@ -113,7 +122,9 @@ sub verbose {
     }
 
     if ( $level < $options->verbose ) {
-        print $message;
+        #<<<
+        print $message; ## no critic (RequireCheckedSyscalls)
+        #>>>
     }
 
     return;
@@ -125,26 +136,26 @@ sub clean_kernel_version {
     my $kernel = shift;
 
     # remove PAE
-    
-    $kernel =~ s/\.[\w]*PAE//imxs;
+
+    $kernel =~ s/[.][\w]*PAE//imxs;
     $kernel =~ s/PAE-//imxs;
 
     # remove Xen
     $kernel =~ s/xen-//imxs;
-    
+
     # remove architecture
-    
-    $kernel =~ s/\.(i[3-6]86|ppc|x86_64)$//mxs;
+
+    $kernel =~ s/[.](i[3-6]86|ppc|x86_64)$//mxs;
 
     # remove smp
 
     $kernel =~ s/smp$//mxs;
     $kernel =~ s/smp-//imxs;
 
-    # remove RH, Fedora and CentOSflavours
+    # remove RHEL, CentOS, Scientific Linux and Fedora flavours
 
-    $kernel =~ s/\.el\d+.*//imxs;
-    $kernel =~ s/.fc\d+.*//imxs;
+    $kernel =~ s/[.]el\d+.*//imxs;
+    $kernel =~ s/[.]fc\d+.*//imxs;
 
     return $kernel;
 
@@ -180,14 +191,17 @@ sub check_running_kernel {
 
     my @versions;
 
-    for my $rpm ( ( "$package", "$package-smp", "$package-PAE", "$package-xen" ) ) {
+    for
+      my $rpm ( ( "$package", "$package-smp", "$package-PAE", "$package-xen" ) )
+    {
 
         my $output;
 
-        my $pid = open $output, q{-|}, "rpm -q $rpm"
+        #<<<
+        my $pid = open $output, q{-|}, "rpm -q $rpm" ## no critic (RequireBriefOpen)
           or $plugin->nagios_exit( UNKNOWN,
             "Cannot list installed kernels: $OS_ERROR" );
-
+        #>>>
         # there could be multiple versions of the same package installed
         my @rpm_versions;
         while (<$output>) {
@@ -265,9 +279,10 @@ sub run_yum {
 
     my $command = "yum $arguments check-update";
 
-    my $pid = open $OUTPUT_HANDLER, q{-|}, $command
+    #<<<
+    my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
       or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
-    
+    #>>>
     while (<$OUTPUT_HANDLER>) {
 
         my $line = $_;
@@ -281,7 +296,7 @@ sub run_yum {
             next;
         }
 
-        if ( $line =~ m{^Loaded\ plugins:.*\ security.*}mxs ) {
+        if ( $line =~ m{^Loaded[ ]plugins:.*[ ]security.*}mxs ) {
 
             if ( !$security_plugin ) {
 
@@ -291,25 +306,27 @@ sub run_yum {
             $security_plugin = 1;
 
         }
-        
+
         if ($blank_line) {
 
             # some lines are wrapped and result and the second part
             # is erroneously interpreted as a new update
-            if ($line =~ m/^\ / ) {
+            if ( $line =~ m/^[ ]/mxs ) {
                 next;
             }
 
-            $line =~ s{\ .*}{}mxs;
+            $line =~ s{[ ].*}{}mxs;
 
             push @updates, $line;
         }
 
     }
 
-    close $OUTPUT_HANDLER;
+    close $OUTPUT_HANDLER
+      or $plugin->nagios_exit( UNKNOWN,
+        "Error reading list of updates: $OS_ERROR" );
 
-    if ( ( $CHILD_ERROR >> 8 ) == $YUM_RETURN_UPDATES_AVAILABLE ) {
+    if ( ( $CHILD_ERROR >> $BITS_PER_BYTE ) == $YUM_RETURN_UPDATES_AVAILABLE ) {
         if ($security_plugin) {
             verbose "Security updates available\n";
         }
@@ -466,17 +483,18 @@ sub check_up2date {
     my $command =
 q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]'};
 
-    my $pid = open $output, q{-|}, $command
+    my $pid = open $output, q{-|}, $command    ## no critic (RequireBriefOpen)
       or $plugin->nagios_exit( UNKNOWN, "Cannot list updates: $OS_ERROR" );
 
     while (<$output>) {
         chomp;
         my $line = $_;
-        $line =~ s/\ .*//mxs;
+        $line =~ s/[ ].*//mxs;
         push @status_lines, $line;
     }
 
-    close $output;
+    close $output
+      or $plugin->nagios_exit( UNKNOWN, "Errror listing updates: $OS_ERROR" );
 
     my $message;
 
@@ -610,7 +628,7 @@ if ( $OSNAME eq 'linux' ) {
           or $plugin->nagios_exit( CRITICAL,
             "Error closing /etc/issue: $OS_ERROR" );
 
-        if ( $header =~ /Fedora/mxs ) {
+        if ( $header =~ /Fedora/mxs ) {   ## no critic (ProhibitCascadingIfElse)
             verbose "Fedora detected: using yum\n";
             check_running_kernel();
             check_yum();
@@ -620,13 +638,18 @@ if ( $OSNAME eq 'linux' ) {
             check_running_kernel();
             check_yum();
         }
-        elsif ( $header =~ /Red\ Hat.*\ 4/mxs ) {
-            verbose "RedHat 4 detected: using up2date\n";
+        elsif ( $header =~ /Scientific[ ]Linux/mxs ) {
+            verbose "Scientific Linux detected: using yum\n";
+            check_running_kernel();
+            check_yum();
+        }
+        elsif ( $header =~ /Red[ ]Hat.*[ ]4/mxs ) {
+            verbose "Red Hat Enterprise Linux 4 detected: using up2date\n";
             check_running_kernel();
             check_up2date();
         }
-        elsif ( $header =~ /Red\ Hat.*\ 5/mxs ) {
-            verbose "RedHat 5 detected: using yum\n";
+        elsif ( $header =~ /Red[ ]Hat.*[ ][56]/mxs ) {
+            verbose "Red Hat Enterprise Linux 5 or newer detected: using yum\n";
             check_running_kernel();
             check_yum();
         }
@@ -641,18 +664,24 @@ if ( $OSNAME eq 'linux' ) {
         # Nagios::Plugin does not support the addition Nagios 3 status lines
         # -> we do it manually
 
-        print 'CHECK_UPDATES '
+        #<<<
+        print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
           . $Nagios::Plugin::STATUS_TEXT{$status}
           . " - $exit_message |";
-
+        #>>>
         for my $pdata ( @{ $plugin->perfdata } ) {
-            print q{ } . $pdata->perfoutput;
+            #<<<
+            print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
+            #>>>
         }
 
-        print "\n";
-
+        #<<<
+        print "\n"; ## no critic (RequireCheckedSyscalls)
+        #>>>
         for my $package (@status_lines) {
-            print "$package\n";
+            #<<<
+            print "$package\n"; ## no critic (RequireCheckedSyscalls)
+            #>>>
         }
 
         exit $status;

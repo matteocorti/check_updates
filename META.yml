@@ -4,10 +4,11 @@ author:
   - 'Matteo Corti <matteo.corti@id.ethz.ch>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
+  Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.95'
+generated_by: 'Module::Install version 1.01'
 license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,6 +17,7 @@ name: check_updates
 no_index:
   directory:
     - inc
+    - t
 requires:
   Carp: 0
   English: 0
@@ -24,6 +26,7 @@ requires:
   Nagios::Plugin::Threshold: 0
   POSIX: 0
   Sort::Versions: 0
+  perl: 5.8.0
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 1.4.11
+version: 1.4.12
