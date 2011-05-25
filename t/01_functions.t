@@ -10,11 +10,11 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use File::Spec;
 
-our $VERSION = '1.4.12';
+our $VERSION = '1.4.14';
 
 my $check_updates = File::Spec->catfile(qw(blib script check_updates));
 
@@ -35,6 +35,11 @@ is(
     '/etc/issues Fedora'
 );
 is(
+    get_os_name_and_version('t/examples/fedora_15'),
+    'Fedora release 15 (Lovelock)',
+    '/etc/issues Fedora'
+);
+is(
     get_os_name_and_version('t/examples/rhel_4'),
     'Red Hat Enterprise Linux AS release 4 (Nahant Update 9)',
     '/etc/issues RHEL 4'
@@ -51,6 +56,7 @@ is(
 );
 
 is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );
+is( get_updater('Fedora release 15 (Lovelock)'), 'yum', 'updater Fedora' );
 is( get_updater('Red Hat Enterprise Linux Server release 6.1 (Santiago)'),
     'yum', 'updater FedorRHEL 6' );
 is( get_updater('Scientific Linux release 6.0 (Carbon)'),

@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.4.13
+%define version          1.4.14
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Wed May 25 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.14-0
+- Fixed a runtime check on correct command execution
+
 * Tue May 24 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.4.13-0
 - fixed the unit tests on RH systems (old Test::Simple version)
 - added the unit tests to the build process

@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.4.13';
+our $VERSION = '1.4.14';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -93,9 +93,14 @@ sub whoami {
         chomp;
         return $_;
     }
-    close $output
-      or
-      $plugin->nagios_exit( UNKNOWN, "Error determining the user: $OS_ERROR" );
+    if ( !( close $output ) && ( $OS_ERROR != 0 ) ) {
+
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        $plugin->nagios_exit( UNKNOWN,
+            "Error while closing pipe to whoami: $OS_ERROR\n" );
+
+    }
 
     $plugin->nagios_exit( UNKNOWN, 'Cannot determine the user' );
     return;
@@ -326,9 +331,14 @@ sub run_yum {
 
     }
 
-    close $OUTPUT_HANDLER
-      or $plugin->nagios_exit( UNKNOWN,
-        "Error reading list of updates: $OS_ERROR" );
+    if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
+
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        $plugin->nagios_exit( UNKNOWN,
+            "Error while closing pipe to rpm: $OS_ERROR\n" );
+
+    }
 
     if ( ( $CHILD_ERROR >> $BITS_PER_BYTE ) == $YUM_RETURN_UPDATES_AVAILABLE ) {
         if ($security_plugin) {
@@ -497,8 +507,14 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         push @status_lines, $line;
     }
 
-    close $output
-      or $plugin->nagios_exit( UNKNOWN, "Errror listing updates: $OS_ERROR" );
+    if ( !( close $output ) && ( $OS_ERROR != 0 ) ) {
+
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        $plugin->nagios_exit( UNKNOWN,
+            "Error while closing pipe to yum (listing updates): $OS_ERROR\n" );
+
+    }
 
     my $message;
 
