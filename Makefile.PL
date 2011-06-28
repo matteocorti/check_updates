@@ -35,6 +35,7 @@ install_script  'check_updates';
 
 tests 't/*.t';
 test_requires 'Test::More'       => 0;
+test_requires 'File::Spec'       => 0;
 
 WriteMakefile(
     INSTALLSCRIPT        => '/usr/lib/nagios/plugins/contrib',
