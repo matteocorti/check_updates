@@ -44,7 +44,7 @@ Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 Readonly our $BITS_PER_BYTE                => 8;
 
-Readonly our $VERSION_FILE                 => '/etc/redhat-release';
+Readonly our $VERSION_FILE => '/etc/redhat-release';
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -601,6 +601,7 @@ sub get_os_name_and_version {
 
     my $filename = shift;
     if ( !$filename ) {
+
         # default
         $filename = $VERSION_FILE;
     }
