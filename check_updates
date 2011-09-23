@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.4.14';
+our $VERSION = '1.4.15';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -43,6 +43,8 @@ use Readonly;
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 Readonly our $BITS_PER_BYTE                => 8;
+
+Readonly our $VERSION_FILE                 => '/etc/redhat-release';
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -589,17 +591,18 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
 ##############################################################################
 # Usage     : my $system = get_os_name_and_version();
-# Purpose   : returns the name of the system by parsing /etc/issue
+# Purpose   : returns the name of the system by parsing $VERSION_FILE
 # Returns   : name of the system
 # Arguments : n/a
-# Throws    : CRITICAL if not able to read /etc/issue
+# Throws    : CRITICAL if not able to read $VERSION_FILE
 # Comments  : n/a
 # See also  : n/a
 sub get_os_name_and_version {
 
     my $filename = shift;
     if ( !$filename ) {
-        $filename = '/etc/issue';
+        # default
+        $filename = $VERSION_FILE;
     }
 
     my $header;

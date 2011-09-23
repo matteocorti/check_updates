@@ -14,7 +14,7 @@ use Test::More tests => 14;
 
 use File::Spec;
 
-our $VERSION = '1.4.14';
+our $VERSION = '1.4.15';
 
 my $check_updates = File::Spec->catfile(qw(blib script check_updates));
 
@@ -32,27 +32,27 @@ is( clean_kernel_version('kernel-2.6.18-194.3.1.el5'),
 is(
     get_os_name_and_version('t/examples/fedora_14'),
     'Fedora release 14 (Laughlin)',
-    '/etc/issues Fedora'
+    '/etc/redhat-release Fedora'
 );
 is(
     get_os_name_and_version('t/examples/fedora_15'),
     'Fedora release 15 (Lovelock)',
-    '/etc/issues Fedora'
+    '/etc/redhat-release Fedora'
 );
 is(
     get_os_name_and_version('t/examples/rhel_4'),
     'Red Hat Enterprise Linux AS release 4 (Nahant Update 9)',
-    '/etc/issues RHEL 4'
+    '/etc/redhat-release RHEL 4'
 );
 is(
     get_os_name_and_version('t/examples/rhel_6'),
     'Red Hat Enterprise Linux Server release 6.1 (Santiago)',
-    '/etc/issues RHEL 6'
+    '/etc/redhat-release RHEL 6'
 );
 is(
     get_os_name_and_version('t/examples/scientific_linux_6'),
     'Scientific Linux release 6.0 (Carbon)',
-    '/etc/issues Scientific Linux'
+    '/etc/redhat-release Scientific Linux'
 );
 
 is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );
