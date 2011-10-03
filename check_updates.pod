@@ -20,7 +20,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.4.15
+Version 1.5.0
 
 =head1 SYNOPSIS
 
@@ -68,6 +68,8 @@ Version 1.4.15
   -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
 
   -v, --verbose                            Show details for command-line debugging (can repeat up to 3 times)
+
+Security updates always force a CRITICAL state
 
 =head1 EXAMPLE
 
@@ -126,6 +128,10 @@ No bugs have been reported.
 Please report any bugs or feature requests to matteo.corti@id.ethz.ch,
 or through the web interface at
 http://trac.id.ethz.ch/projects/nagios_plugins/newticket?component=check_updates
+
+Be sure to include the output produced by the plugin with the --verbose option:
+
+  check_updates -v -v -v
 
 =head1 AUTHOR
 

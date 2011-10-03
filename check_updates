@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.4.15';
+our $VERSION = '1.5.0';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -423,7 +423,12 @@ sub check_yum {
         }
         else {
 
-            $status = WARNING;
+            if (@outdated >= $options->get('warning')) {            
+                $status = WARNING;
+            }
+            if (@outdated >= $options->get('critical')) {
+                $status = CRITICAL;
+            }
 
             @security_updates = run_yum('--security');
 
@@ -551,7 +556,12 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
         $message = ( scalar @status_lines ) . ' update';
 
-        $status = CRITICAL;
+        if (@status_lines >= $options->get('warning')) {            
+            $status = WARNING;
+        }
+        if (@status_lines >= $options->get('critical')) {
+            $status = CRITICAL;
+        }
 
         if ( @status_lines > 1 ) {
             $message = $message . q{s};
@@ -718,6 +728,13 @@ sub run {
 
     $options->getopts();
 
+    ###############
+    # Sanity checks
+
+    if ( $options->get('warning') > $options->get('critical') ) {
+        exit_with_error( UNKNOWN, q{'critical' (} . $options->get('critical') . q{) must not be lower than 'warning' (} . $options->get('warning') . q{)} );
+    }
+    
     $threshold = Nagios::Plugin::Threshold->set_thresholds(
         warning  => $options->get('warning'),
         critical => $options->get('critical'),
