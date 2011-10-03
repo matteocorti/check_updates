@@ -423,10 +423,10 @@ sub check_yum {
         }
         else {
 
-            if (@outdated >= $options->get('warning')) {            
+            if ( @outdated >= $options->get('warning') ) {
                 $status = WARNING;
             }
-            if (@outdated >= $options->get('critical')) {
+            if ( @outdated >= $options->get('critical') ) {
                 $status = CRITICAL;
             }
 
@@ -556,10 +556,10 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
         $message = ( scalar @status_lines ) . ' update';
 
-        if (@status_lines >= $options->get('warning')) {            
+        if ( @status_lines >= $options->get('warning') ) {
             $status = WARNING;
         }
-        if (@status_lines >= $options->get('critical')) {
+        if ( @status_lines >= $options->get('critical') ) {
             $status = CRITICAL;
         }
 
@@ -732,9 +732,14 @@ sub run {
     # Sanity checks
 
     if ( $options->get('warning') > $options->get('critical') ) {
-        exit_with_error( UNKNOWN, q{'critical' (} . $options->get('critical') . q{) must not be lower than 'warning' (} . $options->get('warning') . q{)} );
+        exit_with_error( UNKNOWN,
+                q{'critical' (}
+              . $options->get('critical')
+              . q{) must not be lower than 'warning' (}
+              . $options->get('warning')
+              . q{)} );
     }
-    
+
     $threshold = Nagios::Plugin::Threshold->set_thresholds(
         warning  => $options->get('warning'),
         critical => $options->get('critical'),
