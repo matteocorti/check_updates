@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.5.0';
+our $VERSION = '1.5.1';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -44,7 +44,7 @@ Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 Readonly our $BITS_PER_BYTE                => 8;
 
-Readonly our $VERSION_FILE => '/etc/redhat-release';
+Readonly our $VERSION_FILE => '/etc/system-release';
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -657,7 +657,8 @@ sub get_updater {
     if (   $name =~ /Fedora/mxs
         || $name =~ /CentOS/mxs
         || $name =~ /Scientific[ ]Linux/mxs
-        || $name =~ /Red[ ]Hat.*[ ][56]/mxs )
+        || $name =~ /Red[ ]Hat.*[ ][56]/mxs
+        || $name =~ /Amazon/mxs )
     {
         return 'yum';
     }

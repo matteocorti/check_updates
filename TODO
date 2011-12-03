@@ -1,6 +1,7 @@
 * add more unit tests
 * Should check for up2date errors (return code?)
 * Check for updates on Mac OS X / macports systems
+* Check for the presence of up2date or yum (if the distribution is unknown)
 
 # $Id$
 # $Revision$

@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.5.0
+%define version          1.5.1
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Sat Dec  3 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.5.1-0
+- Support for Amazon Linux
+
 * Mon Oct  3 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.5.0-0
 - Updated to 1.5.0 (fixed a bug which caused -w and -c to be ignored)
 
