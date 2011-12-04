@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.5.1';
+our $VERSION = '1.5.2';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -43,8 +43,6 @@ use Readonly;
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 Readonly our $BITS_PER_BYTE                => 8;
-
-Readonly our $VERSION_FILE => '/etc/system-release';
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -612,8 +610,16 @@ sub get_os_name_and_version {
     my $filename = shift;
     if ( !$filename ) {
 
-        # default
-        $filename = $VERSION_FILE;
+        if ( -r '/etc/system-release' ) {
+            $filename = '/etc/system-release';
+        }
+        elsif ( -r '/etc/redhat-release' ) {
+            $filename = '/etc/redhat-release';
+        }
+        else {
+            exit_with_error( UNKNOWN, 'Cannot detect Linux distribution' );
+        }
+
     }
 
     my $header;

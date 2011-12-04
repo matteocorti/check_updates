@@ -1,3 +1,9 @@
+2011-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.5.2
+	* check_updates: fixed a bug introduced in 1.5.1 which prevented system
+                         detection on CentOS 5.X
+
 2011-12-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.5.1
@@ -17,7 +23,8 @@
 2011-05-25  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.4.14
-	* check_updates: fixed a problem when checking if a piped command was successful 
+	* check_updates: fixed a problem when checking if a piped command was
+	                 successful 
 
 2011-05-24  Matteo Corti  <matteo.corti@id.ethz.ch>
 
