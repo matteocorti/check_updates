@@ -722,7 +722,7 @@ sub run {
     $options->arg(
         spec => 'warning|w=i',
         help =>
-          'Exit with WARNING status if more than INTEGER non-security updates are available',
+'Exit with WARNING status if more than INTEGER non-security updates are available',
         default => 0
     );
 
