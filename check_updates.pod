@@ -42,6 +42,8 @@ Version 1.5.2
     Exit with WARNING status if more than INTEGER updates are available
   -c, --critical=INTEGER
     Exit with CRITICAL status if more than INTEGER updates are available
+  --security-only
+    Ignores non-security updates
   -t, --timeout=INTEGER
     Seconds before plugin times out (default: 15)
   -v, --verbose
@@ -61,9 +63,11 @@ Version 1.5.2
 
   --no-boot-check                          do not complain if the machine was booted with an old kernel
 
-  -w, --warning=INTEGER                    Exit with WARNING status if more than INTEGER updates are available
+  -w, --warning=INTEGER                    Exit with WARNING status if more than INTEGER non-security updates are available
 
-  -c, --critical=INTEGER                   Exit with CRITICAL status if more than INTEGER updates are available
+  -c, --critical=INTEGER                   Exit with CRITICAL status if more than INTEGER non-security updates are available
+
+  --security-only                          Ignores non-security updates
 
   -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
 
@@ -71,9 +75,13 @@ Version 1.5.2
 
 Security updates always force a CRITICAL state
 
+=head1 SECURITY UPDATES
+
+If yum's security plugin is available
+
 =head1 EXAMPLE
 
- check_updates
+check_updates
 
 check_updates checks if the system is up-to-date
 

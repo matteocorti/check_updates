@@ -722,15 +722,20 @@ sub run {
     $options->arg(
         spec => 'warning|w=i',
         help =>
-          'Exit with WARNING status if more than INTEGER updates are available',
+          'Exit with WARNING status if more than INTEGER non-security updates are available',
         default => 0
     );
 
     $options->arg(
         spec => 'critical|c=i',
         help =>
-'Exit with CRITICAL status if more than INTEGER updates are available',
+'Exit with CRITICAL status if more than INTEGER non-security updates are available',
         default => 0
+    );
+
+    $options->arg(
+        spec => 'security-only',
+        help => 'Ignores non-security updates',
     );
 
     $options->getopts();
