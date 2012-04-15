@@ -1,3 +1,7 @@
+2012-04-15  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* check_updates: added an option --security-only to ignore non-security related updates
+
 2011-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.5.2

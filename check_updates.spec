@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.5.2
+%define version          1.6.0
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Sun Apr 15 2012 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.0-0%{?dist}
+- Updated to 1.6.0 (--security-only option)
+
 * Sun Dec  4 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.5.2-0
 - Updated to 1.5.2 (bug fix release)
 

@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.5.2';
+our $VERSION = '1.6.0';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -388,6 +388,7 @@ sub run_yum {
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
+## no critic (ProhibitExcessComplexity)
 sub check_yum {
 
     my $message;
@@ -404,6 +405,11 @@ sub check_yum {
     if ( @outdated > 0 ) {
 
         if ( !$security_plugin ) {
+
+            if ( $options->get('security-only') ) {
+                verbose
+"up2date does not distinguish security updates ignoring --security-only option\n";
+            }
 
             # every update is critical since it could be a security problem
 
@@ -426,6 +432,12 @@ sub check_yum {
             }
             if ( @outdated >= $options->get('critical') ) {
                 $status = CRITICAL;
+            }
+
+            if ( $options->get('security-only') ) {
+
+                # ignore any other update
+                $status = OK;
             }
 
             @security_updates = run_yum('--security');
@@ -506,6 +518,7 @@ sub check_yum {
     return;
 
 }
+## use critic (ProhibitExcessComplexity)
 
 ##############################################################################
 # Usage     : check_up2date();
@@ -789,6 +802,12 @@ sub run {
         }
         elsif ( $updater eq 'up2date' ) {
             verbose "Using up2date\n";
+
+            if ( $options->get('security-only') ) {
+                verbose
+"up2date does not distinguish security updates ignoring --security-only option\n";
+            }
+
             check_running_kernel();
             check_up2date();
         }
