@@ -73,7 +73,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
-* Sun Apr 15 2012 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.0-0%{?dist}
+* Sun Apr 15 2012 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.0-0
 - Updated to 1.6.0 (--security-only option)
 
 * Sun Dec  4 2011 Matteo Corti <matteo.corti@id.ethz.ch> - 1.5.2-0
