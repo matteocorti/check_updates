@@ -299,7 +299,7 @@ sub check_running_kernel {
 
 ##############################################################################
 # Usage     : run_yum();
-# Purpose   : runs yum check-updates with the supplied command line argumens
+# Purpose   : runs yum check-update with the supplied command line argumens
 # Returns   : the list of updates
 # Arguments : string with the command line arguments
 # Throws    : n/a
