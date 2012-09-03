@@ -10,7 +10,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 14;
+use Test::More tests => 17;
 
 use File::Spec;
 
@@ -32,12 +32,17 @@ is( clean_kernel_version('kernel-2.6.18-194.3.1.el5'),
 is(
     get_os_name_and_version('t/examples/fedora_14'),
     'Fedora release 14 (Laughlin)',
-    '/etc/redhat-release Fedora'
+    '/etc/redhat-release Fedora 14'
 );
 is(
     get_os_name_and_version('t/examples/fedora_15'),
     'Fedora release 15 (Lovelock)',
-    '/etc/redhat-release Fedora'
+    '/etc/redhat-release Fedora 15'
+);
+is(
+    get_os_name_and_version('t/examples/fedora_17'),
+    'Fedora release 17 (Beefy Miracle)',
+    '/etc/system-release Fedora 17'
 );
 is(
     get_os_name_and_version('t/examples/rhel_4'),
@@ -53,6 +58,16 @@ is(
     get_os_name_and_version('t/examples/scientific_linux_6'),
     'Scientific Linux release 6.0 (Carbon)',
     '/etc/redhat-release Scientific Linux'
+);
+is(
+    get_os_name_and_version('t/examples/scientific_linux_6'),
+    'Scientific Linux release 6.0 (Carbon)',
+    '/etc/redhat-release Scientific Linux'
+);
+is(
+    get_os_name_and_version('t/examples/puias_6.2'),
+    'PUIAS Linux  release 6.2 (Pisa)',
+    '/etc/system-release PUIAS Linux 6.2'
 );
 
 is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );

@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.0';
+our $VERSION = '1.6.1';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -675,6 +675,7 @@ sub get_updater {
 
     if (   $name =~ /Fedora/mxs
         || $name =~ /CentOS/mxs
+        || $name =~ /PUIAS/mxs
         || $name =~ /Scientific[ ]Linux/mxs
         || $name =~ /Red[ ]Hat.*[ ][56]/mxs
         || $name =~ /Amazon/mxs )

@@ -1,6 +1,13 @@
+2012-09-03  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.6.1
+	* check_updates: recognized PUIAS Linux
+
 2012-04-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: added an option --security-only to ignore non-security related updates
+	* Version 1.6.0
+	* check_updates: added an option --security-only to ignore non-security
+                         related updates
 
 2011-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
 
