@@ -678,6 +678,7 @@ sub get_updater {
         || $name =~ /PUIAS/mxs
         || $name =~ /Scientific[ ]Linux/mxs
         || $name =~ /Red[ ]Hat.*[ ][56]/mxs
+        || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs )
     {
         return 'yum';
