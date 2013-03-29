@@ -6,6 +6,7 @@ Many thanks to:
  * Jose Pedro Oliveira for the build and release fixes
  * Tomas Edwardsson for a patch fixing the detection of RH EL 6 systems
  * Cott Lang for the Amazon Linux patch
+ * Joop Boonen for the yum arguments patch
 
 # File version information:
 # $Id$

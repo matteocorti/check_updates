@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.1';
+our $VERSION = '1.6.2';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -59,10 +59,11 @@ use vars qw(
   $help
   $options
   $plugin
-  $threshold
   $security_plugin
-  $wrong_kernel
   $status
+  $threshold
+  $wrong_kernel
+  $yum_executable
   @status_lines
 );
 ## use critic
@@ -70,6 +71,11 @@ use vars qw(
 # the script is declared as a package so that it can be unit tested
 # but it should not be used as a module
 if ( !caller ) {
+
+    # set the yum executable (the value can be overridden in the
+    # tests to a mock
+    $yum_executable = 'yum';
+
     run();
 }
 
@@ -313,7 +319,7 @@ sub run_yum {
     my $OUTPUT_HANDLER;
     my @updates;
 
-    my $command = "yum $arguments check-update";
+    my $command = "$yum_executable $arguments check-update";
 
     #<<<
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
@@ -384,15 +390,17 @@ sub run_yum {
 # Usage     : check_yum();
 # Purpose   : checks a yum based system for updates
 # Returns   : n/a
-# Arguments : n/a
+# Arguments : string with the command line arguments
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
 ## no critic (ProhibitExcessComplexity)
 sub check_yum {
 
+    my $arguments = shift;
+
     my $message;
-    my @outdated = run_yum(q{});
+    my @outdated = run_yum($arguments);
     my @security_updates;
 
     $plugin->add_perfdata(
@@ -440,7 +448,7 @@ sub check_yum {
                 $status = OK;
             }
 
-            @security_updates = run_yum('--security');
+            @security_updates = run_yum( '--security ' . $arguments );
 
             if ( @security_updates > 0 ) {
 
@@ -753,6 +761,12 @@ sub run {
         help => 'Ignores non-security updates',
     );
 
+    $options->arg(
+        spec => 'yum-arguments|a=s',
+        help => 'specific Yum arguments as STRING',
+
+    );
+
     $options->getopts();
 
     ###############
@@ -784,6 +798,14 @@ sub run {
     }
 
     #########
+    # Arguments
+
+    my $arguments = q{};
+    if ( $options->get('arguments') ) {
+        $arguments = $options->get('arguments');
+    }
+
+    #########
     # Timeout
 
     alarm $options->timeout;
@@ -798,9 +820,9 @@ sub run {
         my $updater = get_updater($name);
 
         if ( $updater eq 'yum' ) {
-            verbose "Using yum\n";
+            verbose "Using Yum\n";
             check_running_kernel();
-            check_yum();
+            check_yum($arguments);
         }
         elsif ( $updater eq 'up2date' ) {
             verbose "Using up2date\n";

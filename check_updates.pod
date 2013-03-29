@@ -20,7 +20,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.6.1
+Version 1.6.2
 
 =head1 SYNOPSIS
 
@@ -44,6 +44,8 @@ Version 1.6.1
     Exit with CRITICAL status if more than INTEGER updates are available
   --security-only
     Ignores non-security updates
+  -a, --yum-arguments=STRING
+    specific Yum arguments as STRING
   -t, --timeout=INTEGER
     Seconds before plugin times out (default: 15)
   -v, --verbose
@@ -68,6 +70,8 @@ Version 1.6.1
   -c, --critical=INTEGER                   Exit with CRITICAL status if more than INTEGER non-security updates are available
 
   --security-only                          Ignores non-security updates
+
+  -a, --yum-arguments=STRING              Specifies additional arguments for Yum
 
   -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
 
@@ -188,5 +192,12 @@ Many thanks to:
 =item * Mark Greenheigh for the prompt and precise bug reports
 
 =item * Jose Pedro Oliveria for the build and release fixes
+
+=item * Tomas Edwardsson for a patch fixing the detection of RH EL 6 systems
+
+=item * Cott Lang for the Amazon Linux patch
+
+=item * Joop Boonen for the yum arguments patch
+
 
 =back
