@@ -321,6 +321,8 @@ sub run_yum {
 
     my $command = "$yum_executable $arguments check-update";
 
+    verbose qq{Running "$command"\n}, 1;
+    
     #<<<
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
       or exit_with_error( UNKNOWN, "Cannot list updates: $OS_ERROR" );
@@ -801,8 +803,8 @@ sub run {
     # Arguments
 
     my $arguments = q{};
-    if ( $options->get('arguments') ) {
-        $arguments = $options->get('arguments');
+    if ( $options->get('yum-arguments') ) {
+        $arguments = $options->get('yum-arguments');
     }
 
     #########
