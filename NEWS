@@ -1,5 +1,8 @@
+2013-03-29: 1.6.2  - Applied a patch adding the possibility to pass arguments
+                     to Yum
 2012-09-03: 1.6.1  - recognizes PUIAS Lunux
-2012-04-15: 1.6.0  - added an option --security-only to ignore non-security related updates
+2012-04-15: 1.6.0  - added an option --security-only to ignore non-security
+                     related updates
 2011-12-04: 1.5.2  - fixed a bug in system detection
 2011-12-03: 1.5.1  - applied a patch to support Amazon Linux
 2011-10-03: 1.5.0  - fixed a bug which caused -w and -c to be ignored

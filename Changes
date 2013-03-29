@@ -1,3 +1,9 @@
+2013-03-29  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.6.2
+	* check_updates: Applied a patch adding the possibility to pass
+                         arguments to Yum
+
 2012-11-18  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: Added Oracle to the systems list

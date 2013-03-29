@@ -71,7 +71,9 @@ Version 1.6.2
 
   --security-only                          Ignores non-security updates
 
-  -a, --yum-arguments=STRING              Specifies additional arguments for Yum
+  -a, --yum-arguments=STRING               Specifies additional arguments for Yum.
+                                           Arguments containing spaces must be quoted
+                                           (e.g., ./check_updates -a "-d 20")
 
   -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
 
