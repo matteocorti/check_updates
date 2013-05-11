@@ -511,7 +511,7 @@ sub check_yum {
         $message = 'no updates available';
     }
 
-    if ( $security_plugin ) {        
+    if ($security_plugin) {
         $plugin->add_perfdata(
             label     => 'security_updates',
             value     => scalar @security_updates,
