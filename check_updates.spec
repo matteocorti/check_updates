@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.6.2
+%define version          1.6.3
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Sat May 11 2013 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.3-0
+- Updated to 1.6.3 (no security perf data if Yum security plugin is not installed)
+
 * Fri Mar 29 2013 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.2-0
 - Updated to 1.6.2 (Yum arguments patch)
 

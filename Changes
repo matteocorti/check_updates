@@ -1,3 +1,9 @@
+2013-05-11  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.6.3
+	* check_updates: do not print the performance data of the security
+	                 updates if the Yum security plugin is not installed
+
 2013-03-29  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.6.2
