@@ -1,3 +1,4 @@
+* check the output of you with locales other than English
 * add more unit tests
 * Should check for up2date errors (return code?)
 * Check for updates on Mac OS X / macports systems

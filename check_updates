@@ -7,7 +7,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2010, Matteo Corti
+# Copyright (c) 2007-2013, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -28,7 +28,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.3';
+our $VERSION = '1.6.4';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -340,7 +340,10 @@ sub run_yum {
             next;
         }
 
-        if ( $line =~ m{^Loaded[ ]plugins:.*[ ]security.*}mxs ) {
+        # TODO check what is the ouptut with other locales
+        if (   $line =~ m{^Loaded[ ]plugins:.*[ ]security.*}mxs
+            || $line =~ m{^[ ]+:.*[ ]security.*}mxs )
+        {
 
             if ( !$security_plugin ) {
 

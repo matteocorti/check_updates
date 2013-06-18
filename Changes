@@ -1,3 +1,8 @@
+2013-06-18  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.6.4
+	* check_updates: handle yum output split on more lines
+
 2013-05-11  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.6.3
