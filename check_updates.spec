@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.6.4
+%define version          1.6.5
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Mon Jul 15 2013 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.5-0
+- Updated to 1.6.5 (disabled ePN)
+
 * Tue Jun 18 2013 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.4-0
 - Updated to 1.6.4 (handle wide Yum output)
 

@@ -1,3 +1,4 @@
+2013-07-15: 1.6.5 - Disabled ePN by default
 2013-06-18: 1.6.4 - Handle wide Yum output
 2013-05-11: 1.6.3 - Do not print performance data on security updates if Yum
                     security plugin is not installed

@@ -1,5 +1,7 @@
 #!perl
 
+# nagios: -epn
+
 package main;
 
 # check_updates is a Nagios plugin to check if RedHat or Fedora system
@@ -28,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.4';
+our $VERSION = '1.6.5';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -163,7 +165,9 @@ sub verbose {
         $level = 0;
     }
 
-    if ( $level < $options->verbose ) {
+    # we check if options is defined as the it could be undefined if
+    # running from a unit test
+    if ( defined $options && $level < $options->verbose ) {
         #<<<
         print $message; ## no critic (RequireCheckedSyscalls)
         #>>>
@@ -173,6 +177,15 @@ sub verbose {
 
 }
 
+##############################################################################
+# Usage     : $kernel_version = clean_kernel_version( $kernel_version )
+# Purpose   : removes everything but the version number from the kernel
+#             version (e.g., PAE, xen, ...)
+# Returns   : kernel version
+# Arguments : kernel_version : output of uname
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
 sub clean_kernel_version {
 
     my $kernel = shift;
