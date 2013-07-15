@@ -14,7 +14,7 @@ use Test::More tests => 17;
 
 use File::Spec;
 
-our $VERSION = '1.6.15';
+our $VERSION = '1.6.5';
 
 my $check_updates = File::Spec->catfile(qw(blib script check_updates));
 
