@@ -30,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.6';
+our $VERSION = '1.6.7';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -214,6 +214,9 @@ sub clean_kernel_version {
     $kernel =~ s/[.]el\d+.*//imxs;
     $kernel =~ s/[.]fc\d+.*//imxs;
 
+    # remove UEK
+    $kernel =~ s/uek-//imxs;
+
     return $kernel;
 
 }
@@ -256,8 +259,8 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",  "$package-smp", "$package-PAE", "$package-xen",
-            'ovzkernel', 'vzkernel'
+            "$package",     "$package-smp", "$package-PAE", "$package-xen",
+            "$package-uek", 'ovzkernel',    'vzkernel'
         )
       )
 

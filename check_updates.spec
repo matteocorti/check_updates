@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.6.6
+%define version          1.6.7
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -73,6 +73,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Fri May 23 2014 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.7-0
+- Updated to 1.6.7
+
 * Thu Oct 10 2013 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.6-0
 - Updated to 1.6.6 (openvz kernel support)
 

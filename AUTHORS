@@ -9,6 +9,7 @@ Many thanks to:
  * Joop Boonen for the yum arguments patch
  * Franky Van Liedekerke for the perfomance data and security plugin
    patch and for the openvz kernels patch
+ * Andreas Dijkman for the Oracle UEK patch
 
 # File version information:
 # $Id$
