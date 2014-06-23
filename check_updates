@@ -721,7 +721,7 @@ sub get_updater {
         || $name =~ /CentOS/mxs
         || $name =~ /PUIAS/mxs
         || $name =~ /Scientific[ ]Linux/mxs
-        || $name =~ /Red[ ]Hat.*[ ][56]/mxs
+        || $name =~ /Red[ ]Hat.*[ ][567]/mxs
         || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs )
     {
