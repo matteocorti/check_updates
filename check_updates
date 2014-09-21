@@ -188,8 +188,6 @@ sub verbose {
 # See also  : Sort::Version on CPAN
 sub versioncmp {
 
-    my ( $a, $b ) = @_;
-
     my @A = ( $a =~ /([-.]|\d+|[^-.\d]+)/gxms );
     my @B = ( $b =~ /([-.]|\d+|[^-.\d]+)/gxms );
 
