@@ -176,11 +176,11 @@ sub verbose {
 }
 
 ##############################################################################
-# Usage     : versioncmp( $version1, $version2 )
+# Usage     : versioncmp
 # Purpose   : Sort revision-like numbers
 # Returns   : -1, 0, or 1 depending on whether the left argument is less than,
 #             equal to, or greater than the right argument.
-# Arguments : versions to compare
+# Arguments : Globally defined $a and $b as the versions to compare
 # Throws    : n/a
 # Comments  : Included (and adapted) from Sort::Version  to remove the
 #             dependency on Sort::Version which is not available per default
