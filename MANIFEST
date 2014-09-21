@@ -18,10 +18,13 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+MYMETA.json
+MYMETA.yml
 NEWS
 README
 t/00_modules.t
 t/01_functions.t
+t/02_yum.t
 t/examples/fedora_14
 t/examples/fedora_15
 t/examples/fedora_17
@@ -29,4 +32,5 @@ t/examples/puias_6.2
 t/examples/rhel_4
 t/examples/rhel_6
 t/examples/scientific_linux_6
+t/mocks/yum_errors.1.sh
 TODO
