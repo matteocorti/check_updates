@@ -13,7 +13,6 @@ check_updates depends on several Perl modules:
  * Nagios::Plugin::Threshold
  * POSIX
  * Readonly
- * Sort::Versions
 
 Perl modules can be found on the "Comprehensive Perl Archive Network"
 (CPAN). The "How to install CPAN modules" guide summarizes how these

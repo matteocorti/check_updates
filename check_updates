@@ -30,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.7';
+our $VERSION = '1.6.8';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -38,7 +38,6 @@ use Nagios::Plugin::Getopt;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin;
 use POSIX qw(uname);
-use Sort::Versions;
 use Readonly;
 
 Readonly our $EXIT_UNKNOWN                 => 3;
@@ -177,6 +176,68 @@ sub verbose {
 }
 
 ##############################################################################
+# Usage     : versioncmp( $version1, $version2 )
+# Purpose   : Sort revision-like numbers
+# Returns   : -1, 0, or 1 depending on whether the left argument is less than,
+#             equal to, or greater than the right argument.
+# Arguments : versions to compare
+# Throws    : n/a
+# Comments  : Included (and adapted) from Sort::Version  to remove the
+#             dependency on Sort::Version which is not available per default
+#             on RH systems
+# See also  : Sort::Version on CPAN
+sub versioncmp {
+
+    my ( $a, $b ) = @_;
+
+    my @A = ( $a =~ /([-.]|\d+|[^-.\d]+)/gxms );
+    my @B = ( $b =~ /([-.]|\d+|[^-.\d]+)/gxms );
+
+    my ( $A, $B );
+    while ( @A and @B ) {
+
+        $A = shift @A;
+        $B = shift @B;
+
+        ## no critic (ProhibitCascadingIfElse)
+        if ( $A eq q{-} and $B eq q{-} ) {
+            next;
+        }
+        elsif ( $A eq q{-} ) {
+            return -1;    ## no critic (ProhibitMagicNumbers)
+        }
+        elsif ( $B eq q{-} ) {
+            return 1;
+        }
+        elsif ( $A eq q{.} and $B eq q{.} ) {
+            next;
+        }
+        elsif ( $A eq q{.} ) {
+            return -1;    ## no critic (ProhibitMagicNumbers)
+        }
+        elsif ( $B eq q{.} ) {
+            return 1;
+        }
+        elsif ( $A =~ /^\d+$/xms and $B =~ /^\d+$/xms ) {
+            if ( $A =~ /^0/xms || $B =~ /^0/xms ) {
+                return $A cmp $B if $A cmp $B;
+            }
+            else {
+                return $A <=> $B if $A <=> $B;
+            }
+        }
+        else {
+            $A = uc $A;
+            $B = uc $B;
+            return $A cmp $B if $A cmp $B;
+        }
+        ## use critic (ProhibitCascadingIfElse)
+
+    }
+    return @A <=> @B;
+}
+
+##############################################################################
 # Usage     : $kernel_version = clean_kernel_version( $kernel_version )
 # Purpose   : removes everything but the version number from the kernel
 #             version (e.g., PAE, xen, ...)
@@ -276,7 +337,7 @@ sub check_running_kernel {
         # there could be multiple versions of the same package installed
         my @rpm_versions;
         while (<$output>) {
-            chomp $_;
+            chomp;
             push @rpm_versions, $_;
         }
 
@@ -301,7 +362,7 @@ sub check_running_kernel {
     for (@versions) {
 
         # strip package name
-        $_ =~ s/^$package-//mxs;
+        s/^$package-//mxs;
         $_ = clean_kernel_version($_);
 
     }

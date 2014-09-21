@@ -10,7 +10,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 38;
 
 use File::Spec;
 
@@ -79,4 +79,38 @@ is( get_updater('Scientific Linux release 6.0 (Carbon)'),
 is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
     'up2date', 'updater RHEL 4' );
 
+# versioncmp
+
+is( versioncmp( '1.1', '1.2' ), -1 );
+is( versioncmp( '1.2', '1.1' ), 1 );
+is( versioncmp( '1.1', '1.1' ), 0 );
+
+is( versioncmp( '1.1a', '1.2' ),  -1 );
+is( versioncmp( '1.2',  '1.1a' ), 1 );
+
+is( versioncmp( '1.1',   '1.1.1' ), -1 );
+is( versioncmp( '1.1.1', '1.1' ),   1 );
+
+is( versioncmp( '1.1',  '1.1a' ), -1 );
+is( versioncmp( '1.1a', '1.1' ),  1 );
+
+is( versioncmp( '1.1.a', '1.1a' ),  -1 );
+is( versioncmp( '1.1a',  '1.1.a' ), 1 );
+
+is( versioncmp( '1', 'a' ), -1 );
+is( versioncmp( 'a', '1' ), 1 );
+
+is( versioncmp( 'a', 'b' ), -1 );
+is( versioncmp( 'b', 'a' ), 1 );
+
+is( versioncmp( '1', '2' ), -1 );
+is( versioncmp( '2', '1' ), 1 );
+
+is( versioncmp( '1.1-3', '1.1-4' ), -1 );
+is( versioncmp( '1.1-4', '1.1-3' ), 1 );
+
+is( versioncmp( '1.1-5', '1.1.6' ), -1 );
+is( versioncmp( '1.1.6', '1.1.5' ), 1 );
+
 1;
+

@@ -30,7 +30,6 @@ requires 'Nagios::Plugin::Getopt'    => 0;
 requires 'Nagios::Plugin::Threshold' => 0;
 requires 'POSIX'                     => 0;
 requires 'Readonly'                  => 0;
-requires 'Sort::Versions'            => 0;
 
 install_script  'check_updates';
 
