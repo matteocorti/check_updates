@@ -81,36 +81,38 @@ is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
 
 # versioncmp
 
-is( versioncmp( '1.1', '1.2' ), -1 );
-is( versioncmp( '1.2', '1.1' ), 1 );
-is( versioncmp( '1.1', '1.1' ), 0 );
+## no critic (ProhibitMagicNumbers)
+is( versioncmp( '1.1', '1.2' ), -1, q{versioncmp('1.1','1.2')} );
+is( versioncmp( '1.2', '1.1' ), 1,  q{versioncmp('1.2','1.1')} );
+is( versioncmp( '1.1', '1.1' ), 0,  q{versioncmp('1.1','1.1')} );
 
-is( versioncmp( '1.1a', '1.2' ),  -1 );
-is( versioncmp( '1.2',  '1.1a' ), 1 );
+is( versioncmp( '1.1a', '1.2' ),  -1, q{versioncmp('1.1a','1.2')} );
+is( versioncmp( '1.2',  '1.1a' ), 1,  q{versioncmp('1.2','1.1a')} );
 
-is( versioncmp( '1.1',   '1.1.1' ), -1 );
-is( versioncmp( '1.1.1', '1.1' ),   1 );
+is( versioncmp( '1.1',   '1.1.1' ), -1, q{versioncmp('1.1','1.1.1')} );
+is( versioncmp( '1.1.1', '1.1' ),   1,  q{versioncmp('1.1.1','1.1')} );
 
-is( versioncmp( '1.1',  '1.1a' ), -1 );
-is( versioncmp( '1.1a', '1.1' ),  1 );
+is( versioncmp( '1.1',  '1.1a' ), -1, q{versioncmp('1.1','1.1a')} );
+is( versioncmp( '1.1a', '1.1' ),  1,  q{versioncmp('1.1a','1.1')} );
 
-is( versioncmp( '1.1.a', '1.1a' ),  -1 );
-is( versioncmp( '1.1a',  '1.1.a' ), 1 );
+is( versioncmp( '1.1.a', '1.1a' ),  -1, q{versioncmp('1.1.a','1.1a')} );
+is( versioncmp( '1.1a',  '1.1.a' ), 1,  q{versioncmp('1.1a','1.1.a')} );
 
-is( versioncmp( '1', 'a' ), -1 );
-is( versioncmp( 'a', '1' ), 1 );
+is( versioncmp( '1', 'a' ), -1, q{versioncmp('1','a')} );
+is( versioncmp( 'a', '1' ), 1,  q{versioncmp('a','1')} );
 
-is( versioncmp( 'a', 'b' ), -1 );
-is( versioncmp( 'b', 'a' ), 1 );
+is( versioncmp( 'a', 'b' ), -1, q{versioncmp('a','b')} );
+is( versioncmp( 'b', 'a' ), 1,  q{versioncmp('b','a')} );
 
-is( versioncmp( '1', '2' ), -1 );
-is( versioncmp( '2', '1' ), 1 );
+is( versioncmp( '1', '2' ), -1, q{versioncmp('1','2')} );
+is( versioncmp( '2', '1' ), 1,  q{versioncmp('2','1')} );
 
-is( versioncmp( '1.1-3', '1.1-4' ), -1 );
-is( versioncmp( '1.1-4', '1.1-3' ), 1 );
+is( versioncmp( '1.1-3', '1.1-4' ), -1, q{versioncmp('1.1-3','1.1-4')} );
+is( versioncmp( '1.1-4', '1.1-3' ), 1,  q{versioncmp('1.1-4','1.1-3')} );
 
-is( versioncmp( '1.1-5', '1.1.6' ), -1 );
-is( versioncmp( '1.1.6', '1.1.5' ), 1 );
+is( versioncmp( '1.1-5', '1.1.6' ), -1, q{versioncmp('1.1-5','1.1.6')} );
+is( versioncmp( '1.1.6', '1.1.5' ), 1,  q{versioncmp('1.1.6','1.1.5')} );
+## use critic (ProhibitMagicNumbers)
 
 1;
 
