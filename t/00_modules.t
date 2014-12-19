@@ -10,7 +10,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 17;
 
 our $VERSION = '1.6.8';
 
@@ -36,8 +36,5 @@ can_ok( 'Nagios::Plugin::Threshold', 'set_thresholds' );
 
 use_ok('POSIX');
 can_ok( 'POSIX', 'uname' );
-
-use_ok('Sort::Versions');
-can_ok( 'Sort::Versions', 'versioncmp' );
 
 1;
