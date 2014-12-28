@@ -397,7 +397,7 @@ sub check_running_kernel {
 # Returns   : the list of updates
 # Arguments : string with the command line arguments
 # Throws    : n/a
-# Comments  : sets $security_plugin to true if the plugin is enabled
+# Comments  : n/a
 # See also  : n/a
 sub run_yum {
 
@@ -476,6 +476,21 @@ sub run_yum {
     }
 
     return @updates;
+
+}
+
+##############################################################################
+# Usage     : check_security_option
+# Purpose   : checks if you supports --security (in older versions required
+#             a plugin)
+# Returns   : 1 if --security is supported, undef otherwise
+# Arguments : n/a
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub check_security_option {
+
+
 
 }
 
