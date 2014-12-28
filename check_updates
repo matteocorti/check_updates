@@ -479,7 +479,8 @@ sub check_security_option {
     my $OUTPUT_HANDLER;
 
     my $pid = open $OUTPUT_HANDLER, q{-|}, 'yum --help | grep -q -- --security'
-      or exit_with_error( UNKNOWN, "Cannot check for security option: $OS_ERROR" );
+      or
+      exit_with_error( UNKNOWN, "Cannot check for security option: $OS_ERROR" );
 
     if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
 
@@ -494,6 +495,8 @@ sub check_security_option {
         verbose "Security plugin installed\n";
         $security_plugin = 1;
     }
+
+    return;
 
 }
 
@@ -513,7 +516,7 @@ sub check_yum {
     my $message;
 
     check_security_option();
-    
+
     my @outdated = run_yum($arguments);
     my @security_updates;
 
