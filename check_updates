@@ -30,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.8';
+our $VERSION = '1.6.9';
 
 use Carp;
 use English qw(-no_match_vars);
