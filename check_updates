@@ -428,20 +428,6 @@ sub run_yum {
             next;
         }
 
-        # TODO check what is the ouptut with other locales
-        if (   $line =~ m{^Loaded[ ]plugins:.*[ ]security.*}mxs
-            || $line =~ m{^[ ]+:.*[ ]security.*}mxs )
-        {
-
-            if ( !$security_plugin ) {
-
-             # we do not want the same output if we are running the second check
-                verbose "Security plugin installed\n";
-            }
-            $security_plugin = 1;
-
-        }
-
         if ($blank_line) {
 
             # some lines are wrapped and result and the second part
@@ -490,7 +476,24 @@ sub run_yum {
 # See also  : n/a
 sub check_security_option {
 
+    my $OUTPUT_HANDLER;
 
+    my $pid = open $OUTPUT_HANDLER, q{-|}, 'yum --help | grep -q -- --security'
+      or exit_with_error( UNKNOWN, "Cannot check for security option: $OS_ERROR" );
+
+    if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
+
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        exit_with_error( UNKNOWN,
+            "Error while closing pipe to rpm: $OS_ERROR\n" );
+
+    }
+
+    if ( $CHILD_ERROR == 0 ) {
+        verbose "Security plugin installed\n";
+        $security_plugin = 1;
+    }
 
 }
 
@@ -508,6 +511,9 @@ sub check_yum {
     my $arguments = shift;
 
     my $message;
+
+    check_security_option();
+    
     my @outdated = run_yum($arguments);
     my @security_updates;
 
