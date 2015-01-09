@@ -8,9 +8,9 @@ check_updates depends on several Perl modules:
  * Carp
  * English
  * Getopt::Long
- * Nagios::Plugin
- * Nagios::Plugin::Getopt
- * Nagios::Plugin::Threshold
+ * Monitoring::Plugin
+ * Monitoring::Plugin::Getopt
+ * Monitoring::Plugin::Threshold
  * POSIX
  * Readonly
 

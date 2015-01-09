@@ -30,7 +30,7 @@ Source:        https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{sourc
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(Test::More)
-BuildRequires: perl(Nagios::Plugin)
+BuildRequires: perl(Monitoring::Plugin)
 BuildRequires: perl(Readonly)
 
 Requires:      nagios-plugins

@@ -23,13 +23,13 @@ all_from          'check_updates.pod';
 
 include 'version';
 
-requires 'Carp'                      => 0;
-requires 'English'                   => 0;
-requires 'Nagios::Plugin'            => 0;
-requires 'Nagios::Plugin::Getopt'    => 0;
-requires 'Nagios::Plugin::Threshold' => 0;
-requires 'POSIX'                     => 0;
-requires 'Readonly'                  => 0;
+requires 'Carp'                          => 0;
+requires 'English'                       => 0;
+requires 'Monitoring::Plugin'            => 0;
+requires 'Monitoring::Plugin::Getopt'    => 0;
+requires 'Monitoring::Plugin::Threshold' => 0;
+requires 'POSIX'                         => 0;
+requires 'Readonly'                      => 0;
 
 install_script  'check_updates';
 
