@@ -1,11 +1,12 @@
 2015-01-09  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: using Monitoring::Plugins instead of the deprecated
+	* check_updates: using Monitoring::Plugin instead of the deprecated
 	                 Nagios::Plugin
 
 2014-12-28  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: updated the check for the presence of the --secuity option
+	* check_updates: updated the check for the presence of the --security
+                         option
 
 2014-12-19  Matteo Corti  <matteo@corti.li>
 
