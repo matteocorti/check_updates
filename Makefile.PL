@@ -33,6 +33,8 @@ requires 'Readonly'                      => 0;
 
 install_script  'check_updates';
 
+auto_install;
+
 tests 't/*.t';
 test_requires 'Test::More'       => 0;
 test_requires 'File::Spec'       => 0;
