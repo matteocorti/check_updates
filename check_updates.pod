@@ -135,7 +135,17 @@ Nagios documentation
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
+Some versions of you deliver a wrong number of secuirty updates. For example
+
+        $ yum --security  check-update
+        Loaded plugins: downloadonly, product-id, rhnplugin, security
+        This system is receiving updates from RHN Classic or RHN Satellite.
+        Limiting package lists to security relevant ones
+        No packages needed for security; 7 packages available
+
+        mysql-libs.i686                                  5.1.73-5.el6_6                                   rhel-x86_64-server-6
+
+Either is mysql-libs a secuirity update (and the text should report it) or the package is wrongly listed. If yum delivers a wrong count, the pluging will do the same.
 
 Please report any bugs or feature requests to matteo.corti@id.ethz.ch,
 or through the web interface at

@@ -30,15 +30,57 @@ use 5.00800;
 use strict;
 use warnings;
 
+no warnings 'once'; 
+
 our $VERSION = '1.6.10';
 
 use Carp;
 use English qw(-no_match_vars);
-use Monitoring::Plugin::Getopt;
-use Monitoring::Plugin::Threshold;
-use Monitoring::Plugin;
 use POSIX qw(uname);
 use Readonly;
+
+my $plugin_module = load_module( 'Monitoring::Plugin', 'Nagios::Plugin' );
+my $plugin_threshold_module =
+    load_module( 'Monitoring::Plugin::Threshold', 'Nagios::Plugin::Threshold' );
+my $plugin_getopt_module =
+    load_module( 'Monitoring::Plugin::Getopt', 'Nagios::Plugin::Getopt' );
+
+# Check which version of the monitoring plugins is available
+
+sub load_module {
+
+    my @names = @_;
+    my $loaded_module;
+
+    for my $name (@names) {
+
+        my $file = $name;
+
+        # requires need either a bare word or a file name
+        $file =~ s{::}{/}gsxm;
+        $file .= '.pm';
+
+        eval {    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+            require $file;
+            $name->import();
+        };
+        if ( !$EVAL_ERROR ) {
+            $loaded_module = $name;
+            last;
+        }
+    }
+
+    if ( !$loaded_module ) {
+        #<<<
+        print 'CHECK_FREE_MEM: plugin not found: ' . join( ', ', @names ) . "\n";  ## no critic (RequireCheckedSyscall)
+        #>>>
+
+        exit 2;
+    }
+
+    return $loaded_module;
+
+}
 
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
@@ -169,7 +211,7 @@ if ( !caller ) {
 sub whoami {
     my $output;
     my $pid = open $output, q{-|}, 'whoami'
-      or exit_with_error( UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+      or exit_with_error( $plugin_module->UNKNOWN, "Cannot determine the user: $OS_ERROR" );
     while (<$output>) {
         chomp;
         return $_;
@@ -178,12 +220,12 @@ sub whoami {
 
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             "Error while closing pipe to whoami: $OS_ERROR\n" );
 
     }
 
-    exit_with_error( UNKNOWN, 'Cannot determine the user' );
+    exit_with_error( $plugin_module->UNKNOWN, 'Cannot determine the user' );
     return;
 }
 
@@ -203,7 +245,7 @@ sub verbose {
     my $level   = shift;
 
     if ( !defined $message ) {
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             q{Internal error: not enough parameters for 'verbose'} );
     }
 
@@ -377,7 +419,7 @@ sub check_running_kernel {
 
         #<<<
         my $pid = open $output, q{-|}, "rpm -q $rpm" ## no critic (RequireBriefOpen)
-          or exit_with_error( UNKNOWN,
+          or exit_with_error( $plugin_module->UNKNOWN,
             "Cannot list installed kernels: $OS_ERROR" );
         #>>>
         # there could be multiple versions of the same package installed
@@ -391,7 +433,7 @@ sub check_running_kernel {
 
             # close to a piped open return false if the command with non-zero
             # status. In this case $! is set to 0
-            exit_with_error( UNKNOWN,
+            exit_with_error( $plugin_module->UNKNOWN,
                 "Error while closing pipe to rpm: $OS_ERROR\n" );
 
         }
@@ -461,7 +503,7 @@ sub run_yum {
 
     #<<<
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
-      or exit_with_error( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+      or exit_with_error( $plugin_module->UNKNOWN, "Cannot list updates: $OS_ERROR" );
     #>>>
     while (<$OUTPUT_HANDLER>) {
 
@@ -495,7 +537,7 @@ sub run_yum {
 
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             "Error while closing pipe to rpm: $OS_ERROR\n" );
 
     }
@@ -529,13 +571,13 @@ sub check_security_option {
     my $pid = open $OUTPUT_HANDLER, q{-|},
       "$yum_executable --help | grep -q -- --security"
       or
-      exit_with_error( UNKNOWN, "Cannot check for security option: $OS_ERROR" );
+      exit_with_error( $plugin_module->UNKNOWN, "Cannot check for security option: $OS_ERROR" );
 
     if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
 
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             "Error while closing pipe to rpm: $OS_ERROR\n" );
 
     }
@@ -587,7 +629,7 @@ sub check_yum {
 
             # every update is critical since it could be a security problem
 
-            $status = CRITICAL;
+            $status = $plugin_module->CRITICAL;
             verbose "dnf/yum reports a non-up-to-date system\n";
 
             $message = ( scalar @outdated ) . ' update';
@@ -602,23 +644,23 @@ sub check_yum {
         else {
 
             if ( @outdated >= $options->get('warning') ) {
-                $status = WARNING;
+                $status = $plugin_module->WARNING;
             }
             if ( @outdated >= $options->get('critical') ) {
-                $status = CRITICAL;
+                $status = $plugin_module->CRITICAL;
             }
 
             if ( $options->get('security-only') ) {
 
                 # ignore any other update
-                $status = OK;
+                $status = $plugin_module->OK;
             }
 
             @security_updates = run_yum( '--security ' . $arguments );
 
             if ( @security_updates > 0 ) {
 
-                $status = CRITICAL;
+                $status = $plugin_module->CRITICAL;
 
                 $message = ( scalar @security_updates ) . ' security update';
                 if ( @security_updates > 1 ) {
@@ -671,7 +713,7 @@ sub check_yum {
 
     }
     else {
-        $status  = OK;
+        $status  = $plugin_module->OK;
         $message = 'no updates available';
     }
 
@@ -709,7 +751,7 @@ sub check_up2date {
     # parsing the output of up2date -l
 
     if ( whoami() ne 'root' ) {
-        exit_with_error( CRITICAL,
+        exit_with_error( $plugin_module->CRITICAL,
             q{must be root to execute 'up2date -l': use sudo} );
     }
 
@@ -719,7 +761,7 @@ sub check_up2date {
 q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]'};
 
     my $pid = open $output, q{-|}, $command    ## no critic (RequireBriefOpen)
-      or exit_with_error( UNKNOWN, "Cannot list updates: $OS_ERROR" );
+      or exit_with_error( $plugin_module->UNKNOWN, "Cannot list updates: $OS_ERROR" );
 
     while (<$output>) {
         chomp;
@@ -732,7 +774,7 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
 
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             "Error while closing pipe to dnf/yum (listing updates): $OS_ERROR\n"
         );
 
@@ -745,10 +787,10 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         $message = ( scalar @status_lines ) . ' update';
 
         if ( @status_lines >= $options->get('warning') ) {
-            $status = WARNING;
+            $status = $plugin_module->WARNING;
         }
         if ( @status_lines >= $options->get('critical') ) {
-            $status = CRITICAL;
+            $status = $plugin_module->CRITICAL;
         }
 
         if ( @status_lines > 1 ) {
@@ -807,7 +849,7 @@ sub get_os_name_and_version {
             $filename = '/etc/redhat-release';
         }
         else {
-            exit_with_error( UNKNOWN, 'Cannot detect Linux distribution' );
+            exit_with_error( $plugin_module->UNKNOWN, 'Cannot detect Linux distribution' );
         }
 
     }
@@ -819,18 +861,18 @@ sub get_os_name_and_version {
         my $TMP;
 
         open $TMP, q{<}, $filename
-          or exit_with_error( CRITICAL, "Error opening $filename: $OS_ERROR" );
+          or exit_with_error( $plugin_module->CRITICAL, "Error opening $filename: $OS_ERROR" );
         while (<$TMP>) {
             chomp;
             $header = $_;
             last;
         }
         close $TMP
-          or exit_with_error( CRITICAL, "Error closing $filename: $OS_ERROR" );
+          or exit_with_error( $plugin_module->CRITICAL, "Error closing $filename: $OS_ERROR" );
 
     }
     else {
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
             "Cannot detect Linux distribution (no $filename file)" );
     }
 
@@ -877,7 +919,7 @@ sub get_updater {
 # See also  : n/a
 sub run {
 
-    $status = OK;
+    $status = $plugin_module->OK;
 
     ##############################################################################
     # main
@@ -888,12 +930,12 @@ sub run {
     $help         = q{};
     $bootcheck    = 1;
     $wrong_kernel = 0;
-    $plugin       = Monitoring::Plugin->new( shortname => 'CHECK_UPDATES' );
+    $plugin       = $plugin_module->new( shortname => 'CHECK_UPDATES' );
 
     ########################
     # Command line arguments
 
-    $options = Monitoring::Plugin::Getopt->new(
+    $options = $plugin_getopt_module->new(
         usage   => 'Usage: %s [OPTIONS]',
         version => $VERSION,
         url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
@@ -942,7 +984,7 @@ sub run {
     # Sanity checks
 
     if ( $options->get('warning') > $options->get('critical') ) {
-        exit_with_error( UNKNOWN,
+        exit_with_error( $plugin_module->UNKNOWN,
                 q{'critical' (}
               . $options->get('critical')
               . q{) must not be lower than 'warning' (}
@@ -950,14 +992,14 @@ sub run {
               . q{)} );
     }
 
-    $threshold = Monitoring::Plugin::Threshold->set_thresholds(
+    $threshold = $plugin_threshold_module->set_thresholds(
         warning  => $options->get('warning'),
         critical => $options->get('critical'),
     );
 
     # check bootcheck consistency
     if ( $options->get('boot-check') && $options->get('no-boot-check') ) {
-        exit_with_error( CRITICAL,
+        exit_with_error( $plugin_module->CRITICAL,
             'Error --boot-check and --no-boot-check specified at the same time'
         );
     }
@@ -1005,21 +1047,34 @@ sub run {
             check_up2date();
         }
         else {
-            exit_with_error( UNKNOWN, 'unknown Linux distribution' );
+            exit_with_error( $plugin_module->UNKNOWN, 'unknown Linux distribution' );
         }
 
         if ( $bootcheck && $wrong_kernel ) {
-            $status = CRITICAL;
+            $status = $plugin_module->CRITICAL;
         }
 
         # Monitoring::Plugin does not support the addition Nagios 3 status lines
         # -> we do it manually
+        
+        eval {    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+            require 'Monitoring/Plugin.pm';
+            Monitoring::Plugin->import();
+        };
+        if ( !$EVAL_ERROR ) {
+            #<<<
+            print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
+                . $Monitoring::Plugin::STATUS_TEXT{$status}
+                    . " - $exit_message |";
+            #>>>
+        } else {
+            #<<<
+            print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
+                . $Nagios::Plugin::STATUS_TEXT{$status}
+                    . " - $exit_message |";
+            #>>>
+        }
 
-        #<<<
-        print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
-            . $Monitoring::Plugin::STATUS_TEXT{$status}
-            . " - $exit_message |";
-        #>>>
         for my $pdata ( @{ $plugin->perfdata } ) {
             #<<<
             print q{ } . $pdata->perfoutput; ## no critic (RequireCheckedSyscalls)
@@ -1039,7 +1094,7 @@ sub run {
 
     }
     else {
-        exit_with_error( UNKNOWN, 'Cannot detect Linux system' );
+        exit_with_error( $plugin_module->UNKNOWN, 'Cannot detect Linux system' );
     }
 
     return;
