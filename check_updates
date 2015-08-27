@@ -30,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-no warnings 'once'; 
+no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
 our $VERSION = '1.6.10';
 
@@ -41,9 +41,9 @@ use Readonly;
 
 my $plugin_module = load_module( 'Monitoring::Plugin', 'Nagios::Plugin' );
 my $plugin_threshold_module =
-    load_module( 'Monitoring::Plugin::Threshold', 'Nagios::Plugin::Threshold' );
+  load_module( 'Monitoring::Plugin::Threshold', 'Nagios::Plugin::Threshold' );
 my $plugin_getopt_module =
-    load_module( 'Monitoring::Plugin::Getopt', 'Nagios::Plugin::Getopt' );
+  load_module( 'Monitoring::Plugin::Getopt', 'Nagios::Plugin::Getopt' );
 
 # Check which version of the monitoring plugins is available
 
@@ -191,7 +191,7 @@ if ( !caller ) {
     }
 
     if ( !defined $yum_executable ) {
-        exit_with_error( UNKNOWN, "Cannot find DNF or YUM\n" );
+        exit_with_error( $plugin_module->UNKNOWN, "Cannot find DNF or YUM\n" );
     }
 
     run();
@@ -210,8 +210,10 @@ if ( !caller ) {
 # See also  : n/a
 sub whoami {
     my $output;
-    my $pid = open $output, q{-|}, 'whoami'
-      or exit_with_error( $plugin_module->UNKNOWN, "Cannot determine the user: $OS_ERROR" );
+    my $pid = open $output, q{-|},
+      'whoami'
+      or exit_with_error( $plugin_module->UNKNOWN,
+        "Cannot determine the user: $OS_ERROR" );
     while (<$output>) {
         chomp;
         return $_;
@@ -570,8 +572,8 @@ sub check_security_option {
 
     my $pid = open $OUTPUT_HANDLER, q{-|},
       "$yum_executable --help | grep -q -- --security"
-      or
-      exit_with_error( $plugin_module->UNKNOWN, "Cannot check for security option: $OS_ERROR" );
+      or exit_with_error( $plugin_module->UNKNOWN,
+        "Cannot check for security option: $OS_ERROR" );
 
     if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
 
@@ -761,7 +763,8 @@ sub check_up2date {
 q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]'};
 
     my $pid = open $output, q{-|}, $command    ## no critic (RequireBriefOpen)
-      or exit_with_error( $plugin_module->UNKNOWN, "Cannot list updates: $OS_ERROR" );
+      or exit_with_error( $plugin_module->UNKNOWN,
+        "Cannot list updates: $OS_ERROR" );
 
     while (<$output>) {
         chomp;
@@ -849,7 +852,8 @@ sub get_os_name_and_version {
             $filename = '/etc/redhat-release';
         }
         else {
-            exit_with_error( $plugin_module->UNKNOWN, 'Cannot detect Linux distribution' );
+            exit_with_error( $plugin_module->UNKNOWN,
+                'Cannot detect Linux distribution' );
         }
 
     }
@@ -860,15 +864,18 @@ sub get_os_name_and_version {
 
         my $TMP;
 
-        open $TMP, q{<}, $filename
-          or exit_with_error( $plugin_module->CRITICAL, "Error opening $filename: $OS_ERROR" );
+        open $TMP, q{<},
+          $filename
+          or exit_with_error( $plugin_module->CRITICAL,
+            "Error opening $filename: $OS_ERROR" );
         while (<$TMP>) {
             chomp;
             $header = $_;
             last;
         }
         close $TMP
-          or exit_with_error( $plugin_module->CRITICAL, "Error closing $filename: $OS_ERROR" );
+          or exit_with_error( $plugin_module->CRITICAL,
+            "Error closing $filename: $OS_ERROR" );
 
     }
     else {
@@ -1047,7 +1054,8 @@ sub run {
             check_up2date();
         }
         else {
-            exit_with_error( $plugin_module->UNKNOWN, 'unknown Linux distribution' );
+            exit_with_error( $plugin_module->UNKNOWN,
+                'unknown Linux distribution' );
         }
 
         if ( $bootcheck && $wrong_kernel ) {
@@ -1056,9 +1064,11 @@ sub run {
 
         # Monitoring::Plugin does not support the addition Nagios 3 status lines
         # -> we do it manually
-        
+
         eval {    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+            ## no critic (Modules::RequireBarewordIncludes)
             require 'Monitoring/Plugin.pm';
+            ## use critic (Modules::RequireBarewordIncludes)
             Monitoring::Plugin->import();
         };
         if ( !$EVAL_ERROR ) {
@@ -1067,7 +1077,8 @@ sub run {
                 . $Monitoring::Plugin::STATUS_TEXT{$status}
                     . " - $exit_message |";
             #>>>
-        } else {
+        }
+        else {
             #<<<
             print 'CHECK_UPDATES '  ## no critic (RequireCheckedSyscalls)
                 . $Nagios::Plugin::STATUS_TEXT{$status}
@@ -1094,7 +1105,8 @@ sub run {
 
     }
     else {
-        exit_with_error( $plugin_module->UNKNOWN, 'Cannot detect Linux system' );
+        exit_with_error( $plugin_module->UNKNOWN,
+            'Cannot detect Linux system' );
     }
 
     return;

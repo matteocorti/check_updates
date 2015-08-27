@@ -5,7 +5,9 @@ check_updates.pod
 check_updates.spec
 COPYING
 COPYRIGHT
+inc/Module/AutoInstall.pm
 inc/Module/Install.pm
+inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
