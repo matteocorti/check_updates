@@ -1,3 +1,7 @@
+2015-08-27  Matteo Corti  <matteo@corti.li>
+
+	* check_updates: version 1.6.11 merges two different branches of 1.6.10
+
 2015-08-27  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.6.10
@@ -5,6 +9,7 @@
 
 2015-01-09  Matteo Corti  <matteo@corti.li>
 
+	* Version 1.6.9
 	* check_updates: using Monitoring::Plugin instead of the deprecated
 	                 Nagios::Plugin
 

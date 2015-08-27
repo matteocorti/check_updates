@@ -32,7 +32,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.10';
+our $VERSION = '1.6.11';
 
 use Carp;
 use English qw(-no_match_vars);
