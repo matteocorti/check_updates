@@ -7,7 +7,7 @@
 ################################################################################
 
 %define version          1.6.10
-%define release          0
+%define release          2
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
