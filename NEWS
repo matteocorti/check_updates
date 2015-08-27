@@ -1,12 +1,13 @@
-2014-12-28: 1.6.9 - Fixed a bug for the security plugin check on new RH or Fedora
-                    versions
-2014-09-21: 1.6.8 - Removed dependency on Sort::Versions
-2014-05-23: 1.6.7 - Support for Oracle UEK-kernels and RHEL7
-2013-10-10: 1.6.6 - Support openvz kernels
-2013-07-15: 1.6.5 - Disabled ePN by default
-2013-06-18: 1.6.4 - Handle wide Yum output
-2013-05-11: 1.6.3 - Do not print performance data on security updates if Yum
-                    security plugin is not installed
+2015-08-27: 1.6.10 - Initial support for DNF
+2014-12-28: 1.6.9  - Fixed a bug for the security plugin check on new RH or Fedora
+                     versions
+2014-09-21: 1.6.8  - Removed dependency on Sort::Versions
+2014-05-23: 1.6.7  - Support for Oracle UEK-kernels and RHEL7
+2013-10-10: 1.6.6  - Support openvz kernels
+2013-07-15: 1.6.5  - Disabled ePN by default
+2013-06-18: 1.6.4  - Handle wide Yum output
+2013-05-11: 1.6.3  - Do not print performance data on security updates if Yum
+                     security plugin is not installed
 2013-03-29: 1.6.2  - Applied a patch adding the possibility to pass arguments
                      to Yum
 2012-09-03: 1.6.1  - recognizes PUIAS Lunux

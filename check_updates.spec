@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.6.9
+%define version          1.6.10
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -72,6 +72,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Thu Aug 27 2015 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.10-0
+- Updated to 1.6.10
+
 * Sun Dec 28 2014 Matteo Corti <matteo@corti.li> - 1.6.9-0
 - Updated to 1.6.9
 

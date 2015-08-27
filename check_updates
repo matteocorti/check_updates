@@ -30,7 +30,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-our $VERSION = '1.6.9';
+our $VERSION = '1.6.10';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -68,20 +68,6 @@ use vars qw(
 );
 ## use critic
 
-# the script is declared as a package so that it can be unit tested
-# but it should not be used as a module
-if ( !caller ) {
-
-    # set the yum executable (the value can be overridden in the
-    # tests to a mock
-    $yum_executable = 'yum';
-
-    run();
-}
-
-##############################################################################
-# subroutines
-
 ##############################################################################
 # Usage     : exit_with_error( $status, $message)
 # Purpose   : if a plugin object is available exits via ->nagios_exit
@@ -109,6 +95,68 @@ sub exit_with_error {
     return;
 
 }
+
+##############################################################################
+# Usage     : get_path('program_name');
+# Purpose   : retrieves the path of an executable file using the
+#             'which' utility
+# Returns   : the path of the program (if found)
+# Arguments : the program name
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub get_path {
+
+    my $prog = shift;
+    my $path;
+
+    my $which_command = "which $prog";
+    my $which_output;
+
+    #<<<
+    open $which_output, q{-|}, "$which_command 2>&1"
+      or $plugin->nagios_exit( $plugin->UNKNOWN,  "Cannot execute $which_command: $OS_ERROR" );
+    while (<$which_output>) {
+        chomp;
+        if ( !/^which:/mxs ) {
+            $path = $_;
+        }
+    }
+    if (  !( close $which_output )
+        && ( $OS_ERROR != 0 ) )
+    {
+
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        $plugin->nagios_exit( $plugin->UNKNOWN,
+            "Error while closing pipe to $which_command: $OS_ERROR" );
+    }
+    #>>>
+    return $path;
+
+}
+
+# the script is declared as a package so that it can be unit tested
+# but it should not be used as a module
+if ( !caller ) {
+
+    # set the yum executable (the value can be overridden in the
+    # tests to a mock
+    $yum_executable = get_path('dnf');
+
+    if ( !defined $yum_executable ) {
+        $yum_executable = get_path('yum');
+    }
+
+    if ( !defined $yum_executable ) {
+        exit_with_error( UNKNOWN, "Cannot find DNF or YUM\n" );
+    }
+
+    run();
+}
+
+##############################################################################
+# subroutines
 
 ##############################################################################
 # Usage     : whoami()
@@ -478,7 +526,8 @@ sub check_security_option {
 
     my $OUTPUT_HANDLER;
 
-    my $pid = open $OUTPUT_HANDLER, q{-|}, 'yum --help | grep -q -- --security'
+    my $pid = open $OUTPUT_HANDLER, q{-|},
+      "$yum_executable --help | grep -q -- --security"
       or
       exit_with_error( UNKNOWN, "Cannot check for security option: $OS_ERROR" );
 
@@ -539,7 +588,7 @@ sub check_yum {
             # every update is critical since it could be a security problem
 
             $status = CRITICAL;
-            verbose "yum reports a non-up-to-date system\n";
+            verbose "dnf/yum reports a non-up-to-date system\n";
 
             $message = ( scalar @outdated ) . ' update';
             if ( @outdated > 1 ) {
@@ -684,7 +733,8 @@ q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
         exit_with_error( UNKNOWN,
-            "Error while closing pipe to yum (listing updates): $OS_ERROR\n" );
+            "Error while closing pipe to dnf/yum (listing updates): $OS_ERROR\n"
+        );
 
     }
 

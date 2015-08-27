@@ -1,3 +1,8 @@
+2015-08-27  Matteo Corti  <matteo.corti@id.ethz.ch>
+
+	* Version 1.6.10
+	* check_updates: initial Support for DNF
+
 2015-01-09  Matteo Corti  <matteo@corti.li>
 
 	* check_updates: using Monitoring::Plugin instead of the deprecated
