@@ -1,3 +1,8 @@
+2015-08-28    <matteo@corti.li>
+
+	* Version 1.6.12
+	* check_updates: fixes the tests on systems without Monitoring::Plugin 
+
 2015-08-27  Matteo Corti  <matteo@corti.li>
 
 	* check_updates: version 1.6.11 merges two different branches of 1.6.10

@@ -1,4 +1,5 @@
-2015-08-27: 1.6.10 - Initial support for DNF
+2015-08-28: 1.6.12 - Fixed a bug in the dependencies tests
+2015-08-27: 1.6.11 - Initial support for DNF
 2014-12-28: 1.6.9  - Fixed a bug for the security plugin check on new RH or Fedora
                      versions
 2014-09-21: 1.6.8  - Removed dependency on Sort::Versions

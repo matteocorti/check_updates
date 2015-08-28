@@ -6,7 +6,7 @@
 # $Date$
 ################################################################################
 
-%define version          1.6.11
+%define version          1.6.12
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -30,7 +30,6 @@ Source:        https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{sourc
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(Test::More)
-BuildRequires: perl(Monitoring::Plugin)
 BuildRequires: perl(Readonly)
 
 Requires:      nagios-plugins
@@ -72,7 +71,10 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
-* Thu Aug 27 2015 Matteo Corti <matteo@corti.li> - 1.6.11-0%{?dist}
+* Fri Aug 28 2015  <matteo@corti.li> - 1.6.12-0
+- Updated to 1.6.12
+
+* Thu Aug 27 2015 Matteo Corti <matteo@corti.li> - 1.6.11-0
 - Updated to 1.6.11
 
 * Thu Aug 27 2015 Matteo Corti <matteo.corti@id.ethz.ch> - 1.6.10-0
