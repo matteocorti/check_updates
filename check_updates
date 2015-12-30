@@ -9,21 +9,12 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2014, Matteo Corti
+# Copyright (c) 2007-2015, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
 # or (at your option) any later version.
 # See the COPYING file for details.
-#
-# RCS information
-# enable substitution with:
-#   $ svn propset svn:keywords "Id Revision HeadURL Source Date"
-#
-#   $Id$
-#   $Revision$
-#   $HeadURL$
-#   $Date$
 
 use 5.00800;
 
@@ -72,7 +63,7 @@ sub load_module {
 
     if ( !$loaded_module ) {
         #<<<
-        print 'CHECK_FREE_MEM: plugin not found: ' . join( ', ', @names ) . "\n";  ## no critic (RequireCheckedSyscall)
+        print 'CHECK_UPDATES: plugin not found: ' . join( ', ', @names ) . "\n";  ## no critic (RequireCheckedSyscall)
         #>>>
 
         exit 2;
