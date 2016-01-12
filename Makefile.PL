@@ -1,15 +1,6 @@
 # Load the Module::Install bundled in ./inc/
 use inc::Module::Install;
 
-################################################################################
-# Version information:
-#
-# $Id$
-# $Revision$
-# $HeadURL$
-# $Date$
-#
-
 ##############################################################################
 # Define metadata (we read it from the binary)
 

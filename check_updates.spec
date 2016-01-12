@@ -1,12 +1,4 @@
-################################################################################
-# File version information:
-# $Id$
-# $Revision$
-# $HeadURL$
-# $Date$
-################################################################################
-
-%define version          1.6.12
+%define version          1.6.13
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -21,11 +13,11 @@ Version:       %{version}
 Obsoletes:     check_updates
 Release:       %{release}%{?dist}
 License:       GPLv3+
-Packager:      Matteo Corti <matteo.corti@id.ethz.ch>
+Packager:      Matteo Corti <matteo@corti.li>
 Group:         Applications/System
 BuildRoot:     %{_tmppath}/%{packagename}-%{version}-%{release}-root-%(%{__id_u} -n)
-URL:           https://trac.id.ethz.ch/projects/nagios_plugins/wiki/check_updates
-Source:        https://trac.id.ethz.ch/projects/nagios_plugins/downloads/%{sourcename}-%{version}.tar.gz
+URL:           https://github.com/matteocorti/check_updates
+Source:        https://github.com/matteocorti/%{sourcename}/releases/download/v%{version}/%{sourcename}-%{version}.tar.gz
 
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
@@ -71,6 +63,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Tue Jan 12 2016  <matteo@corti.li> - 1.6.13-0
+- Updated to 1.6.13
+
 * Fri Aug 28 2015  <matteo@corti.li> - 1.6.12-0
 - Updated to 1.6.12
 

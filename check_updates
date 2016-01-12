@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2015, Matteo Corti
+# Copyright (c) 2007-2016, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.12';
+our $VERSION = '1.6.13';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -179,10 +179,6 @@ if ( !caller ) {
 
     if ( !defined $yum_executable ) {
         $yum_executable = get_path('yum');
-    }
-
-    if ( !defined $yum_executable ) {
-        exit_with_error( $plugin_module->UNKNOWN, "Cannot find DNF or YUM\n" );
     }
 
     run();
@@ -936,7 +932,7 @@ sub run {
     $options = $plugin_getopt_module->new(
         usage   => 'Usage: %s [OPTIONS]',
         version => $VERSION,
-        url     => 'https://trac.id.ethz.ch/projects/nagios_plugins',
+        url     => 'https://github.com/matteocorti/check_updates',
         blurb   => 'Checks if RedHat or Fedora system is up-to-date',
     );
 
@@ -948,8 +944,7 @@ sub run {
 
     $options->arg(
         spec => 'boot-check-warning',
-        help =>
-          'Like --boot-check but state is warning instead of critical',
+        help => 'Like --boot-check but state is warning instead of critical',
     );
 
     $options->arg(
@@ -1007,9 +1002,10 @@ sub run {
             'Error --boot-check and --no-boot-check specified at the same time'
         );
     }
-    if ( $options->get('boot-check-warning') && $options->get('no-boot-check') ) {
+    if ( $options->get('boot-check-warning') && $options->get('no-boot-check') )
+    {
         exit_with_error( $plugin_module->CRITICAL,
-            'Error --boot-check-warning and --no-boot-check specified at the same time'
+'Error --boot-check-warning and --no-boot-check specified at the same time'
         );
     }
 
@@ -1021,6 +1017,9 @@ sub run {
         $bootcheck = 2;
     }
 
+    if ( !defined $yum_executable ) {
+        exit_with_error( $plugin_module->UNKNOWN, "Cannot find DNF or YUM\n" );
+    }
 
     #########
     # Arguments
@@ -1067,7 +1066,8 @@ sub run {
 
         if ( $bootcheck == 2 && $wrong_kernel ) {
             $status = $plugin_module->WARNING;
-        } elsif ( $bootcheck && $wrong_kernel ) {
+        }
+        elsif ( $bootcheck && $wrong_kernel ) {
             $status = $plugin_module->CRITICAL;
         }
 

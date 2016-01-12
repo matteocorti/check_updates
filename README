@@ -36,8 +36,3 @@ Use one of the following commands to install the yum security plugin:
   Red Hat Enterprise Linux 5.x, CentOS 5.x and Scientific Linux 5.x systems:
 
   * yum install yum-security
-
-# $Id$
-# $Revision$
-# $HeadURL$
-# $Date$

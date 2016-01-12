@@ -1,4 +1,4 @@
-Matteo Corti <matteo.corti@id.ethz.ch>
+Matteo Corti <matteo@corti.li>
 
 Many thanks to:
  * Peter Bircher & Cristian Tuduce for several bug fixes
@@ -10,9 +10,4 @@ Many thanks to:
  * Franky Van Liedekerke for the perfomance data and security plugin
    patch and for the openvz kernels patch
  * Andreas Dijkman for the Oracle UEK patch
-
-# File version information:
-# $Id$
-# $Revision$
-# $HeadURL$
-# $Date$
+ * PhiBo (https://github.com/phibos) for the --boot-check-warning patch

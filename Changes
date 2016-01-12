@@ -1,3 +1,7 @@
+2016-01-12  PhiBo https://github.com/phibos
+
+	* check_updates: New option --boot-check-warning
+
 2015-08-28    <matteo@corti.li>
 
 	* Version 1.6.12
@@ -270,9 +274,3 @@
 2008-01-22  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* check_updates: recognizes CentOS
-
-# File version information:
-# $Id$
-# $Revision$
-# $HeadURL$
-# $Date$

@@ -6,6 +6,7 @@
 \.bak$
 \.sw.$
 \.svn
+\.git
 ^cover_db
 ^Makefile$
 ^Makefile.old$
