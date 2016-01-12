@@ -947,6 +947,12 @@ sub run {
     );
 
     $options->arg(
+        spec => 'boot-check-warning',
+        help =>
+          'Like --boot-check but state is warning instead of critical',
+    );
+
+    $options->arg(
         spec => 'no-boot-check',
         help => 'do not complain if the machine was booted with an old kernel',
     );
@@ -1001,10 +1007,20 @@ sub run {
             'Error --boot-check and --no-boot-check specified at the same time'
         );
     }
+    if ( $options->get('boot-check-warning') && $options->get('no-boot-check') ) {
+        exit_with_error( $plugin_module->CRITICAL,
+            'Error --boot-check-warning and --no-boot-check specified at the same time'
+        );
+    }
 
     if ( $options->get('no-boot-check') ) {
         $bootcheck = 0;
     }
+
+    if ( $options->get('boot-check-warning') ) {
+        $bootcheck = 2;
+    }
+
 
     #########
     # Arguments
@@ -1049,7 +1065,9 @@ sub run {
                 'unknown Linux distribution' );
         }
 
-        if ( $bootcheck && $wrong_kernel ) {
+        if ( $bootcheck == 2 && $wrong_kernel ) {
+            $status = $plugin_module->WARNING;
+        } elsif ( $bootcheck && $wrong_kernel ) {
             $status = $plugin_module->CRITICAL;
         }
 
