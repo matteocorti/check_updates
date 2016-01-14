@@ -398,12 +398,12 @@ sub check_running_kernel {
     for my $rpm (
         (
             "$package",     "$package-smp", "$package-PAE", "$package-xen",
-            "$package-uek", 'ovzkernel',    'vzkernel'
+            "$package-uek", 'ovzkernel',    'vzkernel', "$package-PAE-core", "$package-core",
         )
       )
 
     {
-
+        
         my $output;
 
         #<<<
@@ -432,7 +432,8 @@ sub check_running_kernel {
             # rpm exits with 0 only it the RPM exists
 
             push @versions, @rpm_versions;
-        }
+
+}
 
     }
 
@@ -447,6 +448,10 @@ sub check_running_kernel {
     @versions = sort versioncmp @versions;
 
     my $installed = $versions[-1];
+
+    if ( ! $installed ) {
+        $plugin->nagios_exit( $plugin->UNKNOWN,  'Unable to detect installed kernel' );
+    }
 
     verbose "kernel: running = $release, installed = $installed\n";
 
