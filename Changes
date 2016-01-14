@@ -1,5 +1,11 @@
+2016-01-14 Matteo Corti <matteo@corti.li>
+
+        * Version 1.6.14
+	* check_updates: Fixed a bug when only '-core' kernel packages are installed
+
 2016-01-12  PhiBo https://github.com/phibos
 
+        * Version 1.6.13
 	* check_updates: New option --boot-check-warning
 
 2015-08-28    <matteo@corti.li>

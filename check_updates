@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.13';
+our $VERSION = '1.6.14';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -397,13 +397,16 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",     "$package-smp", "$package-PAE", "$package-xen",
-            "$package-uek", 'ovzkernel',    'vzkernel', "$package-PAE-core", "$package-core",
+            "$package",     "$package-smp",
+            "$package-PAE", "$package-xen",
+            "$package-uek", 'ovzkernel',
+            'vzkernel',     "$package-PAE-core",
+            "$package-core",
         )
       )
 
     {
-        
+
         my $output;
 
         #<<<
@@ -433,7 +436,7 @@ sub check_running_kernel {
 
             push @versions, @rpm_versions;
 
-}
+        }
 
     }
 
@@ -449,8 +452,9 @@ sub check_running_kernel {
 
     my $installed = $versions[-1];
 
-    if ( ! $installed ) {
-        $plugin->nagios_exit( $plugin->UNKNOWN,  'Unable to detect installed kernel' );
+    if ( !$installed ) {
+        $plugin->nagios_exit( $plugin->UNKNOWN,
+            'Unable to detect installed kernel' );
     }
 
     verbose "kernel: running = $release, installed = $installed\n";
