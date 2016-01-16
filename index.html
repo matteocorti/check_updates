@@ -39,20 +39,20 @@ is up-to-date</p>
 system.</p>
 
 <h1>
-<a id="up2date" class="anchor" href="#up2date" aria-hidden="true"><span class="octicon octicon-link"></span></a>up2date:</h1>
+<a id="up2date" class="anchor" href="#up2date" aria-hidden="true"><span class="octicon octicon-link"></span></a>up2date</h1>
 
-<p>since up2date -l to list the outdated packages can only be run be run
+      <p>since <code>up2date -l</code> to list the outdated packages can only be run be run
 by root the plugin must be executed as root. Plese configure sudo as
 follows:</p>
 
-<p>nagios ALL= NOPASSWD: /usr/sbin/up2date -l</p>
+      <pre>nagios ALL= NOPASSWD: /usr/sbin/up2date -l</pre>
+      
+      <p>and execute the plugin with sudo</p>
 
-<p>and execute the plugin with sudo</p>
-
-<p>sudo $INSTALLATION_PATH/check_updates</p>
+      <pre>sudo $INSTALLATION_PATH/check_updates</pre>
 
 <h1>
-<a id="dnf" class="anchor" href="#dnf" aria-hidden="true"><span class="octicon octicon-link"></span></a>DNF:</h1>
+<a id="dnf" class="anchor" href="#dnf" aria-hidden="true"><span class="octicon octicon-link"></span></a>DNF</h1>
 
 <p>DNF uses different caches pro user. This has the consequence that DNF
 and the plugin will potentially deliver different results for
