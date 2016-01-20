@@ -332,6 +332,9 @@ sub clean_kernel_version {
     $kernel =~ s/[.][\w]*PAE//imxs;
     $kernel =~ s/PAE-//imxs;
 
+    # remove core
+    $kernel =~ s/core-//imxs;
+
     # remove Xen
     $kernel =~ s/xen-//imxs;
 
