@@ -7,7 +7,7 @@ use warnings;
 
 use Test::More tests => 17;
 
-our $VERSION = '1.6.15';
+our $VERSION = '1.6.16';
 
 use_ok('Carp');
 

@@ -11,3 +11,4 @@ Many thanks to:
    patch and for the openvz kernels patch
  * Andreas Dijkman for the Oracle UEK patch
  * PhiBo (https://github.com/phibos) for the --boot-check-warning patch
+ * ptk (https://github.com/ptrj) for the aufs kernels patch

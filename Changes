@@ -1,3 +1,8 @@
+2016-04-18  Matteo Corti  <matteo@corti.li>
+
+	* Version 1.6.16
+	* check_updates: handles "aufs" kernel
+
 2016-01-20  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.15

@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.15';
+our $VERSION = '1.6.16';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -404,10 +404,10 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",     "$package-smp",
-            "$package-PAE", "$package-xen",
-            "$package-uek", 'ovzkernel',
-            'vzkernel',     "$package-PAE-core",
+            "$package",         "$package-smp",
+            "$package-PAE",     "$package-xen",
+            "$package-uek",     'ovzkernel',
+            'vzkernel',         "$package-PAE-core",
             "$package-ml-aufs", "$package-lt-aufs",
             "$package-core",
         )
