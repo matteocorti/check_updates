@@ -906,6 +906,7 @@ sub get_updater {
     if (   $name =~ /Fedora/mxs
         || $name =~ /CentOS/mxs
         || $name =~ /PUIAS/mxs
+        || $name =~ /CloudLinux/mxs
         || $name =~ /Scientific[ ]Linux/mxs
         || $name =~ /Red[ ]Hat.*[ ][567]/mxs
         || $name =~ /Oracle/mxs
