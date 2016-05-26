@@ -531,6 +531,10 @@ sub run_yum {
             if ( $line =~ m/^[ ]/mxs ) {
                 next;
             }
+            
+            if ( $line =~ /^Obsoleting/i ) {
+                next;
+            }
 
             $line =~ s{[ ].*}{}mxs;
 
@@ -613,6 +617,11 @@ sub check_yum {
     my $message;
 
     check_security_option();
+
+    system("$yum_executable -q clean all");
+    if ( $? == -1) {
+      exit_with_error( UNKNOWN, "Cannot clean yum cache" );
+    }
 
     my @outdated = run_yum($arguments);
     my @security_updates;
