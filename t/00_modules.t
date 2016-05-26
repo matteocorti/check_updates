@@ -7,7 +7,7 @@ use warnings;
 
 use Test::More tests => 17;
 
-our $VERSION = '1.6.16';
+our $VERSION = '1.6.17';
 
 use_ok('Carp');
 
@@ -15,9 +15,11 @@ use_ok('English');
 
 my $plugin_name;
 if ( eval { require Monitoring::Plugin } ) {
+    diag "using Monitoring::Plugin";
     $plugin_name = 'Monitoring::Plugin';
 }
 else {
+    diag "using Nagios::Plugin";
     $plugin_name = 'Nagios::Plugin';
 }
 

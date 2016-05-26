@@ -1,4 +1,4 @@
-%define version          1.6.16
+%define version          1.6.17
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Thu May 26 2016  <matteo@corti.li> - 1.6.17-0
+- Updated to 1.6.17
+
 * Mon Apr 18 2016  <matteo@corti.li> - 1.6.16-0
 - Updated to 1.6.16
 

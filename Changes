@@ -1,3 +1,8 @@
+2016-05-26  Matteo Corti  <matteo@corti.li>
+
+	* Version 1.6.17
+	* check_updates: handles "obsolete" packages
+
 2016-04-18  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.16

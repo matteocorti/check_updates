@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.16';
+our $VERSION = '1.6.17';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -74,6 +74,7 @@ sub load_module {
 }
 
 Readonly our $EXIT_UNKNOWN                 => 3;
+Readonly our $YUM_RETURN_ERROR             => 1;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
 Readonly our $BITS_PER_BYTE                => 8;
 
@@ -492,18 +493,25 @@ sub check_running_kernel {
 # Purpose   : runs yum check-update with the supplied command line argumens
 # Returns   : the list of updates
 # Arguments : string with the command line arguments
+#           : (optional) yum command
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
 sub run_yum {
 
-    my $arguments = shift;
+    my $arguments   = shift;
+    my $yum_command = shift;
+
+    # per default check updates
+    if ( !defined $yum_command ) {
+        $yum_command = 'check-update';
+    }
 
     my $blank_line;
     my $OUTPUT_HANDLER;
     my @updates;
 
-    my $command = "$yum_executable $arguments check-update";
+    my $command = "$yum_executable $arguments $yum_command";
 
     verbose qq{Running "$command"\n}, 1;
 
@@ -531,8 +539,8 @@ sub run_yum {
             if ( $line =~ m/^[ ]/mxs ) {
                 next;
             }
-            
-            if ( $line =~ /^Obsoleting/i ) {
+
+            if ( $line =~ /^Obsoleting/imxs ) {
                 next;
             }
 
@@ -559,6 +567,10 @@ sub run_yum {
         else {
             verbose "Updates available\n";
         }
+    }
+    elsif ( ( $CHILD_ERROR >> $BITS_PER_BYTE ) == $YUM_RETURN_ERROR ) {
+        exit_with_error( $plugin_module->UNKNOWN,
+            "Error while executing '$command'\n" );
     }
 
     return @updates;
@@ -618,10 +630,7 @@ sub check_yum {
 
     check_security_option();
 
-    system("$yum_executable -q clean all");
-    if ( $? == -1) {
-      exit_with_error( UNKNOWN, "Cannot clean yum cache" );
-    }
+    run_yum( '-q', 'clean all' );
 
     my @outdated = run_yum($arguments);
     my @security_updates;

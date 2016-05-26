@@ -12,3 +12,4 @@ Many thanks to:
  * Andreas Dijkman for the Oracle UEK patch
  * PhiBo (https://github.com/phibos) for the --boot-check-warning patch
  * ptk (https://github.com/ptrj) for the aufs kernels patch
+ * Pavlos Daoglou for the "obsolete" packages patch
