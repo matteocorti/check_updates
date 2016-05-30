@@ -1,3 +1,8 @@
+2016-05-30  Matteo Corti  <matteo@corti.li>
+
+	* Version 1.6.18
+	* check_updates: 'yum clean' is optional (introduced in 1.6.17)
+
 2016-05-26  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.17

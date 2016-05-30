@@ -12,7 +12,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.6.17
+Version 1.6.18
 
 =head1 SYNOPSIS
 
@@ -32,6 +32,8 @@ Version 1.6.17
     Like --boot-check but state is warning instead of critical
   --no-boot-check
     Do not complain if the machine was booted with an old kernel
+  --clean
+   Cleans YUM/DNF caches
   -w, --warning=INTEGER
     Exit with WARNING status if more than INTEGER updates are available
   -c, --critical=INTEGER
@@ -60,6 +62,8 @@ Version 1.6.17
   --boot-check-warning                     Like --boot-check but state is warning instead of critical
 
   --no-boot-check                          Do not complain if the machine was booted with an old kernel
+
+  --clean                                  Cleans YUM/DNF caches
 
   -w, --warning=INTEGER                    Exit with WARNING status if more than INTEGER non-security updates are available
 

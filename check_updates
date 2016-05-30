@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.17';
+our $VERSION = '1.6.18';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -630,7 +630,9 @@ sub check_yum {
 
     check_security_option();
 
-    run_yum( '-q', 'clean all' );
+    if ( $options->get('clean') ) {
+        run_yum( '-q', 'clean all' );
+    }
 
     my @outdated = run_yum($arguments);
     my @security_updates;
@@ -771,6 +773,10 @@ sub check_yum {
 # Comments  : n/a
 # See also  : n/a
 sub check_up2date {
+
+    if ( $options->get('clean') ) {
+        verbose 'clean not supported with up2date';
+    }
 
     # parsing the output of up2date -l
 
@@ -986,6 +992,11 @@ sub run {
     $options->arg(
         spec => 'no-boot-check',
         help => 'do not complain if the machine was booted with an old kernel',
+    );
+
+    $options->arg(
+        spec => 'clean',
+        help => 'Cleans YUM/DNF caches',
     );
 
     $options->arg(

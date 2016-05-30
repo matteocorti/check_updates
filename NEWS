@@ -1,3 +1,4 @@
+2016-05-30: 1.6.18 - 'yum clean' is optional (introduced in 1.6.17)
 2016-05-26: 1.6.17 - Handles "obsolete" packages
 2016-04-18: 1.6.16 - Support for aufs kernels
 2016-01-20: 1.6.15 - Fixed a bug when comparing kernel versions with 'core'
