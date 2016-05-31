@@ -631,6 +631,7 @@ sub check_yum {
     check_security_option();
 
     if ( $options->get('clean') ) {
+	verbose 'Cleaning YUM/DNF caches';
         run_yum( '-q', 'clean all' );
     }
 
