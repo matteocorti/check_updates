@@ -8,7 +8,7 @@ up2date:
 ========
 
 since up2date -l to list the outdated packages can only be run be run
-by root the plugin must be executed as root. Plese configure sudo as
+by root the plugin must be executed as root. Please configure sudo as
 follows:
 
   nagios ALL= NOPASSWD: /usr/sbin/up2date -l
@@ -20,7 +20,7 @@ and execute the plugin with sudo
 DNF:
 ====
 
-DNF uses different caches pro user. This has the consequence that DNF
+DNF uses different caches per user. This has the consequence that DNF
 and the plugin will potentially deliver different results for
 different users.
 
@@ -29,7 +29,7 @@ Yum security plugin:
 
 Use one of the following commands to install the yum security plugin:
 
-  Fedora, Red Hat Enterprise Linux 6.x, Scientific Linux 6.x systems:
+  Fedora, Red Hat Enterprise Linux 6.x, CentOS 6.x, Scientific Linux 6.x systems:
 
   * yum install yum-plugin-security
 
