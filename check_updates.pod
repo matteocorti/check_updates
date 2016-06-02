@@ -212,6 +212,6 @@ Many thanks to:
 
 =item * Andreas Dijkman for the Oracle UEK patch
 
-=item  * PhiBo (https://github.com/phibos) for the --boot-check-warning patch
+=item * PhiBo (https://github.com/phibos) for the --boot-check-warning patch
 
 =back
