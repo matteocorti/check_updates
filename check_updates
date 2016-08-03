@@ -103,6 +103,42 @@ use vars qw(
 ## use critic
 
 ##############################################################################
+# Usage     : verbose("some message string", $optional_verbosity_level);
+# Purpose   : write a message if the verbosity level is high enough
+# Returns   : n/a
+# Arguments : message : message string
+#             level   : options verbosity level
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub verbose {
+
+    # arguments
+    my $message = shift;
+    my $level   = shift;
+
+    if ( !defined $message ) {
+        exit_with_error( $plugin_module->UNKNOWN,
+            q{Internal error: not enough parameters for 'verbose'} );
+    }
+
+    if ( !defined $level ) {
+        $level = 0;
+    }
+    
+    # we check if options is defined as the it could be undefined if
+    # running from a unit test
+    if ( defined $options && $level < $options->verbose ) {
+        #<<<
+        print $message; ## no critic (RequireCheckedSyscalls)
+        #>>>
+    }
+
+    return;
+
+}
+
+##############################################################################
 # Usage     : exit_with_error( $status, $message)
 # Purpose   : if a plugin object is available exits via ->nagios_exit
 #             otherwise prints to the shell and exit normally
@@ -147,10 +183,15 @@ sub get_path {
     my $which_command = "which $prog";
     my $which_output;
 
+    verbose "Executing 'which $prog'\n", 2;
+    
     #<<<
     open $which_output, q{-|}, "$which_command 2>&1"
       or $plugin->nagios_exit( $plugin->UNKNOWN,  "Cannot execute $which_command: $OS_ERROR" );
     while (<$which_output>) {
+
+	verbose $_, 2;
+
         chomp;
         if ( !/^which:/mxs ) {
             $path = $_;
@@ -174,19 +215,8 @@ sub get_path {
 # but it should not be used as a module
 if ( !caller ) {
 
-    # set the yum executable (the value can be overridden in the
-    # tests to a mock
-    $yum_executable = get_path('dnf');
-
-    if ( !defined $yum_executable ) {
-        $yum_executable = get_path('yum');
-    }
-
     run();
 }
-
-##############################################################################
-# subroutines
 
 ##############################################################################
 # Usage     : whoami()
@@ -217,42 +247,6 @@ sub whoami {
 
     exit_with_error( $plugin_module->UNKNOWN, 'Cannot determine the user' );
     return;
-}
-
-##############################################################################
-# Usage     : verbose("some message string", $optional_verbosity_level);
-# Purpose   : write a message if the verbosity level is high enough
-# Returns   : n/a
-# Arguments : message : message string
-#             level   : options verbosity level
-# Throws    : n/a
-# Comments  : n/a
-# See also  : n/a
-sub verbose {
-
-    # arguments
-    my $message = shift;
-    my $level   = shift;
-
-    if ( !defined $message ) {
-        exit_with_error( $plugin_module->UNKNOWN,
-            q{Internal error: not enough parameters for 'verbose'} );
-    }
-
-    if ( !defined $level ) {
-        $level = 0;
-    }
-
-    # we check if options is defined as the it could be undefined if
-    # running from a unit test
-    if ( defined $options && $level < $options->verbose ) {
-        #<<<
-        print $message; ## no critic (RequireCheckedSyscalls)
-        #>>>
-    }
-
-    return;
-
 }
 
 ##############################################################################
@@ -524,7 +518,7 @@ sub run_yum {
         my $line = $_;
 
         verbose $line, 1;
-
+	
         chomp $line;
 
         if ( !$line ) {
@@ -999,7 +993,7 @@ sub run {
         spec => 'clean',
         help => 'Cleans YUM/DNF caches',
     );
-
+    
     $options->arg(
         spec => 'warning|w=i',
         help =>
@@ -1065,6 +1059,22 @@ sub run {
         $bootcheck = 2;
     }
 
+    ############
+    # YUM or DNF
+    
+    if ( ! defined $yum_executable) {       
+
+	verbose 'Searching for DNF or YUM in ' . $ENV{'PATH'} . "\n", 1;
+	
+	# the yum executable is not mandated by the tests
+	$yum_executable = get_path('dnf');
+	
+	if ( !defined $yum_executable ) {
+	    $yum_executable = get_path('yum');
+	}
+
+    }
+    
     if ( !defined $yum_executable ) {
         exit_with_error( $plugin_module->UNKNOWN, "Cannot find DNF or YUM\n" );
     }
@@ -1081,9 +1091,10 @@ sub run {
     # Timeout
 
     alarm $options->timeout;
-
+    
     verbose "Checking a $OSNAME system\n";
 
+    
     if ( $OSNAME eq 'linux' ) {
 
         my $name = get_os_name_and_version();
