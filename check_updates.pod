@@ -33,7 +33,9 @@ Version 1.6.18
   --no-boot-check
     Do not complain if the machine was booted with an old kernel
   --clean
-   Cleans YUM/DNF caches
+    Cleans YUM/DNF caches
+  -d, --debug
+    Enables debugging messages
   -w, --warning=INTEGER
     Exit with WARNING status if more than INTEGER updates are available
   -c, --critical=INTEGER
@@ -64,6 +66,8 @@ Version 1.6.18
   --no-boot-check                          Do not complain if the machine was booted with an old kernel
 
   --clean                                  Cleans YUM/DNF caches
+
+  -d, --debug                              Enables debugging messages
 
   -w, --warning=INTEGER                    Exit with WARNING status if more than INTEGER non-security updates are available
 

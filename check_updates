@@ -1025,12 +1025,12 @@ sub run {
 
     $options->arg(
         spec => 'debug|d',
-        help => 'enables debugging messages',
+        help => 'Enables debugging messages',
     );
 
     $options->arg(
         spec => 'no-boot-check',
-        help => 'do not complain if the machine was booted with an old kernel',
+        help => 'Do not complain if the machine was booted with an old kernel',
     );
 
     $options->arg(
