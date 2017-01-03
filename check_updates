@@ -139,6 +139,32 @@ sub verbose {
 }
 
 ##############################################################################
+# Usage     : debug("some message string");
+# Purpose   : write a debugging message
+# Returns   : n/a
+# Arguments : message : message string
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub debug {
+
+    # arguments
+    my $message = shift;
+
+    if ( !defined $message ) {
+        exit_with_error( $plugin_module->UNKNOWN,
+            q{Internal error: not enough parameters for 'debug'} );
+    }
+
+    if ( $options->get('debug') ) {
+	print "[DBG] $message"; ## no critic (RequireCheckedSyscalls)
+    }
+
+    return;
+
+}
+
+##############################################################################
 # Usage     : exit_with_error( $status, $message)
 # Purpose   : if a plugin object is available exits via ->nagios_exit
 #             otherwise prints to the shell and exit normally
@@ -507,7 +533,7 @@ sub run_yum {
 
     my $command = "$yum_executable $arguments $yum_command";
 
-    verbose qq{Running "$command"\n}, 1;
+    debug qq{Running "$command"\n}, 1;
 
     #<<<
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
@@ -517,7 +543,7 @@ sub run_yum {
 
         my $line = $_;
 
-        verbose $line, 1;
+        debug $line;
 	
         chomp $line;
 
@@ -584,6 +610,8 @@ sub check_security_option {
 
     my $OUTPUT_HANDLER;
 
+    # UUU
+    
     my $pid = open $OUTPUT_HANDLER, q{-|},
       "$yum_executable --help | grep -q -- --security"
       or exit_with_error( $plugin_module->UNKNOWN,
@@ -601,6 +629,8 @@ sub check_security_option {
     if ( $CHILD_ERROR == 0 ) {
         verbose "Security plugin installed\n";
         $security_plugin = 1;
+    } else {
+	verbose "Security plugin not installed\n",
     }
 
     return;
@@ -649,7 +679,8 @@ sub check_yum {
             }
 
             # every update is critical since it could be a security problem
-
+	    verbose "no security plugin: every update could be a security problem\n";
+	    
             $status = $plugin_module->CRITICAL;
             verbose "dnf/yum reports a non-up-to-date system\n";
 
@@ -982,6 +1013,11 @@ sub run {
     $options->arg(
         spec => 'boot-check-warning',
         help => 'Like --boot-check but state is warning instead of critical',
+    );
+
+    $options->arg(
+        spec => 'debug|d',
+        help => 'enables debugging messages',
     );
 
     $options->arg(
