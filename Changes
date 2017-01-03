@@ -1,3 +1,9 @@
+2017-01-03  Matteo Corti  <corti@matteo.ethz.ch>
+
+	* Version 1.6.19
+	* check_updates: DNF does no more check for the --security option (implicit)
+	* check_updates: arguments after commands when executing YUM or DNF
+
 2016-05-30  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.18
@@ -31,7 +37,7 @@
 2015-08-28    <matteo@corti.li>
 
 	* Version 1.6.12
-	* check_updates: fixes the tests on systems without Monitoring::Plugin 
+	* check_updates: fixes the tests on systems without Monitoring::Plugin
 
 2015-08-27  Matteo Corti  <matteo@corti.li>
 
@@ -55,12 +61,12 @@
 
 2014-12-19  Matteo Corti  <matteo@corti.li>
 
-	* t/00_modules.t: removed dependency on Sort::Version 
+	* t/00_modules.t: removed dependency on Sort::Version
 
 2014-09-21  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.8
-	* check_updates: removed dependency on Sort::Version 
+	* check_updates: removed dependency on Sort::Version
 
 2014-05-23  Matteo Corti  <matteo.corti@id.ethz.ch>
 
@@ -118,7 +124,7 @@
 2011-12-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
 	* Version 1.5.1
-	* check_updates: support for Amazon Linux 
+	* check_updates: support for Amazon Linux
 
 2011-10-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 

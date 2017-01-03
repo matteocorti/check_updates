@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.18';
+our $VERSION = '1.6.19';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -125,7 +125,7 @@ sub verbose {
     if ( !defined $level ) {
         $level = 0;
     }
-    
+
     # we check if options is defined as the it could be undefined if
     # running from a unit test
     if ( defined $options && $level < $options->verbose ) {
@@ -157,7 +157,7 @@ sub debug {
     }
 
     if ( defined $options && $options->get('debug') ) {
-	print "[DBG] $message"; ## no critic (RequireCheckedSyscalls)
+        print "[DBG] $message";    ## no critic (RequireCheckedSyscalls)
     }
 
     return;
@@ -210,14 +210,12 @@ sub get_path {
     my $which_output;
 
     verbose "Executing 'which $prog'\n", 2;
-    
+
     #<<<
     open $which_output, q{-|}, "$which_command 2>&1"
       or $plugin->nagios_exit( $plugin->UNKNOWN,  "Cannot execute $which_command: $OS_ERROR" );
     while (<$which_output>) {
-
 	verbose $_, 2;
-
         chomp;
         if ( !/^which:/mxs ) {
             $path = $_;
@@ -226,7 +224,6 @@ sub get_path {
     if (  !( close $which_output )
         && ( $OS_ERROR != 0 ) )
     {
-
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
         $plugin->nagios_exit( $plugin->UNKNOWN,
@@ -531,7 +528,7 @@ sub run_yum {
     my $OUTPUT_HANDLER;
     my @updates;
 
-    my $command = "$yum_executable $arguments $yum_command";
+    my $command = "$yum_executable $yum_command $arguments";
 
     debug qq{Running "$command"\n}, 1;
 
@@ -544,7 +541,7 @@ sub run_yum {
         my $line = $_;
 
         debug $line;
-	
+
         chomp $line;
 
         if ( !$line ) {
@@ -610,25 +607,37 @@ sub check_security_option {
 
     my $OUTPUT_HANDLER;
 
-    my $pid = open $OUTPUT_HANDLER, q{-|},
-      "$yum_executable --help | grep -q -- --security"
-      or exit_with_error( $plugin_module->UNKNOWN,
-        "Cannot check for security option: $OS_ERROR" );
+    verbose "Checking if YUM/DNF supports the --security option\n", 2;
 
-    if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
-
-        # close to a piped open return false if the command with non-zero
-        # status. In this case $! is set to 0
-        exit_with_error( $plugin_module->UNKNOWN,
-            "Error while closing pipe to rpm: $OS_ERROR\n" );
-
-    }
-
-    if ( $CHILD_ERROR == 0 ) {
-        verbose "Security plugin installed\n";
+    if ( $yum_executable =~ /dnf$/mxs ) {
+        verbose "Using DNF: no security plugin necessary\n", 2;
         $security_plugin = 1;
-    } else {
-	verbose "Security plugin not installed\n",
+    }
+    else {
+
+        my $pid = open $OUTPUT_HANDLER, q{-|},
+          "$yum_executable --help | grep -q -- --security"
+          or exit_with_error( $plugin_module->UNKNOWN,
+            "Cannot check for security option: $OS_ERROR" );
+
+        if ( !( close $OUTPUT_HANDLER ) && ( $OS_ERROR != 0 ) ) {
+
+            # close to a piped open return false if the command with non-zero
+            # status. In this case $! is set to 0
+            exit_with_error( $plugin_module->UNKNOWN,
+                "Error while closing pipe to rpm: $OS_ERROR\n" );
+
+        }
+
+        if ( $CHILD_ERROR == 0 ) {
+            verbose "Using YUM: security plugin installed\n", 1;
+            $security_plugin = 1;
+        }
+        else {
+            verbose
+"Using YUM and security plugin not installed: all updates will be considered security updates\n"
+              ,;
+        }
     }
 
     return;
@@ -653,7 +662,7 @@ sub check_yum {
     check_security_option();
 
     if ( $options->get('clean') ) {
-	verbose 'Cleaning YUM/DNF caches';
+        verbose 'Cleaning YUM/DNF caches';
         run_yum( '-q', 'clean all' );
     }
 
@@ -677,10 +686,11 @@ sub check_yum {
             }
 
             # every update is critical since it could be a security problem
-	    verbose "no security plugin: every update could be a security problem\n";
-	    
+            verbose
+              "no security plugin: every update could be a security problem\n";
+
             $status = $plugin_module->CRITICAL;
-            verbose "dnf/yum reports a non-up-to-date system\n";
+            verbose "DNF/YUM reports a non-up-to-date system\n";
 
             $message = ( scalar @outdated ) . ' update';
             if ( @outdated > 1 ) {
@@ -706,7 +716,7 @@ sub check_yum {
                 $status = $plugin_module->OK;
             }
 
-            @security_updates = run_yum( '--security ' . $arguments );
+            @security_updates = run_yum( $arguments . ' --security' );
 
             if ( @security_updates > 0 ) {
 
@@ -1027,7 +1037,7 @@ sub run {
         spec => 'clean',
         help => 'Cleans YUM/DNF caches',
     );
-    
+
     $options->arg(
         spec => 'warning|w=i',
         help =>
@@ -1095,20 +1105,20 @@ sub run {
 
     ############
     # YUM or DNF
-    
-    if ( ! defined $yum_executable) {       
 
-	verbose 'Searching for DNF or YUM in ' . $ENV{'PATH'} . "\n", 1;
-	
-	# the yum executable is not mandated by the tests
-	$yum_executable = get_path('dnf');
-	
-	if ( !defined $yum_executable ) {
-	    $yum_executable = get_path('yum');
-	}
+    if ( !defined $yum_executable ) {
+
+        verbose 'Searching for DNF or YUM in ' . $ENV{'PATH'} . "\n", 1;
+
+        # the yum executable is not mandated by the tests
+        $yum_executable = get_path('dnf');
+
+        if ( !defined $yum_executable ) {
+            $yum_executable = get_path('yum');
+        }
 
     }
-    
+
     if ( !defined $yum_executable ) {
         exit_with_error( $plugin_module->UNKNOWN, "Cannot find DNF or YUM\n" );
     }
@@ -1125,10 +1135,9 @@ sub run {
     # Timeout
 
     alarm $options->timeout;
-    
+
     verbose "Checking a $OSNAME system\n";
 
-    
     if ( $OSNAME eq 'linux' ) {
 
         my $name = get_os_name_and_version();
