@@ -63,7 +63,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
-* Tue Jan  3 2016  <matteo@corti.li> - 1.6.19-0
+* Tue Jan  3 2017  <matteo@corti.li> - 1.6.19-0
 - Updated to 1.6.19
 
 * Mon May 30 2016  <matteo@corti.li> - 1.6.18-0
