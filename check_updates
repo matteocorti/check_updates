@@ -610,8 +610,6 @@ sub check_security_option {
 
     my $OUTPUT_HANDLER;
 
-    # UUU
-    
     my $pid = open $OUTPUT_HANDLER, q{-|},
       "$yum_executable --help | grep -q -- --security"
       or exit_with_error( $plugin_module->UNKNOWN,
