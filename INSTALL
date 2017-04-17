@@ -5,6 +5,7 @@ Dependecies
 
 check_updates depends on several Perl modules:
 
+ * Module::Install
  * Carp
  * English
  * Getopt::Long
