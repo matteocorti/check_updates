@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.19';
+our $VERSION = '1.6.20';
 
 use Carp;
 use English qw(-no_match_vars);

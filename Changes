@@ -1,4 +1,9 @@
-2017-01-03  Matteo Corti  <corti@matteo.ethz.ch>
+2017-07-18  Matteo Corti  <matteo@corti.li>
+
+	* Version 1.6.20
+	* Makefile.PL: Perl 5.26 support ('.' missing from @INC)
+
+2017-01-03  Matteo Corti  <matteo@corti.li>
 
 	* Version 1.6.19
 	* check_updates: DNF does no more check for the --security option (implicit)
