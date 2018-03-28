@@ -12,7 +12,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.6.18
+Version 1.6.20
 
 =head1 SYNOPSIS
 
@@ -97,13 +97,13 @@ check_updates checks if the system is up-to-date
 
 =head1 DIAGNOSTICS
 
-You can specify multiple --verbose options to increase the program
-verbosity.
+You can specify --verbose option (-v) multiple times to increase
+program verbosity.
 
 =head1 EXIT STATUS
 
 0 if OK, 1 in case of a warning, 2 in case of a critical status and 3
-in case of an unkown problem
+in case of an unknown problem
 
 =head1 DEPENDENCIES
 
@@ -139,7 +139,7 @@ Nagios documentation
 
 =head1 BUGS AND LIMITATIONS
 
-Some versions of you deliver a wrong number of secuirty updates. For example
+Some versions of yum deliver a wrong number of security updates. For example
 
         $ yum --security  check-update
         Loaded plugins: downloadonly, product-id, rhnplugin, security
@@ -149,7 +149,7 @@ Some versions of you deliver a wrong number of secuirty updates. For example
 
         mysql-libs.i686                                  5.1.73-5.el6_6                                   rhel-x86_64-server-6
 
-Either is mysql-libs a secuirity update (and the text should report it) or the package is wrongly listed. If yum delivers a wrong count, the pluging will do the same.
+Either is mysql-libs a security update (and the text should report it) or the package is wrongly listed. If yum delivers a wrong count, the plugin will do the same.
 
 Please report any bugs or feature requests to matteo@corti.li,
 or through the web interface at https://github.com/matteocorti/check_updates/issues
