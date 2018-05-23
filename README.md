@@ -19,11 +19,15 @@ since up2date -l to list the outdated packages can only be run be run
 by root the plugin must be executed as root. Please configure sudo as
 follows:
 
-  nagios ALL= NOPASSWD: /usr/sbin/up2date -l
+```
+nagios ALL= NOPASSWD: /usr/sbin/up2date -l
+```
 
 and execute the plugin with sudo
 
-  sudo $INSTALLATION_PATH/check_updates
+```
+sudo $INSTALLATION_PATH/check_updates
+```
 
 ## DNF
 
