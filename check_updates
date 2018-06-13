@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.21';
+our $VERSION = '1.6.22';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -530,8 +530,8 @@ sub run_yum {
 
     my $command = "$yum_executable $yum_command $arguments";
 
-    debug qq{Running "$command"\n}, 1;    
-    
+    debug qq{Running "$command"\n}, 1;
+
     #<<<
     my $pid = open $OUTPUT_HANDLER, q{-|}, $command ## no critic (RequireBriefOpen)
       or exit_with_error( $plugin_module->UNKNOWN, "Cannot list updates: $OS_ERROR" );
@@ -557,8 +557,13 @@ sub run_yum {
                 next;
             }
 
-	    # The obsoleted packages are already listed
+            # The obsoleted packages are already listed
             if ( $line =~ /^Obsoleting/imxs ) {
+                last;
+            }
+
+# After and including "Uploading Enabled Repositories Report" the output can be ignored
+            if ( $line =~ /^Uploading\ Enabled\ Repositories\ Report/imxs ) {
                 last;
             }
 
@@ -717,8 +722,9 @@ sub check_yum {
                 $status = $plugin_module->OK;
             }
 
-	    # --security generates a message on STDERR if no security update is present
-            @security_updates = run_yum( $arguments . ' --security 2> /dev/null' );
+     # --security generates a message on STDERR if no security update is present
+            @security_updates =
+              run_yum( $arguments . ' --security 2> /dev/null' );
 
             if ( @security_updates > 0 ) {
 

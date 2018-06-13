@@ -1,3 +1,4 @@
+2018-06-13: 1.6.22 - Fixed the package count on YUM systems
 2018-05-22: 1.6.21 - Fixed a bug in the processing of YUM output
 2017-07-18: 1.6.20 - Support for Perl 5.26
 2017-01-03: 1.6.19 - Handles buggy versions of DNF (<2.0.0)

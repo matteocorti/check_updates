@@ -1,4 +1,8 @@
-2018-05-23  Matteo Corti  <corti@matteo.ethz.ch>
+2018-06-13  Matteo Corti  <matteo@corti.li>
+
+	* check_updates: Fixed the package count on YUM systems with Satellite
+
+2018-05-23  Matteo Corti  <matteo@corti.li>
 
 	* check_updates: Fixed a bug in the processing of YUM output
 
