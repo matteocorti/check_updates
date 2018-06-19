@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2016, Matteo Corti
+# Copyright (c) 2007-2018, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.6.22';
+our $VERSION = '1.6.23';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -764,7 +764,7 @@ sub check_yum {
                     $message .= ' and ';
                 }
 
-                $message .= ( scalar @outdated ) . ' non-critical update';
+                $message .= ( scalar @outdated ) . ' non-security update';
                 if ( @outdated > 1 ) {
                     $message = $message . q{s};
                 }
