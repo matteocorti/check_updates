@@ -563,7 +563,7 @@ sub run_yum {
             }
 
 # After and including "Uploading Enabled Repositories Report" the output can be ignored
-            if ( $line =~ /^Uploading\ Enabled\ Repositories\ Report/imxs ) {
+            if ( $line =~ /^Uploading[ ]Enabled[ ]Repositories[ ]Report/imxs ) {
                 last;
             }
 
