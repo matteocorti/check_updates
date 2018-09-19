@@ -1153,8 +1153,10 @@ sub run {
 
         my $updater = get_updater($name);
 
+	debug "Updater: $updater\n";
+	
         if ( $updater eq 'yum' ) {
-            verbose "Using Yum\n";
+            verbose "Using Yum or DNF\n";
             check_running_kernel();
             check_yum($arguments);
         }
