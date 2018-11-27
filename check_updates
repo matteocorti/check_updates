@@ -524,8 +524,8 @@ sub run_yum {
                 last;
             }
 
-            # After and including "Uploading Enabled Repositories Report" the output can be ignored
-            if ( $line =~ /^Uploading\ Enabled\ Repositories\ Report/imxs ) {
+# After and including "Uploading Enabled Repositories Report" the output can be ignored
+            if ( $line =~ /^Uploading[ ]Enabled[ ]Repositories[ ]Report/imxs ) {
                 last;
             }
 
@@ -884,8 +884,10 @@ sub get_os_name_and_version {
             $filename = '/etc/redhat-release';
         }
         else {
-            exit_with_error( Monitoring::Plugin->UNKNOWN,
-                'Cannot detect Linux distribution' );
+            exit_with_error(
+                Monitoring::Plugin->UNKNOWN,
+                'Cannot detect Linux distribution'
+            );
         }
 
     }
@@ -898,16 +900,20 @@ sub get_os_name_and_version {
 
         open $TMP, q{<},
           $filename
-          or exit_with_error( Monitoring::Plugin->CRITICAL,
-            "Error opening $filename: $OS_ERROR" );
+          or exit_with_error(
+            Monitoring::Plugin->CRITICAL,
+            "Error opening $filename: $OS_ERROR"
+          );
         while (<$TMP>) {
             chomp;
             $header = $_;
             last;
         }
         close $TMP
-          or exit_with_error( Monitoring::Plugin->CRITICAL,
-            "Error closing $filename: $OS_ERROR" );
+          or exit_with_error(
+            Monitoring::Plugin->CRITICAL,
+            "Error closing $filename: $OS_ERROR"
+          );
 
     }
     else {
@@ -1090,7 +1096,8 @@ sub run {
     }
 
     if ( !defined $yum_executable ) {
-        exit_with_error( Monitoring::Plugin->UNKNOWN, "Cannot find DNF or YUM\n" );
+        exit_with_error( Monitoring::Plugin->UNKNOWN,
+            "Cannot find DNF or YUM\n" );
     }
 
     #########
@@ -1115,8 +1122,8 @@ sub run {
 
         my $updater = get_updater($name);
 
-	debug "Updater: $updater\n";
-	
+        debug "Updater: $updater\n";
+
         if ( $updater eq 'yum' ) {
             verbose "Using Yum or DNF\n";
             check_running_kernel();
