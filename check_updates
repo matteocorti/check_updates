@@ -521,7 +521,7 @@ sub run_yum {
 
     # per default check updates
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update';
+        $yum_command = 'check-update 2> /dev/null';
     }
 
     my $blank_line;
@@ -562,7 +562,7 @@ sub run_yum {
                 last;
             }
 
-# After and including "Uploading Enabled Repositories Report" the output can be ignored
+            # After and including "Uploading Enabled Repositories Report" the output can be ignored
             if ( $line =~ /^Uploading\ Enabled\ Repositories\ Report/imxs ) {
                 last;
             }
