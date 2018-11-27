@@ -1053,7 +1053,7 @@ sub run {
               . q{)} );
     }
 
-    $threshold = Monitorint::Plugin::Threshold->set_thresholds(
+    $threshold = Monitoring::Plugin::Threshold->set_thresholds(
         warning  => $options->get('warning'),
         critical => $options->get('critical'),
     );
