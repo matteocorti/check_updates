@@ -20,28 +20,10 @@ my %prereqs = (
     'English'  => 0,
     'POSIX'    => 0,
     'Readonly' => 0,
+    'Monitoring::Plugin' => 0,
+    'Monitoring::Plugin::Threshold' => 0,
+    'Monitoring::Plugin::Getopt' => 0,
 );
-
-if( eval { require Monitoring::Plugin } ) {
-    $prereqs{'Monitoring::Plugin'} = 0;
-}
-else {
-    $prereqs{'Nagios::Plugin'} = 0;
-}
-
-if( eval { require Monitoring::Plugin::Threshold } ) {
-    $prereqs{'Monitoring::Plugin::Threshold'} = 0;
-}
-else {
-    $prereqs{'Nagios::Plugin::Threshold'} = 0;
-}
-
-if( eval { require Monitoring::Plugin::Getopt } ) {
-    $prereqs{'Monitoring::Plugin::Getopt'} = 0;
-}
-else {
-    $prereqs{'Nagios::Plugin::Getopt'} = 0;
-}
 
 install_script  'check_updates';
 
