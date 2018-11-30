@@ -1,3 +1,4 @@
+2018-11-30: 1.6.25 - Support for adding new types of kernel: kernel-lt, kernel-ml
 2018-11-27: 1.6.24 - Removed Nagios::Plugin (deprecated)
 2018-06-19: 1.6.23 - Fixed the output about non-security updates
 2018-06-13: 1.6.22 - Fixed the package count on YUM systems
