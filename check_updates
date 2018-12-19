@@ -385,12 +385,12 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",         "$package-smp",
-            "$package-PAE",     "$package-xen",
-            "$package-uek",     'ovzkernel',
-            'vzkernel',         "$package-PAE-core",
-            "$package-ml",      "$package-ml-aufs",
-	    "$package-lt",      "$package-lt-aufs",
+            "$package",     "$package-smp",
+            "$package-PAE", "$package-xen",
+            "$package-uek", 'ovzkernel',
+            'vzkernel',     "$package-PAE-core",
+            "$package-ml",  "$package-ml-aufs",
+            "$package-lt",  "$package-lt-aufs",
             "$package-core",
         )
       )
@@ -1112,8 +1112,7 @@ sub run {
 
     $options->arg(
         spec => 'quiet',
-        help =>
-          'Do not print package list',
+        help => 'Do not print package list',
     );
 
     #########
@@ -1194,7 +1193,7 @@ sub run {
         print "\n"; ## no critic (RequireCheckedSyscalls)
         #>>>
 
-        if ( ! $options->get('quiet') ) {
+        if ( !$options->get('quiet') ) {
             for my $package (@status_lines) {
                 #<<<
                 print "$package\n"; ## no critic (RequireCheckedSyscalls)
