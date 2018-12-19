@@ -1110,6 +1110,12 @@ sub run {
         $arguments = $options->get('yum-arguments');
     }
 
+    $options->arg(
+        spec => 'quiet',
+        help =>
+          'Do not print package list',
+    );
+
     #########
     # Timeout
 
@@ -1187,10 +1193,13 @@ sub run {
         #<<<
         print "\n"; ## no critic (RequireCheckedSyscalls)
         #>>>
-        for my $package (@status_lines) {
-            #<<<
-            print "$package\n"; ## no critic (RequireCheckedSyscalls)
-            #>>>
+
+        if ( ! $options->get('quiet') ) {
+            for my $package (@status_lines) {
+                #<<<
+                print "$package\n"; ## no critic (RequireCheckedSyscalls)
+                #>>>
+            }
         }
 
         exit $status;

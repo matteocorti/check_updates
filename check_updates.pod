@@ -46,6 +46,8 @@ Version 1.6.23
     specific Yum arguments as STRING
   -t, --timeout=INTEGER
     Seconds before plugin times out (default: 15)
+  -q, --quiet
+    Do not print package list
   -v, --verbose
     Show details for command-line debugging (can repeat up to 3 times)
 
@@ -80,6 +82,8 @@ Version 1.6.23
                                            (e.g., ./check_updates -a "-d 20")
 
   -t, --timeout=INTEGER                    Seconds before plugin times out (default: 15)
+
+  -q, --quiet                              Do not print package list
 
   -v, --verbose                            Show details for command-line debugging (can repeat up to 3 times)
 
