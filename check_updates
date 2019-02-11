@@ -583,10 +583,10 @@ sub check_security_option {
         verbose "Using DNF: no security plugin necessary\n", 2;
         $security_plugin = 1;
     }
-    else {
-
+    else {	
+	
         my $pid = open $OUTPUT_HANDLER, q{-|},
-          "$yum_executable --help | grep -q -- --security"
+          "$yum_executable --help 2>&1 | grep -q -- --security"
           or exit_with_error( Monitoring::Plugin->UNKNOWN,
             "Cannot check for security option: $OS_ERROR" );
 
