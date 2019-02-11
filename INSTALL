@@ -13,7 +13,8 @@ check_updates depends on several Perl modules:
  * Monitoring::Plugin::Threshold
  * POSIX
  * Readonly
-
+ * Module::Install
+ 
 Perl modules can be found on the "Comprehensive Perl Archive Network"
 (CPAN). The "How to install CPAN modules" guide summarizes how these
 can be installed
