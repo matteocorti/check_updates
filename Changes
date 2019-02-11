@@ -1,3 +1,7 @@
+2019-02-11  Matteo Corti  <matteo@corti.li>
+
+	* check_updates: Fixed a bug while checking for the security plugin
+
 2018-12-19  Matteo Corti  <matteo@corti.li>
 
 	* check_updates: Added --quiet

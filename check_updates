@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2018, Matteo Corti
+# Copyright (c) 2007-2019, Matteo Corti
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.0';
+our $VERSION = '1.7.1';
 
 use Carp;
 use English qw(-no_match_vars);
