@@ -343,6 +343,9 @@ sub clean_kernel_version {
     $kernel =~ s/lt-//imxs;
     $kernel =~ s/aufs-//imxs;
 
+    # remove azure
+    $kernel =~ s/[.]azure//imxs;
+
     return $kernel;
 
 }
