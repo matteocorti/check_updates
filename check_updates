@@ -343,8 +343,8 @@ sub clean_kernel_version {
     $kernel =~ s/lt-//imxs;
     $kernel =~ s/aufs-//imxs;
 
-    # remove azure
-    $kernel =~ s/[.]azure//imxs;
+    # Remove azure
+    $kernel =~ s/azure-//imxs;
 
     return $kernel;
 
@@ -394,7 +394,7 @@ sub check_running_kernel {
             'vzkernel',     "$package-PAE-core",
             "$package-ml",  "$package-ml-aufs",
             "$package-lt",  "$package-lt-aufs",
-            "$package-core",
+            "$package-azure", "$package-core",
         )
       )
 
