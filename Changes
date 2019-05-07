@@ -1,3 +1,7 @@
+2019-05-07  Matteo Corti  <matteo@corti.li>
+
+	* check_updates (clean_kernel_version): Azure CentOS support
+
 2019-02-11  Matteo Corti  <matteo@corti.li>
 
 	* check_updates: Fixed a bug while checking for the security plugin

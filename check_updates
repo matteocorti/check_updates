@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.1';
+our $VERSION = '1.7.2';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -388,12 +388,12 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",     "$package-smp",
-            "$package-PAE", "$package-xen",
-            "$package-uek", 'ovzkernel',
-            'vzkernel',     "$package-PAE-core",
-            "$package-ml",  "$package-ml-aufs",
-            "$package-lt",  "$package-lt-aufs",
+            "$package",       "$package-smp",
+            "$package-PAE",   "$package-xen",
+            "$package-uek",   'ovzkernel',
+            'vzkernel',       "$package-PAE-core",
+            "$package-ml",    "$package-ml-aufs",
+            "$package-lt",    "$package-lt-aufs",
             "$package-azure", "$package-core",
         )
       )
@@ -586,8 +586,8 @@ sub check_security_option {
         verbose "Using DNF: no security plugin necessary\n", 2;
         $security_plugin = 1;
     }
-    else {	
-	
+    else {
+
         my $pid = open $OUTPUT_HANDLER, q{-|},
           "$yum_executable --help 2>&1 | grep -q -- --security"
           or exit_with_error( Monitoring::Plugin->UNKNOWN,
