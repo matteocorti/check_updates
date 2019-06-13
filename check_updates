@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.2';
+our $VERSION = '1.7.3';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -947,7 +947,7 @@ sub get_updater {
         || $name =~ /PUIAS/mxs
         || $name =~ /CloudLinux/mxs
         || $name =~ /Scientific[ ]Linux/mxs
-        || $name =~ /Red[ ]Hat.*[ ][567]/mxs
+        || $name =~ /Red[ ]Hat.*[ ][56789]/mxs
         || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs )
     {
