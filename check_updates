@@ -947,13 +947,13 @@ sub get_updater {
         || $name =~ /PUIAS/mxs
         || $name =~ /CloudLinux/mxs
         || $name =~ /Scientific[ ]Linux/mxs
-        || $name =~ /Red[ ]Hat.*[ ][56789]/mxs
+        || $name =~ /Red[ ]Hat.*release[ ][56789]/mxs
         || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs )
     {
         return 'yum';
     }
-    elsif ( $name =~ /Red[ ]Hat.*[ ]4/mxs ) {
+    elsif ( $name =~ /Red[ ]Hat.*release[ ]4/mxs ) {
         return 'up2date';
     }
     return;
