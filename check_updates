@@ -538,6 +538,8 @@ sub run_yum {
 	     $line =~ /^Loaded[ ]plugins:/imxs ||
 	     $line =~ /^Loading[ ]mirror[ ]speeds/imxs ||
 	     $line =~ /[ ].B\/s[ ][|][ ]/imxs ||
+	     $line =~ /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs ||
+	     $line =~ /^Security:[ ].*is[ ]the[ ]currently[ ]running[ ]version/imxs ||
 	     $line =~ /^No[ ]packages[ ]needed/imxs ) {
             next;
         }
