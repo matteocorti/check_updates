@@ -1,3 +1,4 @@
+2019-08-05: 1.7.4  - Checks for missing GPG key
 2019-06-13: 1.7.3  - RHEL 8 support
 2019-05-07: 1.7.2  - Azure CentOS support
 2019-02-11: 1.7.1  - Fixed a bug while checking for the security plugin

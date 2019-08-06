@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.3';
+our $VERSION = '1.7.4';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -487,11 +487,12 @@ sub run_yum {
     my $yum_command = shift;
 
     # per default check updates
+    # --assumeno to avoid a timeout when the GPG key is not present
+    # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update 2> /dev/null';
+        $yum_command = 'check-update --assumeno 2>&1';
     }
 
-    my $blank_line;
     my $OUTPUT_HANDLER;
     my @updates;
 
@@ -512,32 +513,38 @@ sub run_yum {
         chomp $line;
 
         if ( !$line ) {
-            $blank_line = 1;
             next;
         }
 
-        if ($blank_line) {
+        # some lines are wrapped and result and the second part
+        # is erroneously interpreted as a new update
+        if ( $line =~ m/^[ ]/mxs ) {
+            next;
+        }
 
-            # some lines are wrapped and result and the second part
-            # is erroneously interpreted as a new update
-            if ( $line =~ m/^[ ]/mxs ) {
-                next;
-            }
+        # The obsoleted packages are already listed
+        if ( $line =~ /^Obsoleting/imxs ) {
+            last;
+        }
 
-            # The obsoleted packages are already listed
-            if ( $line =~ /^Obsoleting/imxs ) {
-                last;
-            }
+        # GPG key is missing
+        if ( $line =~ /^Importing[ ]GPG[ ]key/imxs ) {
+            exit_with_error( Monitoring::Plugin->UNKNOWN,
+                'Missing GPG key, run "dnf check-updates" manually' );
+        }
 
 # After and including "Uploading Enabled Repositories Report" the output can be ignored
-            if ( $line =~ /^Uploading[ ]Enabled[ ]Repositories[ ]Report/imxs ) {
-                last;
-            }
-
-            $line =~ s{[ ].*}{}mxs;
-
-            push @updates, $line;
+        if ( $line =~ /^Uploading[ ]Enabled[ ]Repositories[ ]Report/imxs ) {
+            last;
         }
+
+        if ( $line =~ /^Last[ ]metadata[ ]expiration/imxs ) {
+            next;
+        }
+
+        $line =~ s{[ ].*}{}mxs;
+
+        push @updates, $line;
 
     }
 
@@ -690,8 +697,7 @@ sub check_yum {
             }
 
      # --security generates a message on STDERR if no security update is present
-            @security_updates =
-              run_yum( $arguments . ' --security 2> /dev/null' );
+            @security_updates = run_yum( $arguments . ' --security 2>&1' );
 
             if ( @security_updates > 0 ) {
 
@@ -1063,7 +1069,7 @@ sub run {
         critical => $options->get('critical'),
     );
 
-    # check bootcheck consistency
+    # check bootcheck consistencys
     if ( $options->get('boot-check') && $options->get('no-boot-check') ) {
         exit_with_error( Monitoring::Plugin->CRITICAL,
             'Error --boot-check and --no-boot-check specified at the same time'
