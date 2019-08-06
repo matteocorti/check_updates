@@ -533,14 +533,17 @@ sub run_yum {
                 'Missing GPG key, run "dnf check-updates" manually' );
         }
 
-	# Lines to be ignored
-        if ( $line =~ /^Last[ ]metadata[ ]expiration/imxs ||
-	     $line =~ /^Loaded[ ]plugins:/imxs ||
-	     $line =~ /^Loading[ ]mirror[ ]speeds/imxs ||
-	     $line =~ /[ ].B\/s[ ][|][ ]/imxs ||
-	     $line =~ /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs ||
-	     $line =~ /^Security:[ ].*is[ ]the[ ]currently[ ]running[ ]version/imxs ||
-	     $line =~ /^No[ ]packages[ ]needed/imxs ) {
+        # Lines to be ignored
+        if (   $line =~ /^Last[ ]metadata[ ]expiration/imxs
+            || $line =~ /^Loaded[ ]plugins:/imxs
+            || $line =~ /^Loading[ ]mirror[ ]speeds/imxs
+            || $line =~ /[ ].B\/s[ ][|][ ]/imxs
+            || $line =~
+            /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs
+            || $line =~
+            /^Security:[ ].*is[ ]the[ ]currently[ ]running[ ]version/imxs
+            || $line =~ /^No[ ]packages[ ]needed/imxs )
+        {
             next;
         }
 
