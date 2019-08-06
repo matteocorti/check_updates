@@ -533,13 +533,17 @@ sub run_yum {
                 'Missing GPG key, run "dnf check-updates" manually' );
         }
 
+	# Lines to be ignored
+        if ( $line =~ /^Last[ ]metadata[ ]expiration/imxs ||
+	     $line =~ /^Loaded[ ]plugins:/imxs ||
+	     $line =~ /^Loading[ ]mirror[ ]speeds/imxs ||
+	     $line =~ /^No[ ]packages[ ]needed/imxs ) {
+            next;
+        }
+
 # After and including "Uploading Enabled Repositories Report" the output can be ignored
         if ( $line =~ /^Uploading[ ]Enabled[ ]Repositories[ ]Report/imxs ) {
             last;
-        }
-
-        if ( $line =~ /^Last[ ]metadata[ ]expiration/imxs ) {
-            next;
         }
 
         $line =~ s{[ ].*}{}mxs;
