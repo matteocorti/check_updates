@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.4';
+our $VERSION = '1.7.5';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -537,8 +537,8 @@ sub run_yum {
         if (   $line =~ /^Last[ ]metadata[ ]expiration/imxs
             || $line =~ /^Loaded[ ]plugins:/imxs
             || $line =~ /^Loading[ ]mirror[ ]speeds/imxs
-	    || $line =~ /[ ].B\/s[ ][|][ ]/imxs
-	    || $line =~ /^No\ security\ updates/imxs
+            || $line =~ /[ ].B\/s[ ][|][ ]/imxs
+            || $line =~ /^No\ security\ updates/imxs
             || $line =~
             /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs
             || $line =~
