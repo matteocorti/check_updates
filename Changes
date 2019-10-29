@@ -1,353 +1,357 @@
+2019-10-29  Matteo Corti  <matteo@corti.li>
+
+    * check_updates: Added support for Sangoma FreePBX distro
+
 2019-08-20  Matteo Corti <matteo@corti.li>
 
-	* check_updates (run_yum): Fixed the parsing of --security output
+    * check_updates (run_yum): Fixed the parsing of --security output
 
 2019-08-05  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: checks for missing GPG key
+    * check_updates: checks for missing GPG key
 
 2019-06-13  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: RHEL 8 support
+    * check_updates: RHEL 8 support
 
 2019-05-07  Matteo Corti  <matteo@corti.li>
 
-	* check_updates (clean_kernel_version): Azure CentOS support
+    * check_updates (clean_kernel_version): Azure CentOS support
 
 2019-02-11  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Fixed a bug while checking for the security plugin
+    * check_updates: Fixed a bug while checking for the security plugin
 
 2018-12-19  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Added --quiet
+    * check_updates: Added --quiet
 
 2018-11-27  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Removed Nagios::Plugin
+    * check_updates: Removed Nagios::Plugin
 
 2018-06-19  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Fixed the output about non-security updates
+    * check_updates: Fixed the output about non-security updates
 
 2018-06-13  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Fixed the package count on YUM systems with Satellite
+    * check_updates: Fixed the package count on YUM systems with Satellite
 
 2018-05-23  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Fixed a bug in the processing of YUM output
+    * check_updates: Fixed a bug in the processing of YUM output
 
 2017-07-18  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.20
-	* Makefile.PL: Perl 5.26 support ('.' missing from @INC)
+    * Version 1.6.20
+    * Makefile.PL: Perl 5.26 support ('.' missing from @INC)
 
 2017-01-03  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.19
-	* check_updates: DNF does no more check for the --security option (implicit)
-	* check_updates: arguments after commands when executing YUM or DNF
+    * Version 1.6.19
+    * check_updates: DNF does no more check for the --security option (implicit)
+    * check_updates: arguments after commands when executing YUM or DNF
 
 2016-05-30  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.18
-	* check_updates: 'yum clean' is optional (introduced in 1.6.17)
+    * Version 1.6.18
+    * check_updates: 'yum clean' is optional (introduced in 1.6.17)
 
 2016-05-26  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.17
-	* check_updates: handles "obsolete" packages
+    * Version 1.6.17
+    * check_updates: handles "obsolete" packages
 
 2016-04-18  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.16
-	* check_updates: handles "aufs" kernel
+    * Version 1.6.16
+    * check_updates: handles "aufs" kernel
 
 2016-01-20  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.15
-	* check_updates: handles "core-" when comparing kernel versions
+    * Version 1.6.15
+    * check_updates: handles "core-" when comparing kernel versions
 
 2016-01-14 Matteo Corti <matteo@corti.li>
 
         * Version 1.6.14
-	* check_updates: Fixed a bug when only '-core' kernel packages are installed
+    * check_updates: Fixed a bug when only '-core' kernel packages are installed
 
 2016-01-12  PhiBo https://github.com/phibos
 
         * Version 1.6.13
-	* check_updates: New option --boot-check-warning
+    * check_updates: New option --boot-check-warning
 
 2015-08-28    <matteo@corti.li>
 
-	* Version 1.6.12
-	* check_updates: fixes the tests on systems without Monitoring::Plugin
+    * Version 1.6.12
+    * check_updates: fixes the tests on systems without Monitoring::Plugin
 
 2015-08-27  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: version 1.6.11 merges two different branches of 1.6.10
+    * check_updates: version 1.6.11 merges two different branches of 1.6.10
 
 2015-08-27  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.10
-	* check_updates: initial Support for DNF
+    * Version 1.6.10
+    * check_updates: initial Support for DNF
 
 2015-01-09  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.9
-	* check_updates: using Monitoring::Plugin instead of the deprecated
-	                 Nagios::Plugin
+    * Version 1.6.9
+    * check_updates: using Monitoring::Plugin instead of the deprecated
+                     Nagios::Plugin
 
 2014-12-28  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: updated the check for the presence of the --security
+    * check_updates: updated the check for the presence of the --security
                          option
 
 2014-12-19  Matteo Corti  <matteo@corti.li>
 
-	* t/00_modules.t: removed dependency on Sort::Version
+    * t/00_modules.t: removed dependency on Sort::Version
 
 2014-09-21  Matteo Corti  <matteo@corti.li>
 
-	* Version 1.6.8
-	* check_updates: removed dependency on Sort::Version
+    * Version 1.6.8
+    * check_updates: removed dependency on Sort::Version
 
 2014-05-23  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.7
-	* check_updates: support for Oracle UEK-kernels
+    * Version 1.6.7
+    * check_updates: support for Oracle UEK-kernels
 
 2013-10-10  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.6
-	* check_updates: support for openvz kernels
+    * Version 1.6.6
+    * check_updates: support for openvz kernels
 
 2013-07-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.5
-	* check_updates: disabled ePN
+    * Version 1.6.5
+    * check_updates: disabled ePN
 
 2013-06-18  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.4
-	* check_updates: handle yum output split on more lines
+    * Version 1.6.4
+    * check_updates: handle yum output split on more lines
 
 2013-05-11  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.3
-	* check_updates: do not print the performance data of the security
-	                 updates if the Yum security plugin is not installed
+    * Version 1.6.3
+    * check_updates: do not print the performance data of the security
+                     updates if the Yum security plugin is not installed
 
 2013-03-29  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.2
-	* check_updates: Applied a patch adding the possibility to pass
+    * Version 1.6.2
+    * check_updates: Applied a patch adding the possibility to pass
                          arguments to Yum
 
 2012-11-18  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: Added Oracle to the systems list
+    * check_updates: Added Oracle to the systems list
 
 2012-09-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.1
-	* check_updates: recognized PUIAS Linux
+    * Version 1.6.1
+    * check_updates: recognized PUIAS Linux
 
 2012-04-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.6.0
-	* check_updates: added an option --security-only to ignore non-security
+    * Version 1.6.0
+    * check_updates: added an option --security-only to ignore non-security
                          related updates
 
 2011-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.5.2
-	* check_updates: fixed a bug introduced in 1.5.1 which prevented system
+    * Version 1.5.2
+    * check_updates: fixed a bug introduced in 1.5.1 which prevented system
                          detection on CentOS 5.X
 
 2011-12-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.5.1
-	* check_updates: support for Amazon Linux
+    * Version 1.5.1
+    * check_updates: support for Amazon Linux
 
 2011-10-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.5.0
-	* check_updates: fixed a bug which caused the -w and -c options
+    * Version 1.5.0
+    * check_updates: fixed a bug which caused the -w and -c options
                          to be ignored
 
 2011-09-23  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.15
-	* check_updates: using /etc/redhat-release instead of /etc/issue
+    * Version 1.4.15
+    * check_updates: using /etc/redhat-release instead of /etc/issue
 
 2011-05-25  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.14
-	* check_updates: fixed a problem when checking if a piped command was
-	                 successful 
+    * Version 1.4.14
+    * check_updates: fixed a problem when checking if a piped command was
+                     successful
 
 2011-05-24  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.13
-	* check_updates: fixed the unit tests on systems with older Test::Simple
-			 versions
+    * Version 1.4.13
+    * check_updates: fixed the unit tests on systems with older Test::Simple
+             versions
 
-	* Version 1.4.12
-	* check_updates: fixed the detection of RH 6 and Scientific Linux Systems
-	                 (thanks to J. Oliveira and T. Edwardsson)
-	* check_updates: several style fixes (cleaned with Perl::Critic)
+    * Version 1.4.12
+    * check_updates: fixed the detection of RH 6 and Scientific Linux Systems
+                     (thanks to J. Oliveira and T. Edwardsson)
+    * check_updates: several style fixes (cleaned with Perl::Critic)
         * t:             some unit tests (to be extended)
 
 2010-11-18  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.11
-	* check_updates: fixed the processing of Xen kernels
+    * Version 1.4.11
+    * check_updates: fixed the processing of Xen kernels
 
 2010-11-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.10
-	* check_updates.pod: updated the licensing information (GPL v3+)
+    * Version 1.4.10
+    * check_updates.pod: updated the licensing information (GPL v3+)
 
 2010-11-01  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.9
-	* check_updates: removed the dependency on version.pm
+    * Version 1.4.9
+    * check_updates: removed the dependency on version.pm
 
 2010-10-31  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.8
-	* check_updates: fixed the license specification (GPL v3+)
-	* AUTHORS: fixed a typo
+    * Version 1.4.8
+    * check_updates: fixed the license specification (GPL v3+)
+    * AUTHORS: fixed a typo
 
 2010-02-16  root  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.7
-	* check_updates: the output of yum check-updates can get wrapped -> check for double lines
+    * Version 1.4.7
+    * check_updates: the output of yum check-updates can get wrapped -> check for double lines
 
 2010-02-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: constants are now global because of embedded perl
+    * check_updates: constants are now global because of embedded perl
 
 2009-12-10  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.6 
+    * Version 1.4.6
 
 2009-12-09  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Makefile.PL: man page being installed in the wrong section (3 instead of 1)
-	* Makefile.PL: perl site vs vendor directories
-	* check_updates.spec: removed the the %{?dist} macro from the changelog entries
+    * Makefile.PL: man page being installed in the wrong section (3 instead of 1)
+    * Makefile.PL: perl site vs vendor directories
+    * check_updates.spec: removed the the %{?dist} macro from the changelog entries
 
 2009-12-08  root  <matteo.corti@id.ethz.ch>
 
-	* check_updates (check_up2date): fixed 'no updates' message on up2date based systems
+    * check_updates (check_up2date): fixed 'no updates' message on up2date based systems
 
 2009-12-08  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Removed unnecessary dependence on List::MoreUtils, List::Util and Number::Format (fixed #55)
+    * Removed unnecessary dependence on List::MoreUtils, List::Util and Number::Format (fixed #55)
 
 2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* Version 1.4.4
-	* check_updates (clean_kernel_version): fixed a bug with SMP kernels version cleanup
-	* check_updates (clean_kernel_version): fixed a bug with PAE kernels version cleanup
+    * Version 1.4.4
+    * check_updates (clean_kernel_version): fixed a bug with SMP kernels version cleanup
+    * check_updates (clean_kernel_version): fixed a bug with PAE kernels version cleanup
 
 2009-12-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates.pod: fixed outdated documentation
-	* doc: several additions spelling fixes (thanks to J. Oliveira)
+    * check_updates.pod: fixed outdated documentation
+    * doc: several additions spelling fixes (thanks to J. Oliveira)
 
 2009-12-06  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed licensing information (see #52)
-	* check_updates.spec: fixed several build problems (see #53)
-	* check_updates: unified kernel cleanup code (see #54)
+    * check_updates: fixed licensing information (see #52)
+    * check_updates.spec: fixed several build problems (see #53)
+    * check_updates: unified kernel cleanup code (see #54)
 
 2009-12-04  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: distinguish between security and non-critical updates
-	                 when yum-plugin-security is installed
+    * check_updates: distinguish between security and non-critical updates
+                     when yum-plugin-security is installed
 
 2009-11-11  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a regex that failed to strip
-	                 el5PAE from the version
+    * check_updates: fixed a regex that failed to strip
+                     el5PAE from the version
 
 2009-09-20  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a bug in the Red Hat System detection
+    * check_updates: fixed a bug in the Red Hat System detection
 
 2009-07-22  root  <matteo.corti@id.ethz.ch>
 
-	* check_updates: does not parse the output of rpm because of localization problems
+    * check_updates: does not parse the output of rpm because of localization problems
 
 2009-06-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: recognize PAE kernels
+    * check_updates: recognize PAE kernels
 
 2009-05-19  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: --critical and --warning are working again
-	* check_updates: Nagios 3 extended info with the outdated packages
+    * check_updates: --critical and --warning are working again
+    * check_updates: Nagios 3 extended info with the outdated packages
 
 2009-04-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: RH5 support
+    * check_updates: RH5 support
 
 2008-12-05  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: got rid of RPM2 (broken with modern RPM versions)
-	* check_updates: using Nagios::Plugin::Getopt for the processing of command line options
-	* check_updates: timeout
+    * check_updates: got rid of RPM2 (broken with modern RPM versions)
+    * check_updates: using Nagios::Plugin::Getopt for the processing of command line options
+    * check_updates: timeout
 
 2008-11-14  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a bug with updates and excluded packages (wrong count)
+    * check_updates: fixed a bug with updates and excluded packages (wrong count)
 
 2008-08-06  root  <matteo.corti@id.ethz.ch>
 
-	* check_updates: workaround for a possible bug in Sort::Versions
-	                 (http://rt.cpan.org/Public/Bug/Display.html?id=34622)
+    * check_updates: workaround for a possible bug in Sort::Versions
+                     (http://rt.cpan.org/Public/Bug/Display.html?id=34622)
 
 2008-06-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: separated the POD documentation because of ePN issues
-	* check_updates: added the -[no]-boot-check option to disable the kernel check
-	* check_updates: corrected a bug occurring when yum debug level is 0
+    * check_updates: separated the POD documentation because of ePN issues
+    * check_updates: added the -[no]-boot-check option to disable the kernel check
+    * check_updates: corrected a bug occurring when yum debug level is 0
 
 2008-05-15  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: uname returns the kernel version with the architecture at the end
+    * check_updates: uname returns the kernel version with the architecture at the end
 
 2008-05-08  root  <matteo.corti@id.ethz.ch>
 
-	* check_updates: Correct kernel versions sorting
+    * check_updates: Correct kernel versions sorting
 
 2008-03-17  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: CentOS uses yum but had smp and non smp kernels
+    * check_updates: CentOS uses yum but had smp and non smp kernels
 
 2008-03-07  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a problem in the notification of a needed reboot
+    * check_updates: fixed a problem in the notification of a needed reboot
 
 2008-02-26  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed a problem while counting the number of obsolete
-			 packages
+    * check_updates: fixed a problem while counting the number of obsolete
+             packages
 
 2008-02-21  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: fixed the kernel check on RH systems
+    * check_updates: fixed the kernel check on RH systems
 
 2008-02-21  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: checks if the running kernel is the latest
+    * check_updates: checks if the running kernel is the latest
                          installed
-	* check_updates: removed backticks (using open -|)
+    * check_updates: removed backticks (using open -|)
 
 2008-01-22  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-	* check_updates: recognizes CentOS
+    * check_updates: recognizes CentOS

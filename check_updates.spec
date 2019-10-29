@@ -1,5 +1,5 @@
-%define version          1.7.5
-%define release          1
+%define version          1.7.6
+%define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Tue Oct 29 2019  <matteo@corti.li> - 1.7.6-0
+- Updated to 1.7.6
+
 * Mon Aug  5 2019  <matteo@corti.li> - 1.7.4-0
 - Updated to 1.7.4
 

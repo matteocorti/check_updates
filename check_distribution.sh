@@ -25,10 +25,10 @@ YEAR=$( date +"%Y" )
 echo "Copyright"
 echo "========="
 echo
-echo README.md
+echo '### README.md'
 grep  "(c) Matteo Corti, 2007-${YEAR}" README.md
-echo COPYRIGHT
+echo '### COPYRIGHT'
 grep "Copyright (c) 2007-${YEAR} Matteo Corti" COPYRIGHT
-echo check_updates
+echo '### check_updates'
 grep "Copyright (c) 2007-${YEAR} Matteo Corti <matteo@corti.li>" check_updates
 echo

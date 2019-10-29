@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2019, Matteo Corti
+# Copyright (c) 2007-2019 Matteo Corti <matteo@corti.li>
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.5';
+our $VERSION = '1.7.6';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -177,7 +177,7 @@ sub get_path {
     open $which_output, q{-|}, "$which_command 2>&1"
       or $plugin->nagios_exit( $plugin->UNKNOWN,  "Cannot execute $which_command: $OS_ERROR" );
     while (<$which_output>) {
-	verbose $_, 2;
+        verbose $_, 2;
         chomp;
         if ( !/^which:/mxs ) {
             $path = $_;
@@ -481,6 +481,8 @@ sub check_running_kernel {
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
+
+## no critic (ProhibitExcessComplexity)
 sub run_yum {
 
     my $arguments   = shift;
@@ -538,7 +540,7 @@ sub run_yum {
             || $line =~ /^Loaded[ ]plugins:/imxs
             || $line =~ /^Loading[ ]mirror[ ]speeds/imxs
             || $line =~ /[ ].B\/s[ ][|][ ]/imxs
-            || $line =~ /^No\ security\ updates/imxs
+            || $line =~ /^No[ ]security[ ]updates/imxs
             || $line =~
             /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs
             || $line =~
@@ -920,6 +922,7 @@ sub get_os_name_and_version {
 
         my $TMP;
 
+        ## no critic (RequireBriefOpen)
         open $TMP, q{<},
           $filename
           or exit_with_error(
@@ -986,6 +989,8 @@ sub get_updater {
 # Throws    : n/a
 # Comments  : n/a
 # See also  : n/a
+
+## no critic (ProhibitExcessComplexity)
 sub run {
 
     $status = Monitoring::Plugin->OK;

@@ -1,3 +1,4 @@
+2019-10-29: 1.7.6 - Added support for Sangoma FreePBX distro
 2019-08-20: 1.7.5 - Bug fix (DNF parsing)
 2019-08-05: 1.7.4  - Checks for missing GPG key
 2019-06-13: 1.7.3  - RHEL 8 support
@@ -71,7 +72,7 @@
 2008-08-06: 1.1.1  - fixed a problem with version sorting
 2008-06-03: 1.1.0  - added an option to enable/disable the check on the running
                      kernel and fixed a bug occurring when yum is set to use
-		     a low verbosity
+                     a low verbosity
 2008-06-03: 1.0.2  - Separated the POD because of ePN issues
 2008-05-15: 1.0.1  - Strips the ending architecture from the kernel version
 2008-05-08: 1.0.0  - corrected a bug in the kernel version comparison.
