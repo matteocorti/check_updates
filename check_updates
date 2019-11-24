@@ -33,8 +33,6 @@ use Monitoring::Plugin;
 use Monitoring::Plugin::Threshold;
 use Monitoring::Plugin::Getopt;
 
-# Check which version of the monitoring plugins is available
-
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_ERROR             => 1;
 Readonly our $YUM_RETURN_UPDATES_AVAILABLE => 100;
