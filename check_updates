@@ -490,13 +490,13 @@ sub run_yum {
     # --assumeno to avoid a timeout when the GPG key is not present
     # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update --assumeno 2>&1';
+        $yum_command = 'check-update --assumeno';
     }
 
     my $OUTPUT_HANDLER;
     my @updates;
 
-    my $command = "$yum_executable $yum_command $arguments";
+    my $command = "$yum_executable $yum_command $arguments 2>&1";
 
     debug qq{Running "$command"\n}, 1;
 
@@ -1133,6 +1133,11 @@ sub run {
     if ( $options->get('yum-arguments') ) {
         $arguments = $options->get('yum-arguments');
     }
+
+    # Check if foreman-protector is installed
+    if ( -e '/etc/yum/pluginconf.d/foreman-protector.conf' ) {
+	$arguments = "$arguments --disableplugin=foreman-protector";
+    }	
 
     $options->arg(
         spec => 'quiet',
