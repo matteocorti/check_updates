@@ -12,7 +12,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.7.6
+Version 1.7.7
 
 =head1 SYNOPSIS
 

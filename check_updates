@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.6';
+our $VERSION = '1.7.7';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -1136,8 +1136,8 @@ sub run {
 
     # Check if foreman-protector is installed
     if ( -e '/etc/yum/pluginconf.d/foreman-protector.conf' ) {
-	$arguments = "$arguments --disableplugin=foreman-protector";
-    }	
+        $arguments = "$arguments --disableplugin=foreman-protector";
+    }
 
     $options->arg(
         spec => 'quiet',
