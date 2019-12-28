@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.7';
+our $VERSION = '1.7.8';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -490,7 +490,7 @@ sub run_yum {
     # --assumeno to avoid a timeout when the GPG key is not present
     # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update --assumeno';
+        $yum_command = 'check-update --assumeno -q';
     }
 
     my $OUTPUT_HANDLER;

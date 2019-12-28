@@ -1,3 +1,7 @@
+2019-12-28  Matteo Corti  <matteo@corti.li>
+
+     * check_updates (run_yum): using check_updates -q
+
 2019-12-11  Matteo Corti  <corti@matteo.ethz.ch>
 
     * check_updates (run_yum): Disables Foreman
