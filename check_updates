@@ -540,6 +540,8 @@ sub run_yum {
             || $line =~ /[ ].B\/s[ ][|][ ]/imxs
             || $line =~ /^No[ ]security[ ]updates/imxs
             || $line =~
+            /^Repository[ ]'.*' is missing name in configuration, using id/imxs
+            || $line =~
             /^Security:[ ].*is[ ]an[ ]installed[ ]security[ ]update/imxs
             || $line =~
             /^Security:[ ].*is[ ]the[ ]currently[ ]running[ ]version/imxs

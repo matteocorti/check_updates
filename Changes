@@ -1,3 +1,7 @@
+2020-02-26  Matteo Corti  <matteo@corti.li>
+
+	* check_updates (run_yum): Ignoring an additional message from YUM
+
 2019-12-28  Matteo Corti  <matteo@corti.li>
 
      * check_updates (run_yum): using check_updates -q
