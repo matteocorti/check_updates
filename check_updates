@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2019 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2007-2020 Matteo Corti <matteo@corti.li>
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.8';
+our $VERSION = '1.7.9';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -490,7 +490,7 @@ sub run_yum {
     # --assumeno to avoid a timeout when the GPG key is not present
     # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update --assumeno -q';
+        $yum_command = 'check-update --assumeno --errorlevel=0 -q';
     }
 
     my $OUTPUT_HANDLER;
