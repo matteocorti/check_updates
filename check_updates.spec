@@ -1,4 +1,4 @@
-%define version          1.7.9
+%define version          1.7.10
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -63,9 +63,12 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Thu Mar 12 2020  <matteo@corti.li> - 1.7.10-0
+- Updates to 1.7.10
+
 * Wed Feb 26 2020  <matteo@corti.li> - 1.7.9-0
 - Updates to 1.7.9
-
+w
 * Sat Dec 28 2019  <matteo@corti.li> - 1.7.8-0
 - Updated to 1.7.8
 
