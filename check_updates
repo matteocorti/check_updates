@@ -349,6 +349,40 @@ sub clean_kernel_version {
 }
 
 ##############################################################################
+# Usage     : run_command( );
+# Purpose   : runs a command
+# Returns   : command output (STDERR and STDOUT merged)
+# Arguments : command
+# Throws    : n/a
+# Comments  : n/a
+# See also  : n/a
+sub run_command {
+
+    my $command = shift;
+
+    my $command_output;
+    my $output = q{};
+
+    open $command_output, q{-|},
+      "$command 2>&1"
+      or $plugin->nagios_exit( $plugin->UNKNOWN,
+        "Cannot execute $command: $OS_ERROR" );
+    while (<$command_output>) {
+        $output = $output . $_;
+    }
+    if (  !( close $command_output )
+        && ( $OS_ERROR != 0 ) )
+    {
+        # close to a piped open return false if the command with non-zero
+        # status. In this case $! is set to 0
+        $plugin->nagios_exit( $plugin->UNKNOWN,
+            "Error while closing pipe to $command: $OS_ERROR" );
+    }
+    return $output;
+
+}
+
+##############################################################################
 # Usage     : check_running_kernel( );
 # Purpose   : checks if the loaded kernel is the latest available
 # Returns   : n/a
@@ -1068,6 +1102,13 @@ sub run {
     );
 
     $options->getopts();
+
+    debug "check_updates version: $VERSION\n", 1;
+    debug 'system info:           ' . run_command('uname -a'), 1;
+    debug q{                       }
+      . run_command(
+'if [ -f /etc/os-release ] ; then cat /etc/os-release; else echo "/etc/os-release not found"; fi'
+      ), 1;
 
     ###############
     # Sanity checks
