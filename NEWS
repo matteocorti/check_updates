@@ -1,4 +1,4 @@
-2020-03-12: 1.8.0 - Better YUM error handling
+2020-06-05: 1.7.11 - Better YUM error handling
 2020-02-26: 1.7.9 - Bug fix (YUM parsing)
 2019-12-28: 1.7.8 - Uses check_updates -q
 2019-12-11: 1.7.7 - Disables foreman protector on Satellite

@@ -1,3 +1,7 @@
+2020-06-05  Matteo Corti  <matteo@corti.li>
+
+	* check_updates: (run_yum): Ignoring an additional message from YUM
+
 2020-03-12  Matteo Corti  <matteo@corti.li>
 
         * check_updates (run): Show the version number in the debug output
