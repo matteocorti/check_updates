@@ -1,9 +1,10 @@
+2020-06-19: 1.7.12 - Bug fix (YUM parsing)
 2020-06-05: 1.7.11 - Better YUM error handling
-2020-02-26: 1.7.9 - Bug fix (YUM parsing)
-2019-12-28: 1.7.8 - Uses check_updates -q
-2019-12-11: 1.7.7 - Disables foreman protector on Satellite
-2019-10-29: 1.7.6 - Added support for Sangoma FreePBX distro
-2019-08-20: 1.7.5 - Bug fix (DNF parsing)
+2020-02-26: 1.7.9  - Bug fix (YUM parsing)
+2019-12-28: 1.7.8  - Uses check_updates -q
+2019-12-11: 1.7.7  - Disables foreman protector on Satellite
+2019-10-29: 1.7.6  - Added support for Sangoma FreePBX distro
+2019-08-20: 1.7.5  - Bug fix (DNF parsing)
 2019-08-05: 1.7.4  - Checks for missing GPG key
 2019-06-13: 1.7.3  - RHEL 8 support
 2019-05-07: 1.7.2  - Azure CentOS support

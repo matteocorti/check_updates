@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.11';
+our $VERSION = '1.7.12';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -583,6 +583,7 @@ sub run_yum {
             || $line =~ /^You[ ]should/imxs
             || $line =~ /^If[ ]you[ ]are/imxs
             || $line =~ /^To[ ]help[ ]pinpoint[ ]the[ ]issue/imxs
+            || $line =~ /You[ ]must[ ]run[ ]this[ ]command[ ]as[ ]root/imxs
             || $line =~ /^No[ ]packages[ ]needed/imxs )
         {
             next;
