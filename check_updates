@@ -9,7 +9,7 @@ package main;
 #
 # See  the INSTALL file for installation instructions
 #
-# Copyright (c) 2007-2020 Matteo Corti <matteo@corti.li>
+# Copyright (c) 2007-2021 Matteo Corti <matteo@corti.li>
 #
 # This module is free software; you can redistribute it and/or modify it
 # under the terms of GNU general public license (gpl) version 3,
@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.12';
+our $VERSION = '1.7.13';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -316,6 +316,9 @@ sub clean_kernel_version {
     # remove Xen
     $kernel =~ s/xen-//imxs;
 
+    # remove plus
+    $kernel =~ s/plus-//imxs;
+
     # remove openvz
     $kernel =~ s/o?vzkernel-//imxs;
 
@@ -420,13 +423,14 @@ sub check_running_kernel {
 
     for my $rpm (
         (
-            "$package",       "$package-smp",
-            "$package-PAE",   "$package-xen",
-            "$package-uek",   'ovzkernel',
-            'vzkernel',       "$package-PAE-core",
-            "$package-ml",    "$package-ml-aufs",
-            "$package-lt",    "$package-lt-aufs",
-            "$package-azure", "$package-core",
+            "$package",          "$package-PAE",
+            "$package-PAE-core", "$package-azure",
+            "$package-core",     "$package-lt",
+            "$package-lt-aufs",  "$package-ml",
+            "$package-ml-aufs",  "$package-plus",
+            "$package-smp",      "$package-uek",
+            "$package-xen",      'ovzkernel',
+            'vzkernel',
         )
       )
 

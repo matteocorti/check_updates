@@ -1,3 +1,4 @@
+2021-01-21: 1.7.13 - Support for CentOSPlus kernels
 2020-06-19: 1.7.12 - Bug fix (YUM parsing)
 2020-06-05: 1.7.11 - Better YUM error handling
 2020-02-26: 1.7.9  - Bug fix (YUM parsing)

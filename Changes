@@ -1,15 +1,19 @@
+2021-01-21  Matteo Corti  <matteo@corti.li>
+
+    * check_updates (check_running_kernel): support for CentOSPlus
+
 2020-06-19  Matteo Corti  <matteo@corti.li>
 
-	* check_updates (run_yum): Ignoring an additional message from YUM
+    * check_updates (run_yum): Ignoring an additional message from YUM
 
 2020-06-05  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: (run_yum): Ignoring an additional message from YUM
+    * check_updates: (run_yum): Ignoring an additional message from YUM
 
 2020-03-12  Matteo Corti  <matteo@corti.li>
 
-        * check_updates (run): Show the version number in the debug output
-        * check_updates(run_yum): better YUM outpt handling
+    * check_updates (run): Show the version number in the debug output
+    * check_updates(run_yum): better YUM outpt handling
 
 2020-02-26  Matteo Corti  <matteo@corti.li>
 
