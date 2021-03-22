@@ -30,6 +30,8 @@ jobs:
         include:
           - distro: 'fedora:rawhide'
             pre: >-
+              echo $PACKAGES
+              echo "$PACKAGES"
               dnf install -y "$PACKAGES"
           - distro: 'fedora:34'
             pre: >-
