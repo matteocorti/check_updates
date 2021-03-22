@@ -25,6 +25,8 @@ jobs:
           - 'fedora:33'
           - 'fedora:34'
           - 'fedora:rawhide'
+#          - 'oraclelinux-7'
+#          - 'oraclelinux-8'
         include:
           - distro: 'fedora:rawhide'
             pre: >-
@@ -40,9 +42,11 @@ jobs:
               dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'centos:7'
             pre: >-
+              yum install -y epel-release &&
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'centos:8'
             pre: >-
+              dnf install -y epel-release &&
               dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
