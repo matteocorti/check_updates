@@ -47,8 +47,8 @@ jobs:
           - distro: 'centos:8'
             pre: >-
               dnf install -y sudo dnf-plugins-core epel-release &&
+              sudo dnf config-manager --set-enabled PowerTools &&
               dnf install -y perl perl-Module-Install
-#              sudo yum config-manager --set-enabled PowerTools
               #perl-Module-Install perl-Readonly perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
