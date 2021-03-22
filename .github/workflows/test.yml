@@ -47,7 +47,7 @@ jobs:
           - distro: 'centos:8'
             pre: >-
               dnf install -y epel-release &&
-              dnf install -y sudo perl
+              dnf install -y sudo perl perl-Module-Install
               #perl-Module-Install perl-Readonly perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
