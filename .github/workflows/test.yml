@@ -48,8 +48,7 @@ jobs:
             pre: >-
               dnf install -y sudo dnf-plugins-core epel-release &&
               sudo dnf config-manager --set-enabled powertools &&
-              dnf install -y perl perl-Module-Install
-              #perl-Module-Install perl-Readonly perl-Monitoring-Plugin
+              dnf install -y perl perl-Module-Install  perl-Readonly perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
