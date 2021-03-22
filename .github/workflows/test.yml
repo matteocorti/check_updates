@@ -28,22 +28,22 @@ jobs:
         include:
           - distro: 'fedora:rawhide'
             pre: >-
-              dnf install -y sudo perl-Module-Install perl-Readonly
+              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'fedora:34'
             pre: >-
-              dnf install -y sudo perl-Module-Install perl-Readonly
+              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'fedora:33'
             pre: >-
-              dnf install -y sudo perl-Module-Install perl-Readonly
+              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'fedora:32'
             pre: >-
-              dnf install -y sudo perl-Module-Install perl-Readonly
+              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'centos:7'
             pre: >-
-              yum install -y sudo perl-Module-Install perl-Readonly
+              yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
           - distro: 'centos:8'
             pre: >-
-              dnf install -y sudo perl-Module-Install perl-Readonly
+              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
