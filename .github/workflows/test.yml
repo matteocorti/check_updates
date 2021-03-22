@@ -15,11 +15,11 @@ jobs:
     # The host should always be linux
     runs-on: ubuntu-latest
     name: Running tests on ${{ matrix.distro }}
-    env:
-        PACKAGES: perl-Module-Install make
     strategy:
       fail-fast: false
       matrix:
+        env:
+          PACKAGES: 'perl-Module-Install'
         distro:
           - 'centos:7'
           - 'centos:8'
