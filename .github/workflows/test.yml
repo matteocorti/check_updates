@@ -17,9 +17,9 @@ jobs:
     name: Running tests on ${{ matrix.distro }}
     strategy:
       fail-fast: false
+      env:
+        PACKAGES: 'perl-Module-Install'
       matrix:
-        env:
-          PACKAGES: 'perl-Module-Install'
         distro:
           - 'centos:7'
           - 'centos:8'
