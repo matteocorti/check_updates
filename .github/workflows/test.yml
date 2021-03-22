@@ -54,6 +54,7 @@ jobs:
         env:
           PRE: ${{ matrix.pre }}
         run: |
+          echo $PRE
           echo $PRE > ./prep-cmd.sh
           docker run --network host -w /check_updates -v ${PWD}:/check_upates ${{ matrix.distro }} \
               /bin/sh -c 'sh ./prep-cmd.sh \
