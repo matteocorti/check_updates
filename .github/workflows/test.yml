@@ -137,5 +137,6 @@ jobs:
               && curl -L https://cpanmin.us | sudo perl - --sudo App::cpanminus \
               && cpanm --sudo install Date::Parse \
               && uname -a \
+              && perl Makefile.PL \
               && make test'
 
