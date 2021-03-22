@@ -34,6 +34,10 @@ jobs:
               echo $PACKAGES &&
               echo 2 &&
               echo "$PACKAGES" &&
+              echo 3 &&
+              echo env.PACKAGES &&
+              echo 4 &&
+              echo ${{ env.PACKAGES }} &&
               dnf install -y "$PACKAGES"
           - distro: 'fedora:34'
             pre: >-
