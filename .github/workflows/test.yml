@@ -17,8 +17,6 @@ jobs:
     name: Running tests on ${{ matrix.distro }}
     strategy:
       fail-fast: false
-      env:
-        PACKAGES: 'perl-Module-Install'
       matrix:
         distro:
           - 'centos:7'
@@ -30,30 +28,22 @@ jobs:
         include:
           - distro: 'fedora:rawhide'
             pre: >-
-              echo 1 &&
-              echo $PACKAGES &&
-              echo 2 &&
-              echo "$PACKAGES" &&
-              echo 3 &&
-              echo env.PACKAGES &&
-              echo 4 &&
-              echo ${{ env.PACKAGES }} &&
-              dnf install -y "$PACKAGES"
+              dnf install -y perl-Module-Install
           - distro: 'fedora:34'
             pre: >-
-              dnf install -y $PACKAGES
+              dnf install -y perl-Module-Install
           - distro: 'fedora:33'
             pre: >-
-              dnf install -y $PACKAGES
+              dnf install -y perl-Module-Install
           - distro: 'fedora:32'
             pre: >-
-              dnf install -y $PACKAGES
+              dnf install -y perl-Module-Install
           - distro: 'centos:7'
             pre: >-
-              yum install -y $PACKAGES
+              yum install -y perl-Module-Install
           - distro: 'centos:8'
             pre: >-
-              dnf install -y $PACKAGES
+              dnf install -y perl-Module-Install
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
