@@ -43,11 +43,12 @@ jobs:
           - distro: 'centos:7'
             pre: >-
               yum install -y epel-release &&
-              yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
+              yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple
           - distro: 'centos:8'
             pre: >-
+              dnf install -y sudo perl-Module-Install perl-Readonly &&
               dnf install -y epel-release &&
-              dnf install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin
+              dnf install perl-Monitoring-Plugin
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
