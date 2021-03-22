@@ -46,7 +46,7 @@ jobs:
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple
           - distro: 'centos:8'
             pre: >-
-              dnf install -y epel-release &&
+#              dnf install -y epel-release &&
               dnf install -y sudo perl perl-Module-Install
               #perl-Module-Install perl-Readonly perl-Monitoring-Plugin
     steps:
