@@ -1,0 +1,61 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - $default-branch
+      - development
+      - master
+  # Run tests for any PRs
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    # The host should always be Ubuntu
+    runs-on: ubuntu-latest
+    name: Running tests on ${{ matrix.distro }}
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - 'centos:7'
+          - 'centos:8'
+          - 'fedora:32'
+          - 'fedora:33'
+          - 'fedora:34'
+          - 'fedora:rawhide'
+        include:
+          - distro: 'fedora:rawhide'
+            pre: >-
+              dnf install -y sudo perl make bzip2 file
+          - distro: 'fedora:34'
+            pre: >-
+              dnf install -y sudo perl make bzip2 file
+          - distro: 'fedora:33'
+            pre: >-
+              dnf install -y sudo perl make bzip2 file
+          - distro: 'fedora:32'
+            pre: >-
+              dnf install -y sudo perl make bzip2 file
+          - distro: 'centos:7'
+            pre: >-
+              yum install -y sudo perl make bzip2 file perl-ExtUtils-MakeMaker perl-Test-Simple
+          - distro: 'centos:8'
+            pre: >-
+              dnf install -y sudo perl make bzip2 file
+              
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Run the tests on ${{ matrix.distro }}
+        env:
+          PRE: ${{ matrix.pre }}
+        run: |
+          echo $PRE > ./prep-cmd.sh
+          docker run --network host -w /check_updates -v ${PWD}:/check_upates ${{ matrix.distro }} \
+              /bin/sh -c 'sh ./prep-cmd.sh \
+              && uname -a \
+              && make test
