@@ -11,14 +11,51 @@ on:
   workflow_dispatch:
 
 jobs:
+  macos:
+    name: Running tests on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-10.15
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Git clone repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Install shellcheck
+        run: brew install shellcheck
+
+      - name: install cpanm and Date::Parse
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          install: Date::Parse
+
+      - name: Run the tests
+        run:  |
+          uname -a \
+          && make test
+
   linux:
-    # The host should always be Ubuntu
+    # The host should always be linux
     runs-on: ubuntu-latest
     name: Running tests on ${{ matrix.distro }}
     strategy:
       fail-fast: false
       matrix:
         distro:
+          - 'debian:9'
+          - 'debian:10'
+          - 'debian:testing'
+          - 'ubuntu:16.04'
+          - 'ubuntu:18.04'
+          - 'ubuntu:20.04'
+          - 'ubuntu:20.10'
+          - 'alpine:3.13'
+          - 'alpine:edge'
           - 'centos:7'
           - 'centos:8'
           - 'fedora:32'
@@ -26,25 +63,65 @@ jobs:
           - 'fedora:34'
           - 'fedora:rawhide'
         include:
+          - distro: 'debian:testing'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'debian:10'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'debian:9'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'ubuntu:20.10'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'ubuntu:20.04'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'ubuntu:16.04'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'ubuntu:18.04'
+            pre: >-
+              apt-get update &&
+              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
+          - distro: 'alpine:edge'
+            pre: >-
+              apk add -U bash &&
+              apk add nmap shellcheck curl sudo perl make wget bzip2 file openssl
+          - distro: 'alpine:3.13'
+            pre: >-
+              apk add -U bash &&
+              apk add nmap shellcheck curl sudo perl make wget bzip2 file openssl
           - distro: 'fedora:rawhide'
             pre: >-
-              dnf install -y sudo perl make bzip2 file
+              dnf install -y nmap ShellCheck curl sudo perl make bzip2 file openssl hostname
           - distro: 'fedora:34'
             pre: >-
-              dnf install -y sudo perl make bzip2 file
+              dnf install -y hostname &&
+              dnf install -y nmap ShellCheck curl sudo perl make bzip2 file openssl
           - distro: 'fedora:33'
             pre: >-
-              dnf install -y sudo perl make bzip2 file
+              dnf install -y hostname &&
+              dnf install -y nmap ShellCheck curl sudo perl make bzip2 file openssl
           - distro: 'fedora:32'
             pre: >-
-              dnf install -y sudo perl make bzip2 file
+              dnf install -y hostname &&
+              dnf install -y nmap ShellCheck curl sudo perl make bzip2 file openssl
           - distro: 'centos:7'
             pre: >-
-              yum install -y sudo perl make bzip2 file perl-ExtUtils-MakeMaker perl-Test-Simple
+              yum install -y nmap curl sudo perl make bzip2 file openssl perl-ExtUtils-MakeMaker perl-Test-Simple &&
+              scversion="stable"; curl -Ls "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv && cp "shellcheck-${scversion}/shellcheck" /usr/bin/
           - distro: 'centos:8'
             pre: >-
-              dnf install -y sudo perl make bzip2 file
-              
+              dnf install -y nmap curl sudo perl make bzip2 file openssl &&
+              scversion="stable"; curl -Ls "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv && cp "shellcheck-${scversion}/shellcheck" /usr/bin/
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
@@ -54,9 +131,11 @@ jobs:
         env:
           PRE: ${{ matrix.pre }}
         run: |
-          echo $PRE
           echo $PRE > ./prep-cmd.sh
-          docker run --network host -w /check_updates -v ${PWD}:/check_upates ${{ matrix.distro }} \
+          docker run --network host -w /check_updates -v ${PWD}:/check_updates ${{ matrix.distro }} \
               /bin/sh -c 'sh ./prep-cmd.sh \
+              && curl -L https://cpanmin.us | sudo perl - --sudo App::cpanminus \
+              && cpanm --sudo install Date::Parse \
               && uname -a \
               && make test'
+
