@@ -47,7 +47,6 @@ jobs:
           - distro: 'centos:8'
             pre: >-
               dnf install -y sudo dnf-plugins-core &&
-              dnf update &&
               dnf upgrade -y &&
               dnf install -y perl perl-Module-Install
               #perl-Module-Install perl-Readonly perl-Monitoring-Plugin
