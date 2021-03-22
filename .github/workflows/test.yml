@@ -11,34 +11,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  macos:
-    name: Running tests on ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - macos-10.15
-    runs-on: ${{ matrix.os }}
-    steps:
-
-      - name: Git clone repository
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Install shellcheck
-        run: brew install shellcheck
-
-      - name: install cpanm and Date::Parse
-        uses: perl-actions/install-with-cpanm@v1
-        with:
-          install: Date::Parse
-
-      - name: Run the tests
-        run:  |
-          uname -a \
-          && make test
-
   linux:
     # The host should always be linux
     runs-on: ubuntu-latest
@@ -47,15 +19,6 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - 'debian:9'
-          - 'debian:10'
-          - 'debian:testing'
-          - 'ubuntu:16.04'
-          - 'ubuntu:18.04'
-          - 'ubuntu:20.04'
-          - 'ubuntu:20.10'
-          - 'alpine:3.13'
-          - 'alpine:edge'
           - 'centos:7'
           - 'centos:8'
           - 'fedora:32'
@@ -63,42 +26,6 @@ jobs:
           - 'fedora:34'
           - 'fedora:rawhide'
         include:
-          - distro: 'debian:testing'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'debian:10'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'debian:9'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'ubuntu:20.10'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'ubuntu:20.04'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'ubuntu:16.04'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'ubuntu:18.04'
-            pre: >-
-              apt-get update &&
-              apt-get -y install nmap shellcheck curl sudo perl make bzip2 file openssl
-          - distro: 'alpine:edge'
-            pre: >-
-              apk add -U bash &&
-              apk add nmap shellcheck curl sudo perl make wget bzip2 file openssl
-          - distro: 'alpine:3.13'
-            pre: >-
-              apk add -U bash &&
-              apk add nmap shellcheck curl sudo perl make wget bzip2 file openssl
           - distro: 'fedora:rawhide'
             pre: >-
               dnf install -y nmap ShellCheck curl sudo perl make bzip2 file openssl hostname
