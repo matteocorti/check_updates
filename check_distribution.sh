@@ -9,9 +9,20 @@ if ! perlcritic -1 ${PERL_FILES} ; then
     FAILED=1
 fi
 
-if grep -q '\t' ${FILES} ; then
-    echo "Tabs"
-    grep -n '\t' ${FILES}
+if uname -a | grep -q '^Linux' ; then
+    if grep -P -q '\t' ${FILES} ; then
+        echo "Tabs"
+        grep -P -n '\t' ${FILES}
+        FAILED=1
+    fi
+elif uname -a | grep -q '^Darwin' ; then
+    if grep -E -q '\t' ${FILES} ; then
+        echo "Tabs"
+        grep -E -n '\t' ${FILES}
+        FAILED=1
+    fi
+else
+    echo "Unable to check for tabs"
     FAILED=1
 fi
 
