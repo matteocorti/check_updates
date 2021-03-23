@@ -1,9 +1,11 @@
-.travis.yml
 AUTHORS
 Changes
+check_distribution.sh
 check_updates
 check_updates.pod
 check_updates.spec
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
 COPYING
 COPYRIGHT
 inc/Module/AutoInstall.pm
@@ -24,7 +26,9 @@ META.yml
 MYMETA.json
 MYMETA.yml
 NEWS
+pull_request_template.md
 README.md
+SECURITY.md
 t/00_modules.t
 t/01_functions.t
 t/02_yum.t
@@ -36,4 +40,3 @@ t/examples/rhel_4
 t/examples/rhel_6
 t/examples/scientific_linux_6
 t/mocks/yum_errors.1.sh
-TODO
