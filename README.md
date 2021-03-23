@@ -1,6 +1,5 @@
 
  (c) Matteo Corti, ETH Zurich, 2007-2012
-
  (c) Matteo Corti, 2007-2021
 
   see AUTHORS for the complete list of contributors
@@ -35,9 +34,9 @@ DNF uses different caches per user. This has the consequence that DNF
 and the plugin will potentially deliver different results for
 different users.
 
-## Yum security plugin
+## YUM security plugin
 
-Use one of the following commands to install the yum security plugin:
+Use one of the following commands to install the YUM security plugin:
 
  - Fedora, Red Hat Enterprise Linux 6.x, CentOS 6.x, Scientific Linux 6.x systems:
 
