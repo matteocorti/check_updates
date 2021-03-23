@@ -25,8 +25,7 @@ jobs:
           - 'fedora:33'
           - 'fedora:34'
           - 'fedora:rawhide'
-#          - 'oraclelinux-7'
-#          - 'oraclelinux-8'
+          - 'oraclelinux:8'
         include:
           - distro: 'fedora:rawhide'
             pre: >-
