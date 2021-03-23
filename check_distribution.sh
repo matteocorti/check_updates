@@ -5,6 +5,19 @@ FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS 
 
 FAILED=
 
+# shellcheck disable=SC2250
+for file in $FILES $PERL_FILES ; do
+    if ! [ -r "${file}" ] ; then
+        echo "${file} is missing"
+        FAILED=1
+    fi
+done
+
+if [ -n "${FAILED}" ] ; then
+    # skip the next tests as at leadt file is missing
+    exit 1
+fi
+
 # shellcheck disable=SC2086
 if ! perlcritic -1 ${PERL_FILES} ; then
     FAILED=1
