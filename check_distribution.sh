@@ -3,32 +3,51 @@
 PERL_FILES="check_updates t/*.t"
 FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS README.md TODO check_distribution.sh"
 
-echo "Perl::Critic"
-echo "============"
-echo
-perlcritic -1 ${PERL_FILES}
-echo
+FAILED=
 
-echo "Formatting errors: tabs"
-echo "======================="
-echo
-grep --line-number '\t' ${FILES}
-echo
+if ! perlcritic -1 ${PERL_FILES} ; then
+    FAILED=1
+fi
 
-echo "Formatting errors: blanks at the end of line"
-echo "============================================"
-echo
-grep --line-number '[[:blank:]]$' ${FILES}
-echo
+if uname -a | grep -q '^Linux' ; then
+    if grep -P -q '\t' ${FILES} ; then
+        echo "Tabs"
+        grep -P -n '\t' ${FILES}
+        FAILED=1
+    fi
+elif uname -a | grep -q '^Darwin' ; then
+    if grep -E -q '\t' ${FILES} ; then
+        echo "Tabs"
+        grep -E -n '\t' ${FILES}
+        FAILED=1
+    fi
+else
+    echo "Unable to check for tabs"
+    FAILED=1
+fi
+
+if grep -q '[[:blank:]]$' ${FILES} ; then
+    echo "Blanks at the end of a line"
+    grep -n '[[:blank:]]$' ${FILES}
+    FAILED=1
+fi
 
 YEAR=$( date +"%Y" )
-echo "Copyright"
-echo "========="
-echo
-echo '### README.md'
-grep  "(c) Matteo Corti, 2007-${YEAR}" README.md
-echo '### COPYRIGHT'
-grep "Copyright (c) 2007-${YEAR} Matteo Corti" COPYRIGHT
-echo '### check_updates'
-grep "Copyright (c) 2007-${YEAR} Matteo Corti <matteo@corti.li>" check_updates
-echo
+if ! grep  -q "(c) Matteo Corti, 2007-${YEAR}" README.md ; then
+    echo "Wrong (c) in README.md"
+    FAILED=1
+fi
+if ! grep -q "Copyright (c) 2007-${YEAR} Matteo Corti" COPYRIGHT ; then
+    echo "Wrong (c) in COPYRIGHT"
+    FAILED=1
+fi
+if ! grep -q "Copyright (c) 2007-${YEAR} Matteo Corti <matteo@corti.li>" check_updates ; then
+    echo "Wrong (c) in check_updates"
+    FAILED=1
+fi
+
+if [ -n "${FAILED}" ] ; then
+    exit 1
+else
+    exit 0
+fi
