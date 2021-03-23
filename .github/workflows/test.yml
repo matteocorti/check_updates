@@ -25,7 +25,6 @@ jobs:
           - 'fedora:33'
           - 'fedora:34'
           - 'fedora:rawhide'
-          - 'oraclelinux:8'
         include:
           - distro: 'fedora:rawhide'
             pre: >-
@@ -47,10 +46,6 @@ jobs:
             pre: >-
               dnf install -y sudo dnf-plugins-core epel-release &&
               sudo dnf config-manager --set-enabled powertools &&
-              dnf install -y perl perl-Module-Install  perl-Readonly perl-Monitoring-Plugin perl-Perl-Critic
-          - distro: 'oraclelinux:8'
-            pre: >-
-              dnf install -y sudo dnf-plugins-core &&
               dnf install -y perl perl-Module-Install  perl-Readonly perl-Monitoring-Plugin perl-Perl-Critic
     steps:
       - name: Git clone repository
