@@ -5,19 +5,24 @@ FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS 
 
 FAILED=
 
+# shellcheck disable=SC2086
 if ! perlcritic -1 ${PERL_FILES} ; then
     FAILED=1
 fi
 
 if uname -a | grep -q '^Linux' ; then
+    # shellcheck disable=SC2086
     if grep -P -q '\t' ${FILES} ; then
         echo "Tabs"
+        # shellcheck disable=SC2086
         grep -P -n '\t' ${FILES}
         FAILED=1
     fi
 elif uname -a | grep -q '^Darwin' ; then
+    # shellcheck disable=SC2086
     if grep -E -q '\t' ${FILES} ; then
         echo "Tabs"
+        # shellcheck disable=SC2086
         grep -E -n '\t' ${FILES}
         FAILED=1
     fi
@@ -26,8 +31,10 @@ else
     FAILED=1
 fi
 
+# shellcheck disable=SC2086
 if grep -q '[[:blank:]]$' ${FILES} ; then
     echo "Blanks at the end of a line"
+    # shellcheck disable=SC2086
     grep -n '[[:blank:]]$' ${FILES}
     FAILED=1
 fi
