@@ -63,5 +63,6 @@ jobs:
               /bin/sh -c 'sh ./prep-cmd.sh \
               && uname -a \
               && perl Makefile.PL \
-              && make test'
+              && make test \
+              && ./check_distribution.sh'
 
