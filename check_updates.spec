@@ -102,7 +102,7 @@ w
 * Wed Dec 19 2018  <matteo@corti.li> - 1.7.0-0
 - Updated to 1.7.0
 
-* Tue Nov 30 2018  <matteo@corti.li> - 1.6.25-0
+* Fri Nov 30 2018  <matteo@corti.li> - 1.6.25-0
 - Updated to 1.6.25
 
 * Tue Nov 27 2018  <matteo@corti.li> - 1.6.24-0
