@@ -63,5 +63,5 @@ jobs:
               && perl Makefile.PL \
               && make test \
               && ./check_distribution.sh \
-	      && ./build_rpm.sh'
+              && ./build_rpm.sh'
 
