@@ -9,7 +9,7 @@ If possible give a real-life example that can be tested
 ## Submitting changes
 
  * Always write clear log messages for your commits
- * Check the code with Perl::Critic
+ * Check the code with `Perl::Critic`
  * Always log your changes in the Changes file
  * Always test the changes `make test` and be sure that all the tests are passed
  * If possible write some tests to validate the changes you did to the plugin

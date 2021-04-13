@@ -4,9 +4,9 @@
 
   see AUTHORS for the complete list of contributors
 
-# check_updates
+# check\_updates
 
-check_updates is a Nagios plugin to check if RedHat or Fedora system
+check\_updates is a Nagios plugin to check if RedHat or Fedora system
 is up-to-date
 
 The plugin uses either YUM, DNF or up2date depending on the operating
@@ -14,7 +14,7 @@ system.
 
 ## up2date
 
-since up2date -l to list the outdated packages can only be run be run
+Since `up2date -l` to list the outdated packages can only be run be run
 by root the plugin must be executed as root. Please configure sudo as
 follows:
 
