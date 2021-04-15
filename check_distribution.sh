@@ -1,12 +1,13 @@
 #!/bin/sh
 
 PERL_FILES="check_updates t/*.t"
-FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS README.md check_distribution.sh"
+FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS check_distribution.sh"
+MARKDOWN_FILES="README.md"
 
 FAILED=
 
 # shellcheck disable=SC2250
-for file in $FILES $PERL_FILES ; do
+for file in $FILES $PERL_FILES $MARKDOWN_FILES ; do
     if ! [ -r "${file}" ] ; then
         echo "${file} is missing"
         FAILED=1
@@ -25,18 +26,18 @@ fi
 
 if uname -a | grep -q '^Linux' ; then
     # shellcheck disable=SC2086
-    if grep -P -q '\t' ${FILES} ; then
+    if grep -P -q '\t' ${FILES} ${MARKDOWN_FILES} ; then
         echo "Tabs"
         # shellcheck disable=SC2086
-        grep -P -n '\t' ${FILES}
+        grep -P -n '\t' ${FILES} ${MARKDOWN_FILES}
         FAILED=1
     fi
 elif uname -a | grep -q '^Darwin' ; then
     # shellcheck disable=SC2086
-    if grep -E -q '\t' ${FILES} ; then
+    if grep -E -q '\t' ${FILES} ${MARKDOWN_FILES} ; then
         echo "Tabs"
         # shellcheck disable=SC2086
-        grep -E -n '\t' ${FILES}
+        grep -E -n '\t' ${FILES} ${MARKDOWN_FILES}
         FAILED=1
     fi
 else
@@ -53,7 +54,7 @@ if grep -q '[[:blank:]]$' ${FILES} ; then
 fi
 
 YEAR=$( date +"%Y" )
-if ! grep  -q "(c) Matteo Corti, 2007-${YEAR}" README.md ; then
+if ! grep  -q "&copy; Matteo Corti, 2007-${YEAR}" README.md ; then
     echo "Wrong (c) in README.md"
     FAILED=1
 fi
