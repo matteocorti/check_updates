@@ -1,6 +1,6 @@
 2021-04-15  Matteo Corti  <matteo@corti.li>
 
-	* check_updates: Added the --number-only option
+    * check_updates: Added the --number-only option
 
 2021-01-21  Matteo Corti  <matteo@corti.li>
 

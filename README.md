@@ -12,6 +12,11 @@ is up-to-date
 The plugin uses either YUM, DNF or up2date depending on the operating
 system.
 
+## Security
+
+If at least a security update is available the plugin will return a critical status.
+This can be overriden with the `--number-only` command line option
+
 ## up2date
 
 Since `up2date -l` to list the outdated packages can only be run be run
