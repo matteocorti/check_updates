@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.7.13';
+our $VERSION = '1.8.0';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -721,11 +721,14 @@ sub check_yum {
 "up2date does not distinguish security updates ignoring --security-only option\n";
             }
 
-            # every update is critical since it could be a security problem
-            verbose
-              "no security plugin: every update could be a security problem\n";
+            if ( !$options->get('number-only') ) {
 
-            $status = Monitoring::Plugin->CRITICAL;
+                # every update is critical since it could be a security problem
+                verbose
+"no security plugin: every update could be a security problem\n";
+                $status = Monitoring::Plugin->CRITICAL;
+            }
+
             verbose "DNF/YUM reports a non-up-to-date system\n";
 
             $message = ( scalar @outdated ) . ' update';
@@ -757,7 +760,13 @@ sub check_yum {
 
             if ( @security_updates > 0 ) {
 
-                $status = Monitoring::Plugin->CRITICAL;
+                if ( !$options->get('number-only') ) {
+
+                 # every update is critical since it could be a security problem
+                    verbose
+"no security plugin: every update could be a security problem\n";
+                    $status = Monitoring::Plugin->CRITICAL;
+                }
 
                 $message = ( scalar @security_updates ) . ' security update';
                 if ( @security_updates > 1 ) {
@@ -1108,6 +1117,12 @@ sub run {
         spec => 'yum-arguments|a=s',
         help => 'specific Yum arguments as STRING',
 
+    );
+
+    $options->arg(
+        spec => 'number-only|n',
+        help =>
+'consider the number of updates only (security updates are not automatically critical)',
     );
 
     $options->getopts();

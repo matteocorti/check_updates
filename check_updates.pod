@@ -12,7 +12,7 @@ is up-to-date
 
 =head1 VERSION
 
-Version 1.7.13
+Version 1.8.0
 
 =head1 SYNOPSIS
 
@@ -44,6 +44,8 @@ Version 1.7.13
     Ignores non-security updates
   -a, --yum-arguments=STRING
     specific Yum arguments as STRING
+  -n, --number-only
+    consider the number of updates only (security updates are not automatically critical)
   -t, --timeout=INTEGER
     Seconds before plugin times out (default: 15)
   -q, --quiet
