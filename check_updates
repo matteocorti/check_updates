@@ -727,6 +727,11 @@ sub check_yum {
                 verbose
 "no security plugin: every update could be a security problem\n";
                 $status = Monitoring::Plugin->CRITICAL;
+
+            }
+            else {
+                verbose
+"Security updates available but --number-only was specified\n";
             }
 
             verbose "DNF/YUM reports a non-up-to-date system\n";
@@ -766,6 +771,10 @@ sub check_yum {
                     verbose
 "no security plugin: every update could be a security problem\n";
                     $status = Monitoring::Plugin->CRITICAL;
+                }
+                else {
+                    verbose
+"Security updates available but --number-only was specified\n";
                 }
 
                 $message = ( scalar @security_updates ) . ' security update';
