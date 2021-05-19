@@ -36,6 +36,8 @@ Version 1.8.0
     Cleans YUM/DNF caches
   -d, --debug
     Enables debugging messages
+  --debug-file=STRING
+   Write debugging messages to a file
   -w, --warning=INTEGER
     Exit with WARNING status if more than INTEGER updates are available
   -c, --critical=INTEGER
