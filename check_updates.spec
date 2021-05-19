@@ -1,4 +1,4 @@
-%define version          1.8.0
+%define version          1.8.1
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -63,23 +63,26 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Wed May   19 2021  <matteo@corti.li> - 1.8.1-0
+- Updated to 1.8.1
+
 * Thu Apr   15 2021  <matteo@corti.li> - 1.8.0-0
-- Updates to 1.8.0
+- Updated to 1.8.0
 
 * Thu Jan   21 2021  <matteo@corti.li> - 1.7.13-0
-- Updates to 1.7.13
+- Updated to 1.7.13
 
 * Fri Jun   19 2020  <matteo@corti.li> - 1.7.12-0
-- Updates to 1.7.12
+- Updated to 1.7.12
 
 * Fri Jun   5 2020  <matteo@corti.li> - 1.7.11-0
-- Updates to 1.7.11
+- Updated to 1.7.11
 
 * Thu Mar 12 2020  <matteo@corti.li> - 1.7.10-0
-- Updates to 1.7.10
+- Updated to 1.7.10
 
 * Wed Feb 26 2020  <matteo@corti.li> - 1.7.9-0
-- Updates to 1.7.9
+- Updated to 1.7.9
 w
 * Sat Dec 28 2019  <matteo@corti.li> - 1.7.8-0
 - Updated to 1.7.8
