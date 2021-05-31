@@ -1,4 +1,5 @@
 AUTHORS
+build_rpm.sh
 Changes
 check_distribution.sh
 check_updates
@@ -26,8 +27,10 @@ META.yml
 MYMETA.json
 MYMETA.yml
 NEWS
+publish_release.sh
 pull_request_template.md
 README.md
+RELEASE_NOTES.md
 SECURITY.md
 t/00_modules.t
 t/01_functions.t

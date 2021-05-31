@@ -33,6 +33,9 @@ tests 't/*.t';
 test_requires 'Test::More'       => 0;
 test_requires 'File::Spec'       => 0;
 
+# https://metacpan.org/pod/release/DAGOLDEN/CPAN-Meta-2.142690/lib/CPAN/Meta/Spec.pm#license
+license 'gpl_3';
+
 WriteMakefile(
     PREREQ_PM            => \%prereqs,
     INSTALLSCRIPT        => '/usr/lib/nagios/plugins/contrib',
