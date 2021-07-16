@@ -575,7 +575,7 @@ sub run_yum {
         # GPG key is missing
         if ( $line =~ /^Importing[ ]GPG[ ]key/imxs ) {
             exit_with_error( Monitoring::Plugin->UNKNOWN,
-                'Missing GPG key, run "dnf check-updates" manually' );
+                'Missing GPG key, run "dnf check-update" manually' );
         }
 
         # Lines to be ignored
