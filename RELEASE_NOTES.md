@@ -1,1 +1,1 @@
-Added the command line option ```--debug-file``` to write the debugging output to a file
+Forces the default locate to support system with languages different than English
