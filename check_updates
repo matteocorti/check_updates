@@ -370,6 +370,9 @@ sub run_command {
 
     my $command = shift;
 
+    # prepend the localization settings
+    $command = 'LC_ALL=C ; ' . $command;
+    
     my $command_output;
     my $output = q{};
 

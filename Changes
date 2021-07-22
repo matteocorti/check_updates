@@ -1,3 +1,7 @@
+2021-07-22  Matteo Corti  <matteo@corti.li>
+
+	* check_updates (run_command): LC_ALL=C
+
 2021-05-19  Matteo Corti  <matteo@corti.li>
 
     * check_updates (debug): Debug to a file
