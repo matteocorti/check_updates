@@ -41,5 +41,6 @@ t/examples/fedora_17
 t/examples/puias_6.2
 t/examples/rhel_4
 t/examples/rhel_6
+t/examples/rocky_linux_8
 t/examples/scientific_linux_6
 t/mocks/yum_errors.1.sh

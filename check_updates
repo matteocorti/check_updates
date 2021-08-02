@@ -1039,6 +1039,7 @@ sub get_updater {
         || $name =~ /CloudLinux/mxs
         || $name =~ /Scientific[ ]Linux/mxs
         || $name =~ /Red[ ]Hat.*release[ ][56789]/mxs
+        || $name =~ /Rocky[ ]Linux/mxs
         || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs
         || $name =~ /Sangoma/mxs )

@@ -5,7 +5,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 38;
+use Test::More tests => 40;
 
 use File::Spec;
 
@@ -64,6 +64,11 @@ is(
     'PUIAS Linux  release 6.2 (Pisa)',
     '/etc/system-release PUIAS Linux 6.2'
 );
+is(
+    get_os_name_and_version('t/examples/rocky_linux_8'),
+    'Rocky Linux release 8.4 (Green Obsidian)',
+    '/etc/system-release Rocky Linux 8.4'
+);
 
 is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );
 is( get_updater('Fedora release 15 (Lovelock)'), 'yum', 'updater Fedora' );
@@ -73,6 +78,8 @@ is( get_updater('Scientific Linux release 6.0 (Carbon)'),
     'yum', 'updater Scientific Linux' );
 is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
     'up2date', 'updater RHEL 4' );
+is( get_updater('Rocky Linux release 8.4 (Green Obsidian)'),
+    'yum', 'updater Rocky Linux' );
 
 # versioncmp
 

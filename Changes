@@ -1,3 +1,7 @@
+2021-08-21  Ben Li  <bli@linsang.com>
+
+    * check_updates: Add support for Rocky Linux
+
 2021-07-22  Matteo Corti  <matteo@corti.li>
 
     * check_updates (run_command): LC_ALL=C
