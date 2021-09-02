@@ -1,1 +1,1 @@
-Support for Rocky Linux
+Support for AlmaLinux
