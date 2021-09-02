@@ -5,7 +5,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 40;
+use Test::More tests => 42;
 
 use File::Spec;
 
@@ -69,6 +69,11 @@ is(
     'Rocky Linux release 8.4 (Green Obsidian)',
     '/etc/system-release Rocky Linux 8.4'
 );
+is(
+    get_os_name_and_version('t/examples/almalinux_8'),
+    'AlmaLinux 8.4 (Electric Cheetah)',
+    '/etc/system-release AlmaLinux 8.4'
+);
 
 is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );
 is( get_updater('Fedora release 15 (Lovelock)'), 'yum', 'updater Fedora' );
@@ -80,6 +85,8 @@ is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
     'up2date', 'updater RHEL 4' );
 is( get_updater('Rocky Linux release 8.4 (Green Obsidian)'),
     'yum', 'updater Rocky Linux' );
+is( get_updater('AlmaLinux 8.4 (Electric Cheetah)'),
+    'yum', 'updater AlmaLinux' );
 
 # versioncmp
 

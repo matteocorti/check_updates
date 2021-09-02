@@ -1,3 +1,7 @@
+2021-09-02  Frank Schroeter
+
+    * check_updates: Add support for AlmaLinux
+
 2021-08-21  Ben Li  <bli@linsang.com>
 
     * check_updates: Add support for Rocky Linux
