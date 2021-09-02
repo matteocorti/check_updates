@@ -1040,6 +1040,7 @@ sub get_updater {
         || $name =~ /Scientific[ ]Linux/mxs
         || $name =~ /Red[ ]Hat.*release[ ][56789]/mxs
         || $name =~ /Rocky[ ]Linux/mxs
+        || $name =~ /AlmaLinux/mxs
         || $name =~ /Oracle/mxs
         || $name =~ /Amazon/mxs
         || $name =~ /Sangoma/mxs )
