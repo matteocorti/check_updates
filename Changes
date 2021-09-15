@@ -1,6 +1,6 @@
 2021-09-15  Matteo Corti  <matteo@corti.li>
 
-	* check_updates (run): adding user info to the debugging output
+    * check_updates (run): adding user info to the debugging output
 
 2021-09-02  Frank Schroeter
 
