@@ -1163,8 +1163,8 @@ sub run {
     }
 
     debug "check_updates version: $VERSION\n", 1;
+    debug 'running as:            ' . whoami() . "\n";
     debug 'system info:           ' . run_command('uname -a'), 1;
-    debug 'running as:            ' . whoami();
     debug q{                       }
       . run_command(
 'if [ -f /etc/os-release ] ; then cat /etc/os-release; else echo "/etc/os-release not found"; fi'
