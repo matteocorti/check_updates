@@ -1163,6 +1163,7 @@ sub run {
     }
 
     debug "check_updates version: $VERSION\n", 1;
+    debug 'running as:            ' . whoami() . "\n";
     debug 'system info:           ' . run_command('uname -a'), 1;
     debug q{                       }
       . run_command(
