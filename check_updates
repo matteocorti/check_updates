@@ -492,25 +492,29 @@ sub check_running_kernel {
     my $installed = $versions[-1];
 
     if ( !$installed ) {
-        $plugin->nagios_exit( $plugin->UNKNOWN,
-            'Unable to detect installed kernel' );
+
+# there are systems where the kernel is not installed with RPG (e.g., CentOS on RPi)
+        verbose "Unable to detect installed kernel: skipping kernel checks";
     }
+    else {
 
-    verbose "kernel: running = $release, installed = $installed\n";
+        verbose "kernel: running = $release, installed = $installed\n";
 
-    if ( $installed ne $release ) {
+        if ( $installed ne $release ) {
 
-        my $error =
+            my $error =
 "your machine is running kernel $release but a newer version ($installed) is installed: you should reboot";
 
-        if ($exit_message) {
-            $exit_message .= $error;
-        }
-        else {
-            $exit_message = $error;
-        }
+            if ($exit_message) {
+                $exit_message .= $error;
+            }
+            else {
+                $exit_message = $error;
+            }
 
-        $wrong_kernel = 1;
+            $wrong_kernel = 1;
+
+        }
 
     }
 
