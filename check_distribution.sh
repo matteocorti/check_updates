@@ -16,11 +16,13 @@ done
 
 if [ -n "${FAILED}" ]; then
     # skip the next tests as at leadt file is missing
+    echo "Skipping the next tests as not all the files are present"
     exit 1
 fi
 
 # shellcheck disable=SC2086
 if ! perlcritic -1 ${PERL_FILES}; then
+    echo "Perl Critic failed"
     FAILED=1
 fi
 
