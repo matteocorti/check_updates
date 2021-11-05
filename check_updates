@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.8.4';
+our $VERSION = '1.8.5';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -494,7 +494,7 @@ sub check_running_kernel {
     if ( !$installed ) {
 
 # there are systems where the kernel is not installed with RPG (e.g., CentOS on RPi)
-        verbose 'Unable to detect installed kernel: skipping kernel checks';
+        verbose "Unable to detect installed kernel: skipping kernel checks\n";
 
     }
     else {

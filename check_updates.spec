@@ -1,4 +1,4 @@
-%define version          1.8.4
+%define version          1.8.5
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -23,6 +23,7 @@ Source:        https://github.com/matteocorti/%{sourcename}/releases/download/v%
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Readonly)
+BuildRequires: perl(Module::Install)
 
 Requires:      nagios-plugins
 # Yum security plugin RPM:
@@ -63,6 +64,10 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Fri Nov  5 2021 <matteo@corti.li> - 1.8.5-0
+- Updated to 1.8.5
+- Added build dependency to Module::Install
+
 * Thu Sep  2 2021 <matteo@corti.li> - 1.8.4-0
 - Updated to 1.8.4
 
