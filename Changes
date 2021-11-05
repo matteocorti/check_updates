@@ -1,3 +1,7 @@
+2021-11-05  Matteo Corti  <matteo@corti.li>
+
+        * check_updates (check_running_kernel): skip the kernel checks if the kernel is not installed with RPM
+
 2021-09-15  Matteo Corti  <matteo@corti.li>
 
     * check_updates (run): adding user info to the debugging output
