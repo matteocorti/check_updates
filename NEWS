@@ -1,3 +1,4 @@
+Skip the kernel checks if the kernel is not installed with RPM
 2021-09-02: 1.8.4  - Support for AlmaLinux
 2021-08-02: 1.8.3  - Support for Rocky Linux
 2021-07-22: 1.8.2  - Forces the default locate to support system with languages different than English

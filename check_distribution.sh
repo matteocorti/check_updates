@@ -70,7 +70,9 @@ if ! grep -q "Copyright (c) 2007-${YEAR} Matteo Corti <matteo@corti.li>" check_u
 fi
 
 if [ -n "${FAILED}" ]; then
+    echo "Distribution check failed"
     exit 1
 else
+    echo "Distribution check OK"
     exit 0
 fi

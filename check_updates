@@ -494,7 +494,8 @@ sub check_running_kernel {
     if ( !$installed ) {
 
 # there are systems where the kernel is not installed with RPG (e.g., CentOS on RPi)
-        verbose "Unable to detect installed kernel: skipping kernel checks";
+        verbose 'Unable to detect installed kernel: skipping kernel checks';
+
     }
     else {
 
