@@ -1164,7 +1164,7 @@ sub run {
         open $debug_fh, q{>},
           $options->get('debug-file')
           or $plugin->nagios_exit( $plugin->UNKNOWN,
-            "Cannot open timer ($debug_file): $OS_ERROR" );
+            "Cannot open debug file ($debug_file): $OS_ERROR" );
     }
 
     debug "check_updates version: $VERSION\n", 1;
