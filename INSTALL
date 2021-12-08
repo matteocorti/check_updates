@@ -1,7 +1,7 @@
 Build and install check_updates
 
-Dependecies
-===========
+Dependencies
+============
 
 check_updates depends on several Perl modules:
 

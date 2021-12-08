@@ -15,7 +15,7 @@ system.
 ## Security
 
 If at least a security update is available the plugin will return a critical status.
-This can be overriden with the `--number-only` command line option
+This can be overridden with the `--number-only` command line option
 
 ## up2date
 
