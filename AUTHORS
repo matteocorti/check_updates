@@ -7,7 +7,7 @@ Many thanks to:
  * Tomas Edwardsson for a patch fixing the detection of RH EL 6 systems
  * Cott Lang for the Amazon Linux patch
  * Joop Boonen for the yum arguments patch
- * Franky Van Liedekerke for the perfomance data and security plugin
+ * Franky Van Liedekerke for the performance data and security plugin
    patch and for the openvz kernels patch
  * Andreas Dijkman for the Oracle UEK patch
  * PhiBo (https://github.com/phibos) for the --boot-check-warning patch

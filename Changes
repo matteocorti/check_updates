@@ -1,3 +1,11 @@
+2021-11-30  Matteo Corti  <matteo@corti.li>
+
+        * check_updates (run): better error message
+
+2021-11-05  Matteo Corti  <matteo@corti.li>
+
+        * check_updates (check_running_kernel): skip the kernel checks if the kernel is not installed with RPM
+
 2021-09-15  Matteo Corti  <matteo@corti.li>
 
     * check_updates (run): adding user info to the debugging output
@@ -37,7 +45,7 @@
 2020-03-12  Matteo Corti  <matteo@corti.li>
 
     * check_updates (run): Show the version number in the debug output
-    * check_updates(run_yum): better YUM outpt handling
+    * check_updates(run_yum): better YUM output handling
 
 2020-02-26  Matteo Corti  <matteo@corti.li>
 
@@ -53,7 +61,7 @@
 
 2019-10-29  Matteo Corti  <matteo@corti.li>
 
-    * check_updates: Added support for Sangoma FreePBX distro
+    * check_updates: Added support for Sangoma FreePBX distribution
 
 2019-08-20  Matteo Corti <matteo@corti.li>
 
@@ -285,7 +293,7 @@
 
 2010-02-03  Matteo Corti  <matteo.corti@id.ethz.ch>
 
-    * check_updates: constants are now global because of embedded perl
+    * check_updates: constants are now global because of embedded Perl
 
 2009-12-10  Matteo Corti  <matteo.corti@id.ethz.ch>
 
@@ -294,7 +302,7 @@
 2009-12-09  Matteo Corti  <matteo.corti@id.ethz.ch>
 
     * Makefile.PL: man page being installed in the wrong section (3 instead of 1)
-    * Makefile.PL: perl site vs vendor directories
+    * Makefile.PL: Perl site vs vendor directories
     * check_updates.spec: removed the the %{?dist} macro from the changelog entries
 
 2009-12-08  root  <matteo.corti@id.ethz.ch>
@@ -403,7 +411,7 @@
 
     * check_updates: checks if the running kernel is the latest
                          installed
-    * check_updates: removed backticks (using open -|)
+    * check_updates: removed back-ticks (using open -|)
 
 2008-01-22  Matteo Corti  <matteo.corti@id.ethz.ch>
 

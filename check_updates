@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.8.4';
+our $VERSION = '1.8.5';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -210,7 +210,7 @@ if ( !caller ) {
 
 ##############################################################################
 # Usage     : whoami()
-# Purpose   : retrieve the user runnging the process
+# Purpose   : retrieve the user running the process
 # Returns   : username
 # Arguments : n/a
 # Throws    : n/a
@@ -338,7 +338,7 @@ sub clean_kernel_version {
     $kernel =~ s/smp$//mxs;
     $kernel =~ s/smp-//imxs;
 
-    # remove RHEL, CentOS, Scientific Linux and Fedora flavours
+    # remove RHEL, CentOS, Scientific Linux and Fedora flavors
 
     $kernel =~ s/[.]el\d+.*//imxs;
     $kernel =~ s/[.]fc\d+.*//imxs;
@@ -492,25 +492,30 @@ sub check_running_kernel {
     my $installed = $versions[-1];
 
     if ( !$installed ) {
-        $plugin->nagios_exit( $plugin->UNKNOWN,
-            'Unable to detect installed kernel' );
+
+# there are systems where the kernel is not installed with RPG (e.g., CentOS on RPi)
+        verbose "Unable to detect installed kernel: skipping kernel checks\n";
+
     }
+    else {
 
-    verbose "kernel: running = $release, installed = $installed\n";
+        verbose "kernel: running = $release, installed = $installed\n";
 
-    if ( $installed ne $release ) {
+        if ( $installed ne $release ) {
 
-        my $error =
+            my $error =
 "your machine is running kernel $release but a newer version ($installed) is installed: you should reboot";
 
-        if ($exit_message) {
-            $exit_message .= $error;
-        }
-        else {
-            $exit_message = $error;
-        }
+            if ($exit_message) {
+                $exit_message .= $error;
+            }
+            else {
+                $exit_message = $error;
+            }
 
-        $wrong_kernel = 1;
+            $wrong_kernel = 1;
+
+        }
 
     }
 
@@ -520,7 +525,7 @@ sub check_running_kernel {
 
 ##############################################################################
 # Usage     : run_yum();
-# Purpose   : runs yum check-update with the supplied command line argumens
+# Purpose   : runs yum check-update with the supplied command line arguments
 # Returns   : the list of updates
 # Arguments : string with the command line arguments
 #           : (optional) yum command
@@ -1159,7 +1164,7 @@ sub run {
         open $debug_fh, q{>},
           $options->get('debug-file')
           or $plugin->nagios_exit( $plugin->UNKNOWN,
-            "Cannot open timer ($debug_file): $OS_ERROR" );
+            "Cannot open debug file ($debug_file): $OS_ERROR" );
     }
 
     debug "check_updates version: $VERSION\n", 1;
