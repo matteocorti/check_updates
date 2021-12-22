@@ -7,3 +7,4 @@ Makefile
 check_updates-**
 **.tdy
 inc
+.DS_Store
