@@ -24,6 +24,7 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Readonly)
 BuildRequires: perl(Module::Install)
+BuildRequires: perl(Monitoring::Plugin)
 
 Requires:      nagios-plugins
 # Yum security plugin RPM:
