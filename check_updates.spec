@@ -1,5 +1,5 @@
 %define version          1.8.5
-%define release          0
+%define release          1
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Thu Dec 30 2021 <matteo@cortli.li> - 1.8.5-1
+- Added Monitoring::Plugin to the build dependencies
+
 * Fri Nov  5 2021 <matteo@corti.li> - 1.8.5-0
 - Updated to 1.8.5
 - Added build dependency to Module::Install
