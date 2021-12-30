@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PERL_FILES="check_updates t/*.t"
-FILES="${PERL_FILES} AUTHORS COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS check_distribution.sh"
+FILES="${PERL_FILES} AUTHORS.md COPYING COPYRIGHT Changes INSTALL Makefile.PL NEWS check_distribution.sh"
 MARKDOWN_FILES="README.md"
 
 FAILED=
