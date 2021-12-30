@@ -60,7 +60,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS Changes NEWS README.md COPYING COPYRIGHT
+%doc AUTHORS.md Changes NEWS README.md COPYING COPYRIGHT
 %{nagiospluginsdir}/%{sourcename}
 %{_mandir}/man1/%{sourcename}.1*
 
