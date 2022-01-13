@@ -1219,7 +1219,7 @@ sub run {
             'Error --security-only and --number-only specified at the same time'
         );
     }
-    
+
     ############
     # YUM or DNF
 
