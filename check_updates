@@ -1213,6 +1213,13 @@ sub run {
         $bootcheck = 2;
     }
 
+    # check bootcheck consistencys
+    if ( $options->get('number-only') && $options->get('security-only') ) {
+        exit_with_error( Monitoring::Plugin->UNKNOWN,
+            'Error --security-only and --number-only specified at the same time'
+        );
+    }
+    
     ############
     # YUM or DNF
 

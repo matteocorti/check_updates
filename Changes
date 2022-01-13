@@ -1,3 +1,7 @@
+2022-01-13  Matteo Corti  <matteo@corti.li>
+
+        * check_updates (run): --security-only and --number-only are not allowed together
+
 2021-11-30  Matteo Corti  <matteo@corti.li>
 
         * check_updates (run): better error message
