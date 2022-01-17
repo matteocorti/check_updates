@@ -589,7 +589,8 @@ sub run_yum {
         }
 
         # GPG key is missing
-        if (  !$options->get('aasumeyes')
+        if (   defined $options
+            && !$options->get('aasumeyes')
             && $line =~ /^Importing[ ]GPG[ ]key/imxs )
         {
             exit_with_error( Monitoring::Plugin->UNKNOWN,

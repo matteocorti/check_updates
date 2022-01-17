@@ -1,1 +1,1 @@
-Skip the kernel checks if the kernel is not installed with RPM
+Adds ```--assumeyes``` to allow the import of GPG keys

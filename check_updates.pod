@@ -26,6 +26,8 @@ Version 1.8.0
     Print version information
   --extra-opts=[<section>[@<config_file>]]
     Section and/or config_file from which to load extra options (may repeat)
+ --assumeyes
+   Automatically answer yes for all dnf check-updates questions. Useful for importing GPG keys
   --boot-check
     Check if the machine was booted with the newest kernel (default)
   --boot-check-warning
