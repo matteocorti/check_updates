@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.8.5';
+our $VERSION = '1.9.0';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -539,11 +539,19 @@ sub run_yum {
     my $arguments   = shift;
     my $yum_command = shift;
 
+    my $assume;
+    if ( defined $options && defined $options->get('assumeyes') ) {
+        $assume = 'assumeyes';
+    }
+    else {
+        $assume = 'assumeno';
+    }
+
     # per default check updates
     # --assumeno to avoid a timeout when the GPG key is not present
     # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = 'check-update --assumeno --errorlevel=0 -q';
+        $yum_command = "check-update --$assume --errorlevel=0 -q";
     }
 
     my $OUTPUT_HANDLER;
@@ -581,7 +589,9 @@ sub run_yum {
         }
 
         # GPG key is missing
-        if ( $line =~ /^Importing[ ]GPG[ ]key/imxs ) {
+        if (  !$options->get('aasumeyes')
+            && $line =~ /^Importing[ ]GPG[ ]key/imxs )
+        {
             exit_with_error( Monitoring::Plugin->UNKNOWN,
                 'Missing GPG key, run "dnf check-update" manually' );
         }
@@ -1092,6 +1102,12 @@ sub run {
         version => $VERSION,
         url     => 'https://github.com/matteocorti/check_updates',
         blurb   => 'Checks if RedHat or Fedora system is up-to-date',
+    );
+
+    $options->arg(
+        spec => 'assumeyes',
+        help =>
+'Automatically answer yes for all dnf check-updates questions. Useful for importing GPG keys'
     );
 
     $options->arg(

@@ -1,3 +1,7 @@
+2022-01-17  Matteo Corti  <matteo@corti.li>
+
+	* check_updates: added an option --assumeyes to allow the import of GPG keys
+
 2022-01-13  Matteo Corti  <matteo@corti.li>
 
         * check_updates (run): --security-only and --number-only are not allowed together
