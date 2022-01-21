@@ -590,7 +590,7 @@ sub run_yum {
 
         # GPG key is missing
         if (   defined $options
-            && !$options->get('aasumeyes')
+            && !$options->get('assumeyes')
             && $line =~ /^Importing[ ]GPG[ ]key/imxs )
         {
             exit_with_error( Monitoring::Plugin->UNKNOWN,
@@ -1228,6 +1228,10 @@ sub run {
 
     if ( $options->get('boot-check-warning') ) {
         $bootcheck = 2;
+    }
+
+    if ( !defined($ENV{PATH}) || $ENV{PATH} eq '' ) {
+        $ENV{PATH} = '/bin:/usr/bin';
     }
 
     # check bootcheck consistencys
