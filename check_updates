@@ -855,7 +855,7 @@ sub check_yum {
     }
     else {
         $status  = Monitoring::Plugin->OK;
-        $message = 'no updates available';
+        $message = 'TEST no updates available';
     }
 
     if ($security_plugin) {
@@ -1230,8 +1230,11 @@ sub run {
         $bootcheck = 2;
     }
 
+    debug "PATH = $ENV{PATH}\n";
+    debug "HOME = $ENV{HOME}\n";
     if ( !defined( $ENV{PATH} ) || $ENV{PATH} eq q{} ) {
         local $ENV{PATH} = '/bin:/usr/bin';
+        debug "  empty PATH, setting to $ENV{PATH}\n";
     }
 
     # check bootcheck consistencys
