@@ -1230,8 +1230,8 @@ sub run {
         $bootcheck = 2;
     }
 
-    if ( !defined($ENV{PATH}) || $ENV{PATH} eq '' ) {
-        $ENV{PATH} = '/bin:/usr/bin';
+    if ( !defined( $ENV{PATH} ) || $ENV{PATH} eq q{} ) {
+        local $ENV{PATH} = '/bin:/usr/bin';
     }
 
     # check bootcheck consistencys
