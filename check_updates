@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.9.0';
+our $VERSION = '1.9.1';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -855,7 +855,7 @@ sub check_yum {
     }
     else {
         $status  = Monitoring::Plugin->OK;
-        $message = 'TEST no updates available';
+        $message = 'no updates available';
     }
 
     if ($security_plugin) {

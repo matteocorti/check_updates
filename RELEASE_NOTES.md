@@ -1,1 +1,1 @@
-Adds ```--assumeyes``` to allow the import of GPG keys
+Removed a test message in the OK output
