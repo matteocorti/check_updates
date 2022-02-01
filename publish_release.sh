@@ -19,4 +19,7 @@ if [ "x${ANSWER}" = "xy" ]; then
     make dist
     gh release create "v${VERSION}" --title "check_updates-${VERSION}" --notes-file RELEASE_NOTES.md "check_updates-${VERSION}.tar.gz"
 
+    # fetch the new tag
+    git pull
+
 fi
