@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+_check_updates() {
+
+    local cur prev pprev opts
+
+    COMPREPLY=()
+
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD - 1]}"
+    pprev="${COMP_WORDS[COMP_CWORD - 2]}"
+
+    # options without arguments
+    opts="--usage --help --version --assumeyes --boot-check --boot-check-warning --debug --no-boot-check --clean --security-only
+ --number-only --verbose --extra-opts= --debug-file= --warning= --critical= --yum-arguments= --timeout="
+
+    # list of command line options
+    if [[ "${cur}" == -* || ${COMP_CWORD} -eq 1 ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+        return 0
+    fi
+
+    # options with arguments
+    case "${prev}" in
+        # options with files as argument
+        --extra-opts|--debug-file|=)
+        if [[ "${pprev}" == "--extra-opts" || "${pprev}" == "--debug-file" ]]; then
+            _filedir
+        fi
+            ;;
+        *)
+            ;;
+    esac
+
+}
+
+complete -o nospace -F _check_updates check_updates
