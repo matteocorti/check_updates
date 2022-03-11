@@ -1,1 +1,1 @@
-Setting the ```PATH``` if empty
+Adding bash completion to the Makefile and RPM
