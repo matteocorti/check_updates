@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{sourcename}.1*
 
 %changelog
+* Thu Feb 11 2022 <matteo@cortli.li> - 1.9.2-0
+- Updated to 1.9.2
+
 * Tue Feb  2 2022 <matteo@cortli.li> - 1.9.1-0
 - Updated to 1.9.1
 
