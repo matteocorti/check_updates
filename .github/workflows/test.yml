@@ -20,7 +20,6 @@ jobs:
       matrix:
         distro:
           - 'centos:7'
-          - 'centos:8'
           - 'fedora:32'
           - 'fedora:33'
           - 'fedora:34'
@@ -42,11 +41,6 @@ jobs:
             pre: >-
               yum install -y epel-release &&
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple perl-Perl-Critic rpm-build
-          - distro: 'centos:8'
-            pre: >-
-              dnf install -y sudo dnf-plugins-core epel-release &&
-              sudo dnf config-manager --set-enabled powertools &&
-              dnf install -y perl perl-Module-Install  perl-Readonly perl-Monitoring-Plugin perl-Perl-Critic rpm-build
     steps:
       - name: Git clone repository
         uses: actions/checkout@v2
@@ -64,4 +58,3 @@ jobs:
               && make test \
               && ./check_distribution.sh \
               && ./build_rpm.sh'
-

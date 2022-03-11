@@ -23,7 +23,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.9.0';
+our $VERSION = '1.9.1';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -1230,9 +1230,11 @@ sub run {
         $bootcheck = 2;
     }
 
+    debug "PATH = $ENV{PATH}\n";
+    debug "HOME = $ENV{HOME}\n";
     if ( !defined( $ENV{PATH} ) || $ENV{PATH} eq q{} ) {
         local $ENV{PATH} = '/bin:/usr/bin';
-        debug "Empty PATH: setting to $ENV{PATH}"
+        debug "  empty PATH, setting to $ENV{PATH}\n";
     }
 
     # check bootcheck consistencys

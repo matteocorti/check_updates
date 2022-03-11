@@ -1,6 +1,6 @@
-2022-01-21  Matteo Corti  <matteo@corti.li>
+2022-02-01  Matteo Corti  <matteo@corti.li>
 
-        * check_updates (run): setting the PATH if empty
+        * check_updates: removed a test message in the OK output
 
 2022-01-17  Matteo Corti  <matteo@corti.li>
 
