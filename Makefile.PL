@@ -2,6 +2,9 @@
 use lib '.'; # added since from Perl 5.26 '.' is no more in @INC
 use inc::Module::Install;
 
+use strict;
+use warnings;
+
 ##############################################################################
 # Define metadata (we read it from the binary)
 
@@ -13,6 +16,7 @@ all_from          'check_updates.pod';
 ##############################################################################
 # Specific dependencies
 
+include 'Module::AutoInstall';
 include 'version';
 
 my %prereqs = (
@@ -43,3 +47,10 @@ WriteMakefile(
     MAN1PODS             => { 'check_updates.pod' => 'blib/man1/check_updates.1', },
     MAN3PODS             => { },
 );
+
+sub MY::postamble {
+    my $dest_path = "/usr/share/bash-completion/completions/";
+    my $script_name = "check_updates.completion";
+    my $str = "install::\n\t\$(CP) ${script_name} ${dest_path}/check_updates\n";
+    return &Module::AutoInstall::postamble . $str;
+}

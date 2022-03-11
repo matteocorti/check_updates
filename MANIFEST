@@ -1,8 +1,11 @@
+.editorconfig
 AUTHORS.md
 build_rpm.sh
 Changes
 check_distribution.sh
 check_updates
+check_updates.completio
+check_updates.completion
 check_updates.pod
 check_updates.spec
 CODE_OF_CONDUCT.md
@@ -35,6 +38,7 @@ SECURITY.md
 t/00_modules.t
 t/01_functions.t
 t/02_yum.t
+t/examples/almalinux_8
 t/examples/fedora_14
 t/examples/fedora_15
 t/examples/fedora_17
@@ -42,6 +46,5 @@ t/examples/puias_6.2
 t/examples/rhel_4
 t/examples/rhel_6
 t/examples/rocky_linux_8
-t/examples/almalinux_8
 t/examples/scientific_linux_6
 t/mocks/yum_errors.1.sh

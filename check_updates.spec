@@ -10,7 +10,7 @@
 Summary:       A Nagios plugin to check if RedHat or Fedora system is up-to-date
 Name:          %{packagename}
 Version:       %{version}
-Obsoletes:     check_updates
+Obsoletes:     check_updates <= 100
 Release:       %{release}%{?dist}
 License:       GPLv3+
 Packager:      Matteo Corti <matteo@corti.li>
@@ -47,6 +47,8 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make pure_install PERL_INSTALL_ROOT=%{buildroot}
+mkdir -p %{buildroot}/usr/share/bash-completion/completions/
+cp check_updates.completion  %{buildroot}/usr/share/bash-completion/completions/check_updates
 find %{buildroot} -type f -name .packlist -exec rm -f {} \;
 find %{buildroot} -type f -name "*.pod" -exec rm -f {} \;
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \;
@@ -63,12 +65,13 @@ rm -rf %{buildroot}
 %doc AUTHORS.md Changes NEWS README.md COPYING COPYRIGHT
 %{nagiospluginsdir}/%{sourcename}
 %{_mandir}/man1/%{sourcename}.1*
+/usr/share/bash-completion/completions/check_updates
 
 %changelog
-* Thu Feb 11 2022 <matteo@cortli.li> - 1.9.2-0
+* Fri Mar 11 2022 <matteo@cortli.li> - 1.9.2-0
 - Updated to 1.9.2
 
-* Tue Feb  2 2022 <matteo@cortli.li> - 1.9.1-0
+* Wed Feb  2 2022 <matteo@cortli.li> - 1.9.1-0
 - Updated to 1.9.1
 
 * Mon Jan 17 2022 <matteo@cortli.li> - 1.9.0-0
