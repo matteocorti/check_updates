@@ -1232,6 +1232,7 @@ sub run {
 
     if ( !defined( $ENV{PATH} ) || $ENV{PATH} eq q{} ) {
         local $ENV{PATH} = '/bin:/usr/bin';
+        debug "Empty PATH: setting to $ENV{PATH}"
     }
 
     # check bootcheck consistencys

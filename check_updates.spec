@@ -1,5 +1,5 @@
-%define version          1.9.0
-%define release          1
+%define version          1.9.1
+%define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins

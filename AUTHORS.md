@@ -27,3 +27,4 @@ Many thanks to:
  * [Ben Li](https://github.com/benjunmun) for the Rocky Linux patch
  * [ulfranky](https://github.com/ulfranky) for the AlmaLinux patch
  * [Isde](https://github.com/lsde) for the build dependencies patch
+ * [Tilghman Lesher](https://github.com/tilghman) for the PATH patch
