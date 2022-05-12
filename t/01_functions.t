@@ -5,7 +5,7 @@ use 5.00800;
 use strict;
 use warnings;
 
-use Test::More tests => 42;
+use Test::More tests => 35;
 
 use File::Spec;
 
@@ -75,19 +75,6 @@ is(
     '/etc/system-release AlmaLinux 8.4'
 );
 
-is( get_updater('Fedora release 14 (Laughlin)'), 'yum', 'updater Fedora' );
-is( get_updater('Fedora release 15 (Lovelock)'), 'yum', 'updater Fedora' );
-is( get_updater('Red Hat Enterprise Linux Server release 6.1 (Santiago)'),
-    'yum', 'updater FedorRHEL 6' );
-is( get_updater('Scientific Linux release 6.0 (Carbon)'),
-    'yum', 'updater Scientific Linux' );
-is( get_updater('Red Hat Enterprise Linux AS release 4 (Nahant Update 9)'),
-    'up2date', 'updater RHEL 4' );
-is( get_updater('Rocky Linux release 8.4 (Green Obsidian)'),
-    'yum', 'updater Rocky Linux' );
-is( get_updater('AlmaLinux 8.4 (Electric Cheetah)'),
-    'yum', 'updater AlmaLinux' );
-
 # versioncmp
 
 sub test_versioncmp {
@@ -138,4 +125,3 @@ test_versioncmp( '1.1.6', '1.1.5', 1 );
 ## use critic (ProhibitMagicNumbers)
 
 1;
-

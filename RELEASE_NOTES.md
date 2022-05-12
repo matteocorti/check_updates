@@ -1,1 +1,1 @@
-Adding bash completion to the Makefile and RPM
+Removed up2date support

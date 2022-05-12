@@ -16,14 +16,12 @@ package main;
 # or (at your option) any later version.
 # See the COPYING file for details.
 
-use 5.00800;
-
 use strict;
 use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '1.9.2';
+our $VERSION = '2.0.0';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -744,7 +742,7 @@ sub check_yum {
 
             if ( $options->get('security-only') ) {
                 verbose
-"up2date does not distinguish security updates ignoring --security-only option\n";
+"YUM does not distinguish security updates ignoring --security-only option\n";
             }
 
             if ( !$options->get('number-only') ) {
@@ -880,102 +878,6 @@ sub check_yum {
 ## use critic (ProhibitExcessComplexity)
 
 ##############################################################################
-# Usage     : check_up2date();
-# Purpose   : checks an up2date based system for updates
-# Returns   : n/a
-# Arguments : n/a
-# Throws    : n/a
-# Comments  : n/a
-# See also  : n/a
-sub check_up2date {
-
-    if ( $options->get('clean') ) {
-        verbose 'clean not supported with up2date';
-    }
-
-    # parsing the output of up2date -l
-
-    if ( whoami() ne 'root' ) {
-        exit_with_error( Monitoring::Plugin->CRITICAL,
-            q{must be root to execute 'up2date -l': use sudo} );
-    }
-
-    my $output;
-
-    my $command =
-q{/usr/sbin/up2date -lf | /bin/grep -A 64 -- '----------------------------------------------------------' | /bin/grep '[[:alpha:]]'};
-
-    my $pid = open $output, q{-|}, $command    ## no critic (RequireBriefOpen)
-      or exit_with_error( Monitoring::Plugin->UNKNOWN,
-        "Cannot list updates: $OS_ERROR" );
-
-    while (<$output>) {
-        chomp;
-        my $line = $_;
-        $line =~ s/[ ].*//mxs;
-        push @status_lines, $line;
-    }
-
-    if ( !( close $output ) && ( $OS_ERROR != 0 ) ) {
-
-        # close to a piped open return false if the command with non-zero
-        # status. In this case $! is set to 0
-        exit_with_error( Monitoring::Plugin->UNKNOWN,
-            "Error while closing pipe to dnf/yum (listing updates): $OS_ERROR\n"
-        );
-
-    }
-
-    my $message;
-
-    if ( @status_lines > 0 ) {
-
-        $message = ( scalar @status_lines ) . ' update';
-
-        if ( @status_lines >= $options->get('warning') ) {
-            $status = Monitoring::Plugin->WARNING;
-        }
-        if ( @status_lines >= $options->get('critical') ) {
-            $status = Monitoring::Plugin->CRITICAL;
-        }
-
-        if ( @status_lines > 1 ) {
-            $message = $message . q{s};
-        }
-        $message = $message . ' available';
-        $plugin->add_perfdata(
-            label     => 'updates',
-            value     => scalar @status_lines,
-            uom       => q{},
-            threshold => $threshold,
-        );
-
-    }
-    else {
-
-        $message = 'no updates available';
-
-        $plugin->add_perfdata(
-            label     => 'updates',
-            value     => 0,
-            uom       => q{},
-            threshold => $threshold,
-        );
-
-    }
-
-    if ($exit_message) {
-        $exit_message .= " $message";
-    }
-    else {
-        $exit_message = $message;
-    }
-
-    return;
-
-}
-
-##############################################################################
 # Usage     : my $system = get_os_name_and_version();
 # Purpose   : returns the name of the system by parsing $VERSION_FILE
 # Returns   : name of the system
@@ -1034,39 +936,6 @@ sub get_os_name_and_version {
     }
 
     return $header;
-
-}
-
-##############################################################################
-# Usage     : my $updater = get_updated()
-# Purpose   : returns the name of updating system (yum or up2date)
-# Returns   : name of updating system or undef if not found
-# Arguments : n/a
-# Throws    : n/a
-# Comments  : n/a
-# See also  : n/a
-sub get_updater {
-
-    my $name = shift;
-
-    if (   $name =~ /Fedora/mxs
-        || $name =~ /CentOS/mxs
-        || $name =~ /PUIAS/mxs
-        || $name =~ /CloudLinux/mxs
-        || $name =~ /Scientific[ ]Linux/mxs
-        || $name =~ /Red[ ]Hat.*release[ ][56789]/mxs
-        || $name =~ /Rocky[ ]Linux/mxs
-        || $name =~ /AlmaLinux/mxs
-        || $name =~ /Oracle/mxs
-        || $name =~ /Amazon/mxs
-        || $name =~ /Sangoma/mxs )
-    {
-        return 'yum';
-    }
-    elsif ( $name =~ /Red[ ]Hat.*release[ ]4/mxs ) {
-        return 'up2date';
-    }
-    return;
 
 }
 
@@ -1295,30 +1164,9 @@ sub run {
         my $name = get_os_name_and_version();
         verbose "Running on $name\n";
 
-        my $updater = get_updater($name);
-
-        debug "Updater: $updater\n";
-
-        if ( $updater eq 'yum' ) {
-            verbose "Using Yum or DNF\n";
-            check_running_kernel();
-            check_yum($arguments);
-        }
-        elsif ( $updater eq 'up2date' ) {
-            verbose "Using up2date\n";
-
-            if ( $options->get('security-only') ) {
-                verbose
-"up2date does not distinguish security updates ignoring --security-only option\n";
-            }
-
-            check_running_kernel();
-            check_up2date();
-        }
-        else {
-            exit_with_error( Monitoring::Plugin->UNKNOWN,
-                'unknown Linux distribution' );
-        }
+        verbose "Using Yum or DNF\n";
+        check_running_kernel();
+        check_yum($arguments);
 
         if ( $bootcheck == 2 && $wrong_kernel ) {
             $status = Monitoring::Plugin->WARNING;

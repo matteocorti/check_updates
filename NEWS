@@ -1,3 +1,4 @@
+2022-05-12: 2.0.0  - Removed up2date support
 2022-03-11: 1.9.2  - Bash completion
 2022-01-21: 1.9.1  - Setting the PATH if empty
 2022-02-01: 1.9.1  - Removed a test message in the OK output

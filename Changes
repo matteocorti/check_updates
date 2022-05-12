@@ -1,3 +1,7 @@
+2022-05-12  Matteo Corti  <matteo@corti.li>
+
+        * check_updates: removed up2date (no more in use)
+
 2022-02-01  Matteo Corti  <matteo@corti.li>
 
         * check_updates: removed a test message in the OK output
