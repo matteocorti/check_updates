@@ -222,7 +222,7 @@ Many thanks to:
 
 =item * Joop Boonen for the yum arguments patch
 
-=item * Franky Van Liedekerke for the perfomance data and security plugin patch and for the openvz kernels patch
+=item * Franky Van Liedekerke for the performance data and security plugin patch and for the openvz kernels patch
 
 =item * Andreas Dijkman for the Oracle UEK patch
 
