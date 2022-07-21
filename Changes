@@ -1,3 +1,7 @@
+2022-07-21  Matteo Corti  <matteo@corti.li>
+
+        * check_updates (check_yum): If the kernel version is critical and the updates are only a warning the exit code will be critical
+
 2022-05-12  Matteo Corti  <matteo@corti.li>
 
         * check_updates: removed up2date (no more in use)

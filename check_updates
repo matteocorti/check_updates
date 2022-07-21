@@ -25,7 +25,7 @@ our $VERSION = '2.0.0';
 
 use Carp;
 use English qw(-no_match_vars);
-use POSIX qw(uname);
+use POSIX   qw(uname);
 use Readonly;
 use Monitoring::Plugin;
 use Monitoring::Plugin::Threshold;
@@ -772,7 +772,11 @@ sub check_yum {
         else {
 
             if ( @outdated >= $options->get('warning') ) {
-                $status = Monitoring::Plugin->WARNING;
+                if ( $status != Monitoring::Plugin->CRITICAL ) {
+
+     # if we have a critical status for something else the status stays critical
+                    $status = Monitoring::Plugin->WARNING;
+                }
             }
             if ( @outdated >= $options->get('critical') ) {
                 $status = Monitoring::Plugin->CRITICAL;
