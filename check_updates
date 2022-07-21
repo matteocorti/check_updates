@@ -23,13 +23,15 @@ no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
 our $VERSION = '2.0.1';
 
+#<<<  Perl::Tidy indents "qw" differently on older versions
 use Carp;
 use English qw(-no_match_vars);
-use POSIX qw(uname);
+use POSIX   qw(uname);
 use Readonly;
 use Monitoring::Plugin;
 use Monitoring::Plugin::Threshold;
 use Monitoring::Plugin::Getopt;
+#>>>
 
 Readonly our $EXIT_UNKNOWN                 => 3;
 Readonly our $YUM_RETURN_ERROR             => 1;
