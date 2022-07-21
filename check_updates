@@ -386,6 +386,7 @@ sub run_command {
     if (  !( close $command_output )
         && ( $OS_ERROR != 0 ) )
     {
+
         # close to a piped open return false if the command with non-zero
         # status. In this case $! is set to 0
         $plugin->nagios_exit( $plugin->UNKNOWN,
