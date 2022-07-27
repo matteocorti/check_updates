@@ -29,7 +29,7 @@ Version 1.9.2
  --assumeyes
    Automatically answer yes for all dnf check-updates questions. Useful for importing GPG keys
   --boot-check
-    Check if the machine was booted with the newest kernel (default)
+    CRITICAL if the machine was booted without the newest kernel (default)
   --boot-check-warning
     Like --boot-check but state is warning instead of critical
   --no-boot-check
@@ -67,7 +67,7 @@ Version 1.9.2
 
   --extra-opts=[<section>[@<config_file>]] Section and/or config_file from which to load extra options (may repeat)
 
-  --boot-check                             Check if the machine was booted with the newest kernel (default)
+  --boot-check                             CRITICAL if the machine was booted without the newest kernel (default)
 
   --boot-check-warning                     Like --boot-check but state is warning instead of critical
 
