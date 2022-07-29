@@ -988,7 +988,7 @@ sub run {
     $options->arg(
         spec => 'boot-check',
         help =>
-          'Check if the machine was booted with the newest kernel (default)',
+          'CRITICAL if the machine was booted without the newest kernel (default)',
     );
 
     $options->arg(
