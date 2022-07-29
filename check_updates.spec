@@ -1,4 +1,4 @@
-%define version          2.0.1
+%define version          2.0.2
 %define release          0
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
@@ -68,6 +68,9 @@ rm -rf %{buildroot}
 /usr/share/bash-completion/completions/check_updates
 
 %changelog
+* Fri Jul 29 2022 <matteo@cortli.li> - 2.0.2-0
+- Updated to 2.0.2
+
 * Thu Jul 21 2022 <matteo@cortli.li> - 2.0.1-0
 - Updated to 2.0.1
 
