@@ -21,7 +21,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '2.0.1';
+our $VERSION = '2.0.2';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -988,7 +988,7 @@ sub run {
     $options->arg(
         spec => 'boot-check',
         help =>
-          'CRITICAL if the machine was booted without the newest kernel (default)',
+'CRITICAL if the machine was booted without the newest kernel (default)',
     );
 
     $options->arg(

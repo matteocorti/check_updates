@@ -28,3 +28,4 @@ Many thanks to:
  * [ulfranky](https://github.com/ulfranky) for the AlmaLinux patch
  * [Isde](https://github.com/lsde) for the build dependencies patch
  * [Tilghman Lesher](https://github.com/tilghman) for the PATH patch
+ * [Manik Roy](https://github.com/manikroy1) for the documentation patch
