@@ -1,1 +1,1 @@
-Improved the documentation of --boot-check
+Fixed RPM dependencies
