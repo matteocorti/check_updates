@@ -23,7 +23,7 @@ jobs:
       matrix:
         distro:
           - 'centos:7'
-          - 'centos:9'
+          - 'rhel:9'
           - 'fedora:34'
           - 'fedora:35'
           - 'fedora:36'
@@ -41,7 +41,7 @@ jobs:
             pre: >-
               yum install -y epel-release &&
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple perl-Perl-Critic rpm-build
-          - distro: 'centos:9'
+          - distro: 'rhel:9'
             pre: >-
               yum install -y epel-release &&
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple perl-Perl-Critic rpm-build
