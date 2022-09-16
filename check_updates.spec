@@ -72,6 +72,9 @@ rm -rf %{buildroot}
 /usr/share/bash-completion/completions/check_updates
 
 %changelog
+* Fri Sep 16 2022 <matteo@cortli.li> - 2.0.3-0
+- Repackaged
+
 * Fri Sep 16 2022 <matteo@cortli.li> - 2.0.2-3
 - Fixed the dependencies (semicolons)
 
