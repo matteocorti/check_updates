@@ -1,5 +1,5 @@
 %define version          2.0.2
-%define release          1
+%define release          2
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -26,9 +26,9 @@ BuildRequires: perl(Test::More)
 
 Requires:      nagios-plugins
 Requires:      perl(Carp)
-Requires:      perl(English);
+Requires:      perl-English;
 Requires:      perl(Monitoring::Plugin)
-Requires:      perl(POSIX);
+Requires:      perl-POSIX;
 Requires:      perl(Readonly)
 
 # Yum security plugin RPM:
@@ -72,6 +72,9 @@ rm -rf %{buildroot}
 /usr/share/bash-completion/completions/check_updates
 
 %changelog
+* Fri Sep 16 2022 <matteo@cortli.li> - 2.0.2-2
+- Fixed the dependencies (perl- packages)
+
 * Fri Sep 16 2022 <matteo@cortli.li> - 2.0.2-1
 - Fixed the dependencies
 
