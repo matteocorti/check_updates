@@ -1,5 +1,5 @@
 %define version          2.0.2
-%define release          0
+%define release          1
 %define sourcename       check_updates
 %define packagename      nagios-plugins-check-updates
 %define nagiospluginsdir %{_libdir}/nagios/plugins
@@ -21,12 +21,16 @@ Source:        https://github.com/matteocorti/%{sourcename}/releases/download/v%
 
 # Fedora build requirement (not needed for EPEL{4,5})
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(Test::More)
-BuildRequires: perl(Readonly)
 BuildRequires: perl(Module::Install)
-BuildRequires: perl(Monitoring::Plugin)
+BuildRequires: perl(Test::More)
 
 Requires:      nagios-plugins
+Requires:      perl(Carp)
+Requires:      perl(English);
+Requires:      perl(Monitoring::Plugin)
+Requires:      perl(POSIX);
+Requires:      perl(Readonly)
+
 # Yum security plugin RPM:
 #    Fedora             : yum-plugin-security (virtual provides yum-security)
 #    Red Hat Enterprise : yum-security
@@ -68,6 +72,9 @@ rm -rf %{buildroot}
 /usr/share/bash-completion/completions/check_updates
 
 %changelog
+* Fri Sep 16 2022 <matteo@cortli.li> - 2.0.2-1
+- Fixed the dependencies
+
 * Fri Jul 29 2022 <matteo@cortli.li> - 2.0.2-0
 - Updated to 2.0.2
 
