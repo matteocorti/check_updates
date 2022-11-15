@@ -6,6 +6,10 @@ on:
       - $default-branch
       - development
       - master
+    paths-ignore:
+      - '**.md'
+      - build_rpm.sh
+      - .github/workflows/publish.yml
   # Run tests for any PRs
   pull_request:
   workflow_dispatch:
