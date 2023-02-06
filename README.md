@@ -1,6 +1,9 @@
 
  &copy; Matteo Corti, ETH Zurich, 2007-2012
- &copy; Matteo Corti, 2007-2022
+ &copy; Matteo Corti, 2007-2023
+
+![](https://img.shields.io/github/v/release/matteocorti/check_updates)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/check_updates/latest/total)&nbsp;![](https://img.shields.io/github/downloads/matteocorti/check_updates/total)&nbsp;![](https://img.shields.io/github/license/matteocorti/check_updates)&nbsp;![](https://img.shields.io/github/stars/matteocorti/check_updates)&nbsp;![](https://img.shields.io/github/forks/matteocorti/check_updates)
+
 
   see AUTHORS for the complete list of contributors
 
