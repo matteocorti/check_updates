@@ -4,7 +4,6 @@ build_rpm.sh
 Changes
 check_distribution.sh
 check_updates
-check_updates.completio
 check_updates.completion
 check_updates.pod
 check_updates.spec
@@ -48,3 +47,4 @@ t/examples/rhel_6
 t/examples/rocky_linux_8
 t/examples/scientific_linux_6
 t/mocks/yum_errors.1.sh
+.codespell-ignore
