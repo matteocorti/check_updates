@@ -42,7 +42,7 @@ jobs:
               yum install -y sudo perl-Module-Install perl-Readonly perl-Monitoring-Plugin perl-Test-Simple perl-Perl-Critic rpm-build
     steps:
       - name: Git clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Run the tests on ${{ matrix.distro }}
