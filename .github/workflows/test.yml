@@ -55,5 +55,6 @@ jobs:
               && uname -a \
               && perl Makefile.PL \
               && make test \
+              && echo "-vxl='q'" > ~/.perltidyrc \
               && ./check_distribution.sh \
               && ./build_rpm.sh'
