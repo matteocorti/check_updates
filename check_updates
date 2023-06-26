@@ -21,7 +21,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '2.0.3';
+our $VERSION = '2.0.4';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -1105,7 +1105,9 @@ sub run {
     }
 
     debug "PATH = $ENV{PATH}\n";
-    debug "HOME = $ENV{HOME}\n";
+    if ( defined $ENV{HOME} ) {
+        debug "HOME = $ENV{HOME}\n";
+    }
     if ( !defined( $ENV{PATH} ) || $ENV{PATH} eq q{} ) {
         local $ENV{PATH} = '/bin:/usr/bin';
         debug "  empty PATH, setting to $ENV{PATH}\n";

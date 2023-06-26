@@ -1,1 +1,1 @@
-Fixed RPM dependencies
+Fixed a bug when no ```$HOME''' is defined
