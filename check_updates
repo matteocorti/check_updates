@@ -1047,6 +1047,12 @@ sub run {
 'consider the number of updates only (security updates are not automatically critical)',
     );
 
+    $options->arg(
+        spec => 'quiet',
+        help =>
+'don\'t list updates, output only the status line',
+    );
+
     $options->getopts();
 
     my $debug_file = $options->get('debug-file');
