@@ -1,3 +1,4 @@
+2024-03-06: 2.0.5  - Fixed a bug with ```--quiet```
 2023-06-26: 2.0.4  - Fixed a bug when no $HOME is defined
 2022-09-16: 2.0.3  - Fixed RPM dependencies
 2022-07-29: 2.0.2  - Improved the documentation of --boot-check

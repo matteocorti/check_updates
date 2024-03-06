@@ -1,3 +1,7 @@
+2024-03-06  Matteo Corti  <matteo@corti.li>
+
+        * check_updates: Fixed a bug with --quiet
+
 2023-06-26  Matteo Corti  <matteo@corti.li>
 
         * check_updates (run): Fixed a bug when no $HOME is defined

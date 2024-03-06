@@ -1,1 +1,1 @@
-Fixed a bug when no ```$HOME''' is defined
+Fixed a bug with ```--quiet```
