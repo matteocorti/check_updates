@@ -1047,6 +1047,11 @@ sub run {
 'consider the number of updates only (security updates are not automatically critical)',
     );
 
+    $options->arg(
+        spec => 'quiet',
+        help => 'Do not print package list',
+    );
+
     $options->getopts();
 
     my $debug_file = $options->get('debug-file');
@@ -1153,11 +1158,6 @@ sub run {
     if ( -e '/etc/yum/pluginconf.d/foreman-protector.conf' ) {
         $arguments = "$arguments --disableplugin=foreman-protector";
     }
-
-    $options->arg(
-        spec => 'quiet',
-        help => 'Do not print package list',
-    );
 
     #########
     # Timeout
