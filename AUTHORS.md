@@ -29,3 +29,4 @@ Many thanks to:
  * [Isde](https://github.com/lsde) for the build dependencies patch
  * [Tilghman Lesher](https://github.com/tilghman) for the PATH patch
  * [Manik Roy](https://github.com/manikroy1) for the documentation patch
+ * [Danilo Godec](https://github.com/danci1973) for the --quiet patch
