@@ -1049,8 +1049,7 @@ sub run {
 
     $options->arg(
         spec => 'quiet',
-        help =>
-'don\'t list updates, output only the status line',
+        help => 'Do not print package list',
     );
 
     $options->getopts();
@@ -1159,11 +1158,6 @@ sub run {
     if ( -e '/etc/yum/pluginconf.d/foreman-protector.conf' ) {
         $arguments = "$arguments --disableplugin=foreman-protector";
     }
-
-    $options->arg(
-        spec => 'quiet',
-        help => 'Do not print package list',
-    );
 
     #########
     # Timeout
