@@ -1009,7 +1009,7 @@ sub run {
     $options->arg(
         spec => 'ignore-gpg-issues',
         help => 'Disable GPG signature checking',
-        );
+    );
 
     $options->arg(
         spec => 'no-boot-check',
