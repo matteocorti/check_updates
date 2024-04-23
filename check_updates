@@ -1007,6 +1007,11 @@ sub run {
     );
 
     $options->arg(
+        spec => 'ignore-gpg-issues',
+        help => 'Disable GPG signature checking',
+        );
+
+    $options->arg(
         spec => 'no-boot-check',
         help => 'Do not complain if the machine was booted with an old kernel',
     );
