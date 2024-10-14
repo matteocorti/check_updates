@@ -30,3 +30,4 @@ Many thanks to:
  * [Tilghman Lesher](https://github.com/tilghman) for the PATH patch
  * [Manik Roy](https://github.com/manikroy1) for the documentation patch
  * [Danilo Godec](https://github.com/danci1973) for the --quiet patch
+ * [Martin Jackson](https://github.com/mhjacks) for the DNF 5 patch

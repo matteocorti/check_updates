@@ -1,1 +1,1 @@
-Fixed a bug with ```--quiet```
+Support for DNF5

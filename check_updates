@@ -547,9 +547,11 @@ sub run_yum {
         $assume = 'assumeno';
     }
 
-    if ( (-l $yum_executable) and (readlink($yum_executable) =~ /dnf5/) ) {
-        $errorlevel='';
-    } else {
+    if ( ( -l $yum_executable ) and ( readlink($yum_executable) =~ /dnf5/mxs ) )
+    {
+        $errorlevel = q{};
+    }
+    else {
         $errorlevel = '--errorlevel=0';
     }
 
