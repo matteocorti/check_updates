@@ -21,7 +21,7 @@ use warnings;
 
 no warnings 'once';    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 
-our $VERSION = '2.0.5';
+our $VERSION = '2.0.6';
 
 use Carp;
 use English qw(-no_match_vars);
@@ -57,6 +57,7 @@ use vars qw(
   $threshold
   $wrong_kernel
   $yum_executable
+  $errorlevel
   @status_lines
 );
 ## use critic
@@ -546,11 +547,17 @@ sub run_yum {
         $assume = 'assumeno';
     }
 
+    if ( (-l $yum_executable) and (readlink($yum_executable) =~ /dnf5/) ) {
+        $errorlevel='';
+    } else {
+        $errorlevel = '--errorlevel=0';
+    }
+
     # per default check updates
     # --assumeno to avoid a timeout when the GPG key is not present
     # we need to process STDERR to catch errors (e.g., missing GPG key)
     if ( !defined $yum_command ) {
-        $yum_command = "check-update --$assume --errorlevel=0 -q";
+        $yum_command = "check-update --$assume $errorlevel -q";
     }
 
     my $OUTPUT_HANDLER;
