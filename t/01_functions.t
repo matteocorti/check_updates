@@ -97,31 +97,31 @@ test_versioncmp( '1.2', '1.1', 1 );
 test_versioncmp( '1.1', '1.1', 0 );
 
 test_versioncmp( '1.1a', '1.2',  -1 );
-test_versioncmp( '1.2',  '1.1a', 1 );
+test_versioncmp( '1.2',  '1.1a',  1 );
 
 test_versioncmp( '1.1',   '1.1.1', -1 );
-test_versioncmp( '1.1.1', '1.1',   1 );
+test_versioncmp( '1.1.1', '1.1',    1 );
 
 test_versioncmp( '1.1',  '1.1a', -1 );
-test_versioncmp( '1.1a', '1.1',  1 );
+test_versioncmp( '1.1a', '1.1',   1 );
 
 test_versioncmp( '1.1.a', '1.1a',  -1 );
-test_versioncmp( '1.1a',  '1.1.a', 1 );
+test_versioncmp( '1.1a',  '1.1.a',  1 );
 
 test_versioncmp( '1', 'a', -1 );
-test_versioncmp( 'a', '1', 1 );
+test_versioncmp( 'a', '1',  1 );
 
 test_versioncmp( 'a', 'b', -1 );
-test_versioncmp( 'b', 'a', 1 );
+test_versioncmp( 'b', 'a',  1 );
 
 test_versioncmp( '1', '2', -1 );
-test_versioncmp( '2', '1', 1 );
+test_versioncmp( '2', '1',  1 );
 
 test_versioncmp( '1.1-3', '1.1-4', -1 );
-test_versioncmp( '1.1-4', '1.1-3', 1 );
+test_versioncmp( '1.1-4', '1.1-3',  1 );
 
 test_versioncmp( '1.1-5', '1.1.6', -1 );
-test_versioncmp( '1.1.6', '1.1.5', 1 );
+test_versioncmp( '1.1.6', '1.1.5',  1 );
 ## use critic (ProhibitMagicNumbers)
 
 1;
